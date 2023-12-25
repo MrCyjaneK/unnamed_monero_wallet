@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LabeledTextInput extends StatelessWidget {
-  final String label;
+  final String? label;
   final String hintText;
   final String? helperText;
   final TextEditingController ctrl;
@@ -22,17 +22,19 @@ class LabeledTextInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        child: Text(
-          label,
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.primary,
-                fontSize: 18,
+      title: (label == null)
+          ? null
+          : Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Text(
+                label!,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 18,
+                    ),
               ),
-        ),
-      ),
+            ),
       subtitle: TextField(
         minLines: minLines,
         maxLines: maxLines,

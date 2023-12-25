@@ -76,6 +76,6 @@ class _MnemonicSeedState extends State<MnemonicSeed> {
     if (seed.length == 25 && num.tryParse(heightCtrl.text) != null) {
       return LongOutlinedButton(text: "Next", onPressed: _nextPage);
     }
-    return Container();
+    return const LongOutlinedButton(text: "Next", onPressed: null);
   }
 }

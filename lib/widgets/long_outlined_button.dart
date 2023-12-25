@@ -18,19 +18,20 @@ class LongOutlinedButton extends StatelessWidget {
         children: [
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: OutlinedButton(
                 style: OutlinedButton.styleFrom(
                   side: const BorderSide(width: 1.0, color: Colors.white),
                   shape: RoundedRectangleBorder(
-                      side: const BorderSide(width: 12, color: Colors.white),
-                      borderRadius: BorderRadius.circular(8)),
+                    side: const BorderSide(width: 12, color: Colors.white),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   padding:
-                      const EdgeInsets.symmetric(vertical: 16, horizontal: 6),
+                      const EdgeInsets.symmetric(vertical: 22, horizontal: 6),
                 ),
                 onPressed: onPressed,
                 child: Text(
-                  text,
+                  text.toUpperCase(),
                   style: Theme.of(context)
                       .textTheme
                       .labelLarge

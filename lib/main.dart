@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Anonero',
       theme: ThemeData(
-        fontFamily: 'Monospace',
+        fontFamily: 'RobotoMono',
         colorScheme: colorScheme,
         dividerTheme: const DividerThemeData(
           thickness: 3,

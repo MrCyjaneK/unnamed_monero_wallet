@@ -1,10 +1,10 @@
+import 'package:anonero/pages/debug.dart';
 import 'package:anonero/pages/pin_screen.dart';
 import 'package:anonero/pages/setup/proxy_settings.dart';
 import 'package:anonero/pages/wallet/settings/nodes_screen.dart';
 import 'package:anonero/pages/wallet/settings/view_seed_page.dart';
 import 'package:anonero/widgets/primary_label.dart';
 import 'package:anonero/widgets/settings_list_tile.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -49,7 +49,12 @@ class SettingsPage extends StatelessWidget {
           const SettingsListTile(
             title: "Secure Wipe",
           ),
-          if (kDebugMode) const PrimaryLabel(title: "D38UG"),
+          const PrimaryLabel(title: "D38UG"),
+          SettingsListTile(
+            title: "Top secret menu",
+            subtitle: "Click for free puppies 🐶🐶🐶",
+            onClick: () => DebugPage.push(context),
+          ),
         ],
       ),
     );

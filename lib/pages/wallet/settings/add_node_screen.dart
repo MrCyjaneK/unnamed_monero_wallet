@@ -19,9 +19,7 @@ class AddNodeScreen extends StatefulWidget {
 
 class _AddNodeScreenState extends State<AddNodeScreen> {
   final nodeCtrl = TextEditingController();
-
   final usernameCtrl = TextEditingController();
-
   final passwordCtrl = TextEditingController();
 
   @override

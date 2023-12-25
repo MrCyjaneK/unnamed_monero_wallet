@@ -85,7 +85,7 @@ class SetupOutlinedButton extends StatelessWidget {
               side: const BorderSide(width: 1.0, color: Colors.white),
               shape: RoundedRectangleBorder(
                   side: const BorderSide(width: 12, color: Colors.white),
-                  borderRadius: BorderRadius.circular(8)),
+                  borderRadius: BorderRadius.circular(12)),
               padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 6),
             ),
             onPressed: onPressed,
