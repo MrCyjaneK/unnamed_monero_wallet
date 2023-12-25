@@ -18,28 +18,26 @@ class SubaddressDetailsPage extends StatelessWidget {
 
   void _showQr(BuildContext c) {
     Alert(
-      cancelable: false,
-      body: [
-        const SizedBox(
+        cancelable: false,
+        singleBody: const SizedBox(
           width: 512,
           child: Qr(
             data: 'text',
           ),
-        )
-      ],
-    ).show(c);
+        )).show(c);
   }
 
   final renameCtrl = TextEditingController(text: "current name");
 
   void _rename(BuildContext c) {
     Alert(
-      body: [
-        SizedBox(
-            width: double.maxFinite,
-            child:
-                LabeledTextInput(label: "Rename subaddress", ctrl: renameCtrl)),
-      ],
+      singleBody: SizedBox(
+        width: double.maxFinite,
+        child: LabeledTextInput(
+          label: "Rename subaddress",
+          ctrl: renameCtrl,
+        ),
+      ),
       cancelable: true,
       callback: () {},
     ).show(c);

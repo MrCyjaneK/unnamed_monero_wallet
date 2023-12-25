@@ -12,46 +12,43 @@ class TransactionItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
-      child: Hero(
-        tag: "tx:${transaction.hash}",
-        child: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            border: Border.all(
-              width: 1,
-              color: transaction.isSpend
-                  ? Theme.of(context).colorScheme.primary
-                  : Colors.grey.shade600,
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: transaction.isSpend
+                ? Theme.of(context).colorScheme.primary
+                : Colors.grey.shade600,
+          ),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(8),
+          ),
+        ),
+        padding: const EdgeInsets.symmetric(
+          vertical: 12,
+          horizontal: 24,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            getStats(transaction, context),
+            Text(
+              (((transaction.amount! / 1e12 * 1e4)).floor() / 1e4)
+                  .toStringAsFixed(4),
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
-            borderRadius: const BorderRadius.all(
-              Radius.circular(8),
-            ),
-          ),
-          padding: const EdgeInsets.symmetric(
-            vertical: 12,
-            horizontal: 24,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              getStats(transaction, context),
-              Text(
-                (((transaction.amount! / 1e12 * 1e4)).floor() / 1e4)
-                    .toStringAsFixed(4),
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              Column(
-                children: [
-                  Text(
-                    formatTime(transaction.timeStamp),
-                    style: Theme.of(context).textTheme.bodySmall,
-                  )
-                ],
-              )
-            ],
-          ),
+            Column(
+              children: [
+                Text(
+                  formatTime(transaction.timeStamp),
+                  style: Theme.of(context).textTheme.bodySmall,
+                )
+              ],
+            )
+          ],
         ),
       ),
     );

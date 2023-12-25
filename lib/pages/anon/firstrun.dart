@@ -3,7 +3,6 @@ import 'package:anonero/pages/setup/node_connection.dart';
 import 'package:anonero/pages/wallet/wallet_home.dart';
 import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/widgets/setup_logo.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // _restoreWallet -> BuildContext
@@ -30,11 +29,10 @@ class AnonFirstRun extends StatelessWidget {
             text: "RESTORE WALLET",
             onPressed: () => _restoreWallet(context),
           ),
-          if (kDebugMode)
-            SetupOutlinedButton(
-              text: "SHORTCUT",
-              onPressed: () => WalletHome.push(context),
-            ),
+          SetupOutlinedButton(
+            text: "SHORTCUT",
+            onPressed: () => WalletHome.push(context),
+          ),
           const Spacer(flex: 3),
         ],
       ),
@@ -42,21 +40,22 @@ class AnonFirstRun extends StatelessWidget {
   }
 
   void _restoreWallet(BuildContext c) {
-    Alert(body: [
-      const SetupLogo(
+    Alert(
+      singleBody: const SetupLogo(
         title: "Restore",
         width: 80,
         fontSize: 18,
       ),
-    ], overrideActions: [
-      const LongAlertButton(text: "RESTORE FROM BACKUP"),
-      const Divider(),
-      LongAlertButton(
-        text: "RESTORE FROM SEED",
-        callback: () => _restoreFromSeed(c),
-      ),
-      const SizedBox(height: 16)
-    ]).show(c);
+      overrideActions: [
+        const LongAlertButtonAlt(text: "RESTORE FROM BACKUP"),
+        const Divider(),
+        LongAlertButtonAlt(
+          text: "RESTORE FROM SEED",
+          callback: () => _restoreFromSeed(c),
+        ),
+        const SizedBox(height: 16)
+      ],
+    ).show(c);
   }
 
   void _restoreFromSeed(BuildContext c) {

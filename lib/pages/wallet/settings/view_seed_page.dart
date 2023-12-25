@@ -84,14 +84,12 @@ class _ViewSeedPageState extends State<ViewSeedPage> {
   void _showNeroKeys() {
     Alert(
       cancelable: false,
-      body: [
-        SizedBox(
-          width: 512,
-          child: Qr(
-            data: seed.join("____"),
-          ),
-        )
-      ],
+      singleBody: SizedBox(
+        width: 512,
+        child: Qr(
+          data: seed.join("____"),
+        ),
+      ),
     ).show(context);
   }
 

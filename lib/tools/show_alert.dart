@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 
 class Alert {
   final String? title;
+  final Widget? singleBody;
   final List<Widget> body;
   final List<Widget> overrideActions;
   final bool cancelable;
   final VoidCallback? callback;
   final String callbackText;
   final CrossAxisAlignment crossAxisAligment;
+
   Alert({
     this.title,
+    this.singleBody,
     this.body = const [],
     this.overrideActions = const [],
     this.cancelable = false,
@@ -19,8 +22,8 @@ class Alert {
   });
 
   Widget _getContent() {
+    if (singleBody != null) return singleBody!;
     if (body.isEmpty) return SelectableText(title ?? "");
-    if (body.length == 1) return body[0];
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: crossAxisAligment,
@@ -76,6 +79,27 @@ class LongAlertButton extends StatelessWidget {
       child: TextButton(
         onPressed: callback,
         child: Expanded(child: Center(child: Text(text))),
+      ),
+    );
+  }
+}
+
+class LongAlertButtonAlt extends StatelessWidget {
+  final VoidCallback? callback;
+  final String text;
+
+  const LongAlertButtonAlt({
+    super.key,
+    this.callback,
+    required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: callback,
+      child: Center(
+        child: Text(text),
       ),
     );
   }

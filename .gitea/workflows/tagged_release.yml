@@ -22,7 +22,7 @@ jobs:
       - name: Build apk
         run: |
           cd ${{ gitea.workspace }} \
-          && flutter build apk
+          && flutter build apk --no-tree-shake-icons
       # - name: Create release [go]  
       #   id: create-release
       #   uses: https://gitea.com/actions/release-action@main
