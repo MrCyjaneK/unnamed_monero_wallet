@@ -45,7 +45,8 @@ class ProgressScreen extends StatelessWidget {
     }
   }
 
-  static void push(BuildContext context, ProgressScreenFlag flag) {
+  static void push(BuildContext context, ProgressScreenFlag flag,
+      {String? passphrase}) {
     Navigator.of(context).pushReplacement(MaterialPageRoute(
       builder: (context) {
         return ProgressScreen(flag: flag);

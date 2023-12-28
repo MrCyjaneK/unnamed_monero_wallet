@@ -1,6 +1,5 @@
 import 'package:anonero/const/resource.g.dart';
 import 'package:anonero/pages/setup/node_connection.dart';
-import 'package:anonero/pages/wallet/wallet_home.dart';
 import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/widgets/setup_logo.dart';
 import 'package:flutter/material.dart';
@@ -28,10 +27,6 @@ class AnonFirstRun extends StatelessWidget {
           SetupOutlinedButton(
             text: "RESTORE WALLET",
             onPressed: () => _restoreWallet(context),
-          ),
-          SetupOutlinedButton(
-            text: "SHORTCUT",
-            onPressed: () => WalletHome.push(context),
           ),
           const Spacer(flex: 3),
         ],

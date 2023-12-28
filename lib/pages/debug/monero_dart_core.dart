@@ -1,10 +1,6 @@
-import 'dart:isolate';
-
 import 'package:anonero/widgets/labeled_text_input.dart';
 import 'package:anonero/widgets/long_outlined_button.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:ffi/ffi.dart';
 import 'package:monero/monero.dart';
 import 'dart:ffi' as ffi;
 

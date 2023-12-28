@@ -2,9 +2,12 @@ import 'package:anonero/const/app_name.dart';
 import 'package:anonero/const/is_view_only.dart';
 import 'package:anonero/legacy.dart';
 import 'package:anonero/pages/wallet/outputs_page.dart';
+import 'package:anonero/tools/format_monero.dart';
+import 'package:anonero/tools/wallet_ptr.dart';
 import 'package:anonero/widgets/transaction_list/popup_menu.dart';
 import 'package:anonero/widgets/transaction_list/transaction_item.dart';
 import 'package:flutter/material.dart';
+import 'package:monero/monero.dart';
 
 class TransactionList extends StatelessWidget {
   const TransactionList({super.key});
@@ -68,7 +71,8 @@ class LargeBalanceWidget extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(top: 40.0, bottom: 60),
           child: Text(
-            "9.4204237",
+            formatMonero(
+                MONERO_Wallet_unlockedBalance(walletPtr!, accountIndex: 0)),
             style: Theme.of(context).textTheme.headlineMedium,
           ),
         ),

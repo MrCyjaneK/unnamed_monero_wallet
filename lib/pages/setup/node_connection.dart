@@ -41,6 +41,9 @@ class _SetupNodeConnectionState extends State<SetupNodeConnection> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
+                  const Text(
+                    "NOTE: this is not implemented. Feel free to skip.",
+                  ),
                   LabeledTextInput(
                     // Called to rebuild the UI and make the button switch
                     // Connect <-> Skip

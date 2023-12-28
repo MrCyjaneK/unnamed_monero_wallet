@@ -72,14 +72,19 @@ class PassphraseEncryption extends StatelessWidget {
               .show(c);
           return;
         }
-        PinScreen.push(c, PinScreenFlag.createWallet);
+        PinScreen.push(c, PinScreenFlag.createWallet,
+            passphrase: pass1Ctrl.text);
       case PassphraseEncryptionFlag.restoreWalletSeed:
         if (!_isPassphraseValid()) {
           Alert(title: _passphraseInvalidReason() ?? "", cancelable: true)
               .show(c);
           return;
         }
-        PinScreen.push(c, PinScreenFlag.restoreWalletSeed);
+        PinScreen.push(
+          c,
+          PinScreenFlag.restoreWalletSeed,
+          passphrase: pass1Ctrl.text,
+        );
     }
   }
 

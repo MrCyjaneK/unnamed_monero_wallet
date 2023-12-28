@@ -1,9 +1,13 @@
 import 'package:anonero/pages/progress_screen.dart';
+import 'package:anonero/pages/wallet/wallet_home.dart';
+import 'package:anonero/tools/dirs.dart';
 import 'package:anonero/tools/show_alert.dart';
+import 'package:anonero/tools/wallet_ptr.dart';
 import 'package:anonero/widgets/normal_keyboard.dart';
 import 'package:anonero/widgets/numerical_keyboard.dart';
 import 'package:anonero/widgets/setup_logo.dart';
 import 'package:flutter/material.dart';
+import 'package:monero/monero.dart';
 
 // createWallet -> createWalletConfirm -> "wallet"
 // /|\                               \__ Doesn't match -> \
@@ -18,7 +22,13 @@ enum PinScreenFlag {
 }
 
 class PinScreen extends StatefulWidget {
-  const PinScreen({super.key, required this.flag, this.initialPin = ""});
+  const PinScreen(
+      {super.key,
+      required this.flag,
+      this.initialPin = "",
+      required this.passphrase});
+
+  final String passphrase;
 
   final PinScreenFlag flag;
   final String initialPin;
@@ -26,32 +36,40 @@ class PinScreen extends StatefulWidget {
   @override
   State<PinScreen> createState() => _PinScreenState();
 
-  static void pushConfirmCreate(BuildContext context, String pin) {
+  static void pushConfirmCreate(BuildContext context, String pin,
+      {required String passphrase}) {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) {
         return PinScreen(
           flag: PinScreenFlag.createWalletConfirm,
           initialPin: pin,
+          passphrase: passphrase,
         );
       },
     ));
   }
 
-  static void pushConfirmRestore(BuildContext context, String pin) {
+  static void pushConfirmRestore(BuildContext context, String pin,
+      {required String passphrase}) {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) {
         return PinScreen(
           flag: PinScreenFlag.createWalletConfirm,
           initialPin: pin,
+          passphrase: passphrase,
         );
       },
     ));
   }
 
-  static void push(BuildContext context, PinScreenFlag flag) {
+  static void push(BuildContext context, PinScreenFlag flag,
+      {required String passphrase}) {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) {
-        return PinScreen(flag: flag);
+        return PinScreen(
+          flag: flag,
+          passphrase: passphrase,
+        );
       },
     ));
   }
@@ -69,28 +87,53 @@ class _PinScreenState extends State<PinScreen> {
     setState(() {});
   }
 
+  Future<bool> _createWallet() async {
+    walletPtr = MONERO_WalletManager_createWallet(
+      path: await getMainWalletPath(),
+      password: pin.value,
+    );
+    final status = MONERO_Wallet_status(walletPtr!);
+    if (status == 0) return true; // All went fine
+    if (mounted) {
+      Alert(title: MONERO_Wallet_errorString(walletPtr!), cancelable: true)
+          .show(context);
+    }
+    return false;
+  }
+
   void _nextPage() {
     switch (widget.flag) {
       case PinScreenFlag.createWallet:
-        PinScreen.pushConfirmCreate(context, pin.value);
+        PinScreen.pushConfirmCreate(context, pin.value,
+            passphrase: widget.passphrase);
       case PinScreenFlag.createWalletConfirm:
         if (pin.value != widget.initialPin) {
           Alert(
             title: "Pins doesn't match. Please try again.",
-            callback: () => PinScreen.push(context, PinScreenFlag.createWallet),
+            callback: () => PinScreen.push(context, PinScreenFlag.createWallet,
+                passphrase: widget.passphrase),
           ).show(context);
           return;
         } else {
-          ProgressScreen.push(context, ProgressScreenFlag.walletCreation);
+          _createWallet().then((createdOk) {
+            if (!mounted) return;
+            if (createdOk) {
+              WalletHome.push(context);
+            }
+          });
+          // ProgressScreen.push(context, ProgressScreenFlag.walletCreation,
+          //     passphrase: widget.passphrase);
         }
       case PinScreenFlag.restoreWalletSeed:
-        PinScreen.pushConfirmRestore(context, pin.value);
+        PinScreen.pushConfirmRestore(context, pin.value,
+            passphrase: widget.passphrase);
       case PinScreenFlag.restoreWalletSeedConfirm:
         if (pin.value != widget.initialPin) {
           Alert(
             title: "Pins doesn't match. Please try again.",
-            callback: () =>
-                PinScreen.push(context, PinScreenFlag.restoreWalletSeed),
+            callback: () => PinScreen.push(
+                context, PinScreenFlag.restoreWalletSeed,
+                passphrase: widget.passphrase),
           ).show(context);
           return;
         } else {
