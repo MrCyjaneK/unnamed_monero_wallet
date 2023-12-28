@@ -1,5 +1,5 @@
 import 'package:anonero/pages/pin_screen.dart';
-import 'package:anonero/pages/wallet/settings/add_node_screen.dart';
+import 'package:anonero/pages/settings/add_node_screen.dart';
 import 'package:anonero/tools/show_alert.dart';
 import 'package:flutter/material.dart';
 
