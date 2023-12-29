@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:anonero/pages/progress_screen.dart';
 import 'package:anonero/pages/wallet/wallet_home.dart';
 import 'package:anonero/tools/dirs.dart';
+import 'package:anonero/tools/node.dart';
+import 'package:anonero/tools/proxy.dart';
 import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
 import 'package:anonero/widgets/normal_keyboard.dart';
@@ -19,16 +23,14 @@ enum PinScreenFlag {
   createWalletConfirm,
   restoreWalletSeed,
   restoreWalletSeedConfirm,
+  openMainWallet
 }
 
 class PinScreen extends StatefulWidget {
   const PinScreen(
-      {super.key,
-      required this.flag,
-      this.initialPin = "",
-      required this.passphrase});
+      {super.key, required this.flag, this.initialPin = "", this.passphrase});
 
-  final String passphrase;
+  final String? passphrase;
 
   final PinScreenFlag flag;
   final String initialPin;
@@ -105,20 +107,20 @@ class _PinScreenState extends State<PinScreen> {
     switch (widget.flag) {
       case PinScreenFlag.createWallet:
         PinScreen.pushConfirmCreate(context, pin.value,
-            passphrase: widget.passphrase);
+            passphrase: widget.passphrase!);
       case PinScreenFlag.createWalletConfirm:
         if (pin.value != widget.initialPin) {
           Alert(
             title: "Pins doesn't match. Please try again.",
             callback: () => PinScreen.push(context, PinScreenFlag.createWallet,
-                passphrase: widget.passphrase),
+                passphrase: widget.passphrase!),
           ).show(context);
           return;
         } else {
           _createWallet().then((createdOk) {
             if (!mounted) return;
             if (createdOk) {
-              WalletHome.push(context);
+              _openMainWallet();
             }
           });
           // ProgressScreen.push(context, ProgressScreenFlag.walletCreation,
@@ -126,21 +128,74 @@ class _PinScreenState extends State<PinScreen> {
         }
       case PinScreenFlag.restoreWalletSeed:
         PinScreen.pushConfirmRestore(context, pin.value,
-            passphrase: widget.passphrase);
+            passphrase: widget.passphrase!);
       case PinScreenFlag.restoreWalletSeedConfirm:
         if (pin.value != widget.initialPin) {
           Alert(
             title: "Pins doesn't match. Please try again.",
             callback: () => PinScreen.push(
                 context, PinScreenFlag.restoreWalletSeed,
-                passphrase: widget.passphrase),
+                passphrase: widget.passphrase!),
           ).show(context);
           return;
         } else {
           ProgressScreen.push(context, ProgressScreenFlag.walletRestore);
         }
+      case PinScreenFlag.openMainWallet:
+        _openMainWallet();
     }
   }
+
+  void _openMainWallet() async {
+    setState(() {
+      openMainWalletUnlockText = "UNLOCKING...";
+    });
+    walletPtr = MONERO_WalletManager_openWallet(
+        path: await getMainWalletPath(), password: pin.value);
+    if (!mounted) return;
+    final status = MONERO_Wallet_status(walletPtr!);
+    if (status != 0) {
+      Alert(
+        title:
+            "Unable to unlock wallet.\n${MONERO_Wallet_errorString(walletPtr!)}",
+        cancelable: true,
+      ).show(context);
+      setState(() {
+        openMainWalletUnlockText = "UNLOCK: failed";
+      });
+      return;
+    }
+    final Node? node = (await NodeStore.getCurrentNode());
+    final ProxyStore proxy = (await ProxyStore.getProxy());
+    setState(() {
+      openMainWalletUnlockText = "INITIALIZING...";
+    });
+    final logPath = await getMoneroLogPath();
+    final logFile = File(logPath);
+    if (logFile.existsSync()) {
+      logFile.deleteSync();
+    }
+    logFile.createSync();
+    MONERO_Wallet_init(
+      walletPtr!,
+      daemonAddress: node?.address ?? "",
+      daemonUsername: node?.username ?? "",
+      daemonPassword: node?.password ?? "",
+      proxyAddress: node == null ? "" : proxy.getAddress(node.network),
+    );
+
+    MONERO_Wallet_init3(walletPtr!,
+        argv0: "", defaultLogBaseName: "", logPath: logPath, console: false);
+    MONERO_Wallet_startRefresh(walletPtr!);
+    MONERO_Wallet_refreshAsync(walletPtr!);
+    setState(() {
+      openMainWalletUnlockText = "UNLOCKED!";
+    });
+    if (!mounted) return;
+    WalletHome.push(context);
+  }
+
+  String openMainWalletUnlockText = "Unlock your wallet";
 
   String getInputText() {
     return switch (widget.flag) {
@@ -150,6 +205,7 @@ class _PinScreenState extends State<PinScreen> {
       PinScreenFlag.createWalletConfirm ||
       PinScreenFlag.restoreWalletSeedConfirm =>
         "Confirm your pin",
+      PinScreenFlag.openMainWallet => openMainWalletUnlockText,
     };
   }
 

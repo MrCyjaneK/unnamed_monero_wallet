@@ -40,6 +40,8 @@ jobs:
           body: |
             This is a **preview** release to be used by testers.
             It was build from **${{ gitea.ref }}** commit `${{ gitea.sha }}`
+            ### Release info
+            ${{ github.event.head_commit.message }}
           #name: "${{ gitea.reg_name }}-${{ gitea.sha }}"
           #tagname: "${{ gitea.reg_name }}-${{ gitea.sha }}"
           files: |-

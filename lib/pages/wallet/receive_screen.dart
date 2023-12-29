@@ -1,12 +1,26 @@
 import 'package:anonero/pages/wallet/subaddress_page.dart';
+import 'package:anonero/tools/monero/subaddress_label.dart';
+import 'package:anonero/tools/wallet_ptr.dart';
 import 'package:anonero/widgets/qr_code.dart';
 import 'package:flutter/material.dart';
+import 'package:monero/monero.dart';
 
-class ReceiveScreen extends StatelessWidget {
+class ReceiveScreen extends StatefulWidget {
   const ReceiveScreen({super.key});
 
-  final address =
-      '888tNkZrPN6JsEgekjMnABU4TBzc2Dt29EPAvkRxbANsAnjyPbb3iQ1YBRk1UXcdRsiKc9dhwMVgN5S9cQUiyoogDavup3H';
+  @override
+  State<ReceiveScreen> createState() => _ReceiveScreenState();
+}
+
+class _ReceiveScreenState extends State<ReceiveScreen> {
+  late int currentAddressIndex =
+      MONERO_Wallet_numSubaddresses(walletPtr!, accountIndex: 0);
+
+  late final address = MONERO_Wallet_address(
+    walletPtr!,
+    accountIndex: 0,
+    addressIndex: currentAddressIndex,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +38,7 @@ class ReceiveScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: Text(
-              "SUBADDRESS #3",
+              subaddressLabel(currentAddressIndex),
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     color: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.bold,

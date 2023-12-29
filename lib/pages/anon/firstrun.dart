@@ -1,7 +1,9 @@
 import 'package:anonero/const/resource.g.dart';
+import 'package:anonero/pages/debug.dart';
 import 'package:anonero/pages/setup/node_connection.dart';
 import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/widgets/setup_logo.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // _restoreWallet -> BuildContext
@@ -28,6 +30,11 @@ class AnonFirstRun extends StatelessWidget {
             text: "RESTORE WALLET",
             onPressed: () => _restoreWallet(context),
           ),
+          if (kDebugMode)
+            SetupOutlinedButton(
+              text: "D3B8G",
+              onPressed: () => DebugPage.push(context),
+            ),
           const Spacer(flex: 3),
         ],
       ),

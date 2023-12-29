@@ -1,4 +1,7 @@
+import 'package:anonero/tools/wallet_ptr.dart';
 import 'package:flutter/material.dart';
+import 'package:monero/monero.dart';
+import 'package:anonero/tools/monero/subaddress_label.dart' as sl;
 
 const ColorScheme colorScheme = ColorScheme(
   brightness: Brightness.dark,
@@ -32,46 +35,38 @@ const ColorScheme colorScheme = ColorScheme(
 );
 
 class Transaction {
-  String? displayLabel;
-  String? subaddressLabel;
-  String? address;
-  String? notes;
-  int? fee;
-  int confirmations;
-  bool isPending = false;
-  int? blockheight;
-  int? accountIndex;
-  String? paymentId;
-  num? amount = 0;
-  bool isSpend = false;
-  int get timeStamp =>
-      DateTime.now()
-          .subtract(
-            Duration(seconds: confirmations * 120),
-          )
-          .millisecondsSinceEpoch ~/
-      1000;
-  int? addressIndex;
-  bool get isConfirmed => confirmations > maxConfirms;
-  String? hash;
-  SubAddress? subAddress;
-  List<Transfer> transfers = [];
-
+  String get displayLabel => MONERO_TransactionInfo_label(_tx);
+  String get subaddressLabel => sl.subaddressLabel(addressIndex);
+  String get address => MONERO_Wallet_address(
+        walletPtr!,
+        accountIndex: 0,
+        addressIndex: addressIndex,
+      );
+  String get description => MONERO_TransactionInfo_description(_tx);
+  int get fee => MONERO_TransactionInfo_fee(_tx);
+  int get confirmations => MONERO_TransactionInfo_confirmations(_tx);
+  bool get isPending => MONERO_TransactionInfo_isPending(_tx);
+  int get blockheight => MONERO_TransactionInfo_blockHeight(_tx);
+  int get accountIndex => MONERO_TransactionInfo_subaddrAccount(_tx);
+  String get paymentId => MONERO_TransactionInfo_paymentId(_tx);
+  int get amount => MONERO_TransactionInfo_amount(_tx);
+  bool get isSpend =>
+      MONERO_TransactionInfo_direction(_tx) == TransactionInfo_Direction.Out;
+  DateTime get timeStamp => DateTime.fromMillisecondsSinceEpoch(
+        MONERO_TransactionInfo_timestamp(_tx) * 1000,
+      );
+  int get addressIndex => MONERO_TransactionInfo_subaddrAccount(_tx);
+  bool get isConfirmed => !isPending;
+  String get hash => MONERO_TransactionInfo_hash(_tx);
+  // SubAddress? subAddress;
+  // List<Transfer> transfers = [];
+  final MONERO_TransactionHistory txHistoryPtr;
+  final int txIndex;
+  late final MONERO_TransactionInfo _tx =
+      MONERO_TransactionHistory_transaction(txHistoryPtr, index: txIndex);
   Transaction({
-    this.displayLabel = "displayLabel",
-    this.subaddressLabel = "subaddressLabel",
-    this.address =
-        "addressaddressaddressaddressaddressaddressaddressaddressaddress",
-    this.notes = "notes",
-    this.fee = 100000000,
-    required this.confirmations,
-    this.isPending = false,
-    this.blockheight = 30003410,
-    this.accountIndex = 0,
-    this.paymentId = "paymentId",
-    this.addressIndex = 0,
-    this.hash =
-        "hashhashhashhashhashhashhashhashhashhashhashhashhashhashhashhash",
+    required this.txHistoryPtr,
+    required this.txIndex,
   });
 }
 

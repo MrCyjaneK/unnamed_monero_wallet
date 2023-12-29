@@ -1,3 +1,5 @@
+import 'package:anonero/tools/node.dart';
+import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/widgets/labeled_text_input.dart';
 import 'package:anonero/widgets/long_outlined_button.dart';
 import 'package:anonero/widgets/proxy_button.dart';
@@ -21,6 +23,35 @@ class _AddNodeScreenState extends State<AddNodeScreen> {
   final nodeCtrl = TextEditingController();
   final usernameCtrl = TextEditingController();
   final passwordCtrl = TextEditingController();
+
+  void _addNode() {
+    if (nodeCtrl.text.isEmpty) {
+      Alert(
+        title: "No host provided",
+        cancelable: true,
+      ).show(context);
+      return;
+    }
+    String nodeUrl = nodeCtrl.text;
+    if (!nodeUrl.toLowerCase().startsWith('http://') &&
+        !nodeUrl.toLowerCase().startsWith("https://")) {
+      nodeUrl = "http://$nodeUrl";
+    }
+    if (Uri.tryParse(nodeUrl) == null) {
+      Alert(title: "Invalid node address").show(context);
+      return;
+    }
+    NodeStore.saveNode(
+      Node(
+        address: nodeUrl,
+        username: usernameCtrl.text,
+        password: passwordCtrl.text,
+        id: NodeStore.getUniqueId(),
+      ),
+      current: true,
+    );
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,9 +79,9 @@ class _AddNodeScreenState extends State<AddNodeScreen> {
           const SizedBox(height: 32),
           const ProxyButton(),
           const Spacer(),
-          const LongOutlinedButton(
+          LongOutlinedButton(
             text: "ADD NODE",
-            onPressed: null,
+            onPressed: _addNode,
           ),
         ],
       ),

@@ -36,7 +36,7 @@ class TransactionItem extends StatelessWidget {
           children: [
             getStats(transaction, context),
             Text(
-              (((transaction.amount! / 1e12 * 1e4)).floor() / 1e4)
+              (((transaction.amount / 1e12 * 1e4)).floor() / 1e4)
                   .toStringAsFixed(4),
               style: Theme.of(context).textTheme.headlineSmall,
             ),
@@ -90,11 +90,7 @@ class TransactionItem extends StatelessWidget {
     }
   }
 
-  String formatTime(int? timestamp) {
-    if (timestamp == null) {
-      return "";
-    }
-    var dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+  String formatTime(DateTime dateTime) {
     return DateFormat("HH:mm\ndd/M").format(dateTime);
   }
 }

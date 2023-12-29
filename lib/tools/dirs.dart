@@ -9,3 +9,19 @@ Future<Directory> getWd() async {
 Future<String> getMainWalletPath() async {
   return "${(await getWd()).path}/main_wallet";
 }
+
+Future<String> getNodeStore() async {
+  return "${(await getWd()).path}/nodes.json";
+}
+
+Future<String> getProxyStore() async {
+  return "${(await getWd()).path}/proxy.json";
+}
+
+Future<String> getMaterial3FlagFile() async {
+  return "${(await getWd()).path}/material3-flag";
+}
+
+Future<String> getMoneroLogPath() async {
+  return "${(await getWd()).path}/monero.log";
+}

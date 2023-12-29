@@ -1,5 +1,6 @@
 import 'package:anonero/pages/setup/mnemonic_seed.dart';
 import 'package:anonero/pages/setup/passphrase_encryption.dart';
+import 'package:anonero/tools/node.dart';
 import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/widgets/labeled_text_input.dart';
 import 'package:anonero/widgets/long_outlined_button.dart';
@@ -27,9 +28,24 @@ class SetupNodeConnection extends StatefulWidget {
 }
 
 class _SetupNodeConnectionState extends State<SetupNodeConnection> {
+  int id = NodeStore.getUniqueId();
   final nodeCtrl = TextEditingController();
   final usernameCtrl = TextEditingController();
   final passwordCtrl = TextEditingController();
+
+  @override
+  void initState() {
+    NodeStore.getCurrentNode().then((node) {
+      if (node == null) return;
+      setState(() {
+        id = node.id;
+        nodeCtrl.text = node.address;
+        usernameCtrl.text = node.username;
+        passwordCtrl.text = passwordCtrl.text;
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +57,6 @@ class _SetupNodeConnectionState extends State<SetupNodeConnection> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  const Text(
-                    "NOTE: this is not implemented. Feel free to skip.",
-                  ),
                   LabeledTextInput(
                     // Called to rebuild the UI and make the button switch
                     // Connect <-> Skip
@@ -79,16 +92,34 @@ class _SetupNodeConnectionState extends State<SetupNodeConnection> {
     );
   }
 
-  void _nextScreenSafe() {
+  void _nextScreenSafe() async {
     if (nodeCtrl.text.isEmpty) {
       Alert(
         title: "Creating offline wallet",
         cancelable: true,
         callback: _nextScreen,
       ).show(context);
-    } else {
-      _nextScreen();
+      return;
     }
+    String nodeUrl = nodeCtrl.text;
+    if (!nodeUrl.toLowerCase().startsWith('http://') &&
+        !nodeUrl.toLowerCase().startsWith("https://")) {
+      nodeUrl = "http://$nodeUrl";
+    }
+    if (Uri.tryParse(nodeUrl) == null) {
+      Alert(title: "Invalid node address").show(context);
+      return;
+    }
+    NodeStore.saveNode(
+      Node(
+        address: nodeUrl,
+        username: usernameCtrl.text,
+        password: passwordCtrl.text,
+        id: id,
+      ),
+      current: true,
+    );
+    _nextScreen();
   }
 
   void _nextScreen() {

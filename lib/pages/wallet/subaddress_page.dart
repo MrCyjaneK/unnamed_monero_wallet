@@ -1,40 +1,15 @@
-import 'dart:math';
-
 import 'package:anonero/pages/wallet/subaddress_details.dart';
 import 'package:anonero/tools/format_monero.dart';
+import 'package:anonero/tools/monero/subaddress_label.dart';
+import 'package:anonero/tools/wallet_ptr.dart';
 import 'package:flutter/material.dart';
+import 'package:monero/monero.dart';
 
-class SubAddressPage extends StatelessWidget {
+class SubAddressPage extends StatefulWidget {
   const SubAddressPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Subadddresses"),
-        actions: [
-          IconButton(onPressed: _addSubaddress, icon: const Icon(Icons.add))
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-            children: List.generate(
-                    128,
-                    (index) => SubaddressItem(
-                        subaddressId: index,
-                        label: 'SUBADDRESS #$index',
-                        received: (index * 1234567890123 +
-                                pow(1234567890123, index).toInt()) %
-                            1987435691635,
-                        squashedAddress:
-                            'squashedAddresssquashedAddresssquashedAddresssquashedAddresssquashedAddresssquashedAddresssquashedAddresssquashedAddress'))
-                .reversed
-                .toList()),
-      ),
-    );
-  }
-
-  void _addSubaddress() {}
+  State<SubAddressPage> createState() => _SubAddressPageState();
 
   static void push(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(
@@ -42,6 +17,44 @@ class SubAddressPage extends StatelessWidget {
         return const SubAddressPage();
       },
     ));
+  }
+}
+
+class _SubAddressPageState extends State<SubAddressPage> {
+  int addrCount = MONERO_Wallet_numSubaddresses(walletPtr!, accountIndex: 0);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Subaddresses"),
+        actions: [
+          IconButton(onPressed: _addSubaddress, icon: const Icon(Icons.add))
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+            children: List.generate(
+          addrCount,
+          (index) => SubaddressItem(
+            subaddressId: index,
+            label: subaddressLabel(index),
+            received: -1,
+            squashedAddress: MONERO_Wallet_address(
+              walletPtr!,
+              accountIndex: 0,
+              addressIndex: index,
+            ),
+          ),
+        ).reversed.toList()),
+      ),
+    );
+  }
+
+  void _addSubaddress() {
+    setState(() {
+      addrCount++;
+    });
   }
 }
 

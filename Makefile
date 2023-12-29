@@ -2,6 +2,11 @@ MONERO_C_TAG=v0.18.3.1-RC11
 LIBCPP_SHARED_SO_TAG=latest-RC1
 LIBCPP_SHARED_SO_NDKVERSION=r17c
 
+
+dev: libs
+.PHONY: dev
+
+dev:
 lib/const/resource.g.dart:
 	dart pub global activate flutter_asset_generator
 	timeout 15 ${HOME}/.pub-cache/bin/fgen || true

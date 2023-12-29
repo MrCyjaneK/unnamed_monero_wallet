@@ -1,11 +1,13 @@
 import 'package:anonero/const/app_name.dart';
 import 'package:anonero/tools/show_alert.dart';
+import 'package:anonero/tools/wallet_ptr.dart';
 import 'package:anonero/widgets/long_outlined_button.dart';
 import 'package:anonero/widgets/padded_element.dart';
 import 'package:anonero/widgets/primary_label.dart';
 import 'package:anonero/widgets/qr_code.dart';
 import 'package:anonero/widgets/tiny_card.dart';
 import 'package:flutter/material.dart';
+import 'package:monero/monero.dart';
 
 class ViewSeedPage extends StatefulWidget {
   const ViewSeedPage({super.key});
@@ -23,57 +25,13 @@ class ViewSeedPage extends StatefulWidget {
 }
 
 class _ViewSeedPageState extends State<ViewSeedPage> {
-  final address =
-      '888tNkZrPN6JsEgekjMnABU4TBzc2Dt29EPAvkRxbANsAnjyPbb3iQ1YBRk1UXcdRsiKc9dhwMVgN5S9cQUiyoogDavup3H';
+  final address = MONERO_Wallet_address(walletPtr!);
 
-  final seed = [
-    "bronze",
-    "rough",
-    "improve",
-    "damage",
-    "hammer",
-    "source",
-    "alpha",
-    "letter",
-    "spice",
-    "front",
-    "unhappy",
-    "popular",
-    "pen",
-    "butter",
-    "culture",
-    "lumber"
-  ];
+  late final legacySeed = MONERO_Wallet_seed(walletPtr!).split(' ');
 
-  final legacySeed = [
-    "eleven",
-    "divers",
-    "smash",
-    "arrow",
-    "dinner",
-    "weekday",
-    "bovine",
-    "melting",
-    "rarest",
-    "jackets",
-    "berries",
-    "nirvana",
-    "nexus",
-    "symptoms",
-    "volcano",
-    "biweekly",
-    "budget",
-    "sake",
-    "pixels",
-    "coge",
-    "licks",
-    "napkin",
-    "sedan",
-    "spud",
-    "jackets"
-  ];
+  late final seed = ['unsupported'];
 
-  bool useLegacy = false;
+  bool useLegacy = true;
 
   void _toggleSeed() {
     setState(() {
@@ -93,6 +51,10 @@ class _ViewSeedPageState extends State<ViewSeedPage> {
     ).show(context);
   }
 
+  String viewKey = MONERO_Wallet_publicViewKey(walletPtr!);
+  String spendKey = MONERO_Wallet_secretSpendKey(walletPtr!);
+  int restoreHeight = -1;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,20 +70,21 @@ class _ViewSeedPageState extends State<ViewSeedPage> {
               const PrimaryLabel(title: "PRIMARY ADDRESS"),
               PaddedElement(child: SelectableText(address)),
               const Divider(),
-              const PrimaryLabel(title: "POLYSEED MNEMONIC"),
+              PrimaryLabel(
+                  title: useLegacy ? "LEGACY MNEMONIC" : "POLYSEED MNEMONIC"),
               InkWell(
                 onTap: _toggleSeed,
                 child: PaddedElement(child: _seedWidget()),
               ),
               const Divider(),
               const PrimaryLabel(title: "VIEW-KEY"),
-              PaddedElement(child: SelectableText(address)),
+              PaddedElement(child: SelectableText(viewKey)),
               const Divider(),
               const PrimaryLabel(title: "SPEND-KEY"),
-              PaddedElement(child: SelectableText(address)),
+              PaddedElement(child: SelectableText(spendKey)),
               const Divider(),
               const PrimaryLabel(title: "RESTORE HEIGHT"),
-              const PaddedElement(child: SelectableText('3011251')),
+              PaddedElement(child: SelectableText(restoreHeight.toString())),
               const Divider(),
               LongOutlinedButton(
                 text: "EXPORT $nero KEYS",

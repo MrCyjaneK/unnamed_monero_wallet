@@ -1,8 +1,18 @@
+import 'dart:io';
+
 import 'package:anonero/legacy.dart';
 import 'package:anonero/pages/anon/firstrun.dart';
+import 'package:anonero/pages/pin_screen.dart';
+import 'package:anonero/tools/dirs.dart';
 import 'package:flutter/material.dart';
+import 'package:monero/monero.dart';
 
-void main() {
+bool _walletExists = false;
+bool useMaterial3 = false;
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  _walletExists = MONERO_WalletManager_walletExists(await getMainWalletPath());
+  useMaterial3 = File(await getMaterial3FlagFile()).existsSync();
   runApp(const MyApp());
 }
 
@@ -24,9 +34,13 @@ class MyApp extends StatelessWidget {
         ),
         dialogBackgroundColor: colorScheme.background, // ?material2 compat
         scaffoldBackgroundColor: colorScheme.background, // material2 compat
-        useMaterial3: false,
+        useMaterial3: useMaterial3,
       ),
-      home: const AnonFirstRun(),
+      home: _walletExists
+          ? const PinScreen(
+              flag: PinScreenFlag.openMainWallet,
+            )
+          : const AnonFirstRun(),
     );
   }
 }

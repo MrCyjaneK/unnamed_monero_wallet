@@ -1,8 +1,8 @@
+import 'package:anonero/tools/wallet_ptr.dart';
 import 'package:anonero/widgets/labeled_text_input.dart';
 import 'package:anonero/widgets/long_outlined_button.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
-import 'dart:ffi' as ffi;
 
 class MoneroDartCore extends StatefulWidget {
   const MoneroDartCore({super.key});
@@ -27,7 +27,7 @@ class _MoneroDartCoreState extends State<MoneroDartCore> {
   final networkTypeCtrl = TextEditingController(text: '0');
 
   String result = "NOTE: There are no safety checks, you may crash the app.";
-  ffi.Pointer<ffi.Void>? wallet;
+  MONERO_wallet? wallet = walletPtr;
 
   void _call() {
     try {

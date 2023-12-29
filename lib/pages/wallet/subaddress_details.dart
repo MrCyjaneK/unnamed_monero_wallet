@@ -1,11 +1,12 @@
-import 'package:anonero/legacy.dart';
 import 'package:anonero/pages/wallet/subaddress_page.dart';
+import 'package:anonero/tools/monero/subaddress_label.dart';
 import 'package:anonero/tools/show_alert.dart';
+import 'package:anonero/tools/wallet_ptr.dart';
 import 'package:anonero/widgets/labeled_text_input.dart';
 import 'package:anonero/widgets/qr_code.dart';
-import 'package:anonero/widgets/transaction_list/transaction_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:monero/monero.dart';
 
 class SubaddressDetailsPage extends StatelessWidget {
   SubaddressDetailsPage({super.key, required this.subaddressId});
@@ -13,21 +14,23 @@ class SubaddressDetailsPage extends StatelessWidget {
   final int subaddressId;
 
   void _copyAddress() {
-    Clipboard.setData(const ClipboardData(text: 'text'));
+    Clipboard.setData(ClipboardData(
+        text: MONERO_Wallet_address(walletPtr!, addressIndex: subaddressId)));
   }
 
   void _showQr(BuildContext c) {
     Alert(
         cancelable: false,
-        singleBody: const SizedBox(
+        singleBody: SizedBox(
           width: 512,
           child: Qr(
-            data: 'text',
+            data: MONERO_Wallet_address(walletPtr!, addressIndex: subaddressId),
           ),
         )).show(c);
   }
 
-  final renameCtrl = TextEditingController(text: "current name");
+  late final renameCtrl =
+      TextEditingController(text: subaddressLabel(subaddressId));
 
   void _rename(BuildContext c) {
     Alert(
@@ -39,7 +42,13 @@ class SubaddressDetailsPage extends StatelessWidget {
         ),
       ),
       cancelable: true,
-      callback: () {},
+      callback: () {
+        MONERO_Wallet_setSubaddressLabel(walletPtr!,
+            accountIndex: 0,
+            addressIndex: subaddressId,
+            label: renameCtrl.text);
+        Navigator.of(c).pop();
+      },
     ).show(c);
   }
 
@@ -67,41 +76,15 @@ class SubaddressDetailsPage extends StatelessWidget {
               SubaddressItem(
                 shouldSquash: false,
                 subaddressId: subaddressId,
-                label: "label",
-                received: 1234567890123,
-                squashedAddress:
-                    'squashedAddresssquashedAddresssquashedAddresssquashedAddresssquashedAddresssquashedAddress',
+                label: subaddressLabel(subaddressId),
+                received: -1,
+                squashedAddress: MONERO_Wallet_address(walletPtr!,
+                    addressIndex: subaddressId),
               ),
               const SizedBox(
                 height: 16,
               ),
-              TransactionItem(
-                  transaction: Transaction(
-                confirmations: 3,
-              )),
-              TransactionItem(
-                transaction: Transaction(confirmations: 9)
-                  ..amount = 1234567890120
-                  ..isSpend = true,
-              ),
-              TransactionItem(
-                  transaction: Transaction(confirmations: 25)..isSpend = true),
-              TransactionItem(
-                  transaction: Transaction(confirmations: 90)
-                    ..amount = 1234567890120),
-              TransactionItem(transaction: Transaction(confirmations: 532)),
-              TransactionItem(
-                  transaction: Transaction(confirmations: 53151)
-                    ..isSpend = true),
-              TransactionItem(transaction: Transaction(confirmations: 533135)),
-              TransactionItem(transaction: Transaction(confirmations: 5111353)),
-              TransactionItem(transaction: Transaction(confirmations: 532)),
-              TransactionItem(transaction: Transaction(confirmations: 532)),
-              TransactionItem(transaction: Transaction(confirmations: 532)),
-              TransactionItem(transaction: Transaction(confirmations: 532)),
-              TransactionItem(transaction: Transaction(confirmations: 532)),
-              TransactionItem(transaction: Transaction(confirmations: 532)),
-              TransactionItem(transaction: Transaction(confirmations: 532)),
+              // TransactionItem(transaction: Transaction(confirmations: 532)),
             ],
           ),
         ),

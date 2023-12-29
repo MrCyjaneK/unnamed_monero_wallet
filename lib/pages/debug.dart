@@ -1,6 +1,9 @@
 import 'package:anonero/pages/debug/button_x_textfield.dart';
+import 'package:anonero/pages/debug/monero_dart_advanced.dart';
 import 'package:anonero/pages/debug/monero_dart_core.dart';
-import 'package:anonero/pages/debug/vars.dart';
+import 'package:anonero/pages/debug/monero_dart_state.dart';
+import 'package:anonero/pages/debug/monero_log.dart';
+import 'package:anonero/pages/debug/use_material3.dart';
 import 'package:anonero/widgets/long_outlined_button.dart';
 import 'package:flutter/material.dart';
 
@@ -25,8 +28,20 @@ class DebugPage extends StatelessWidget {
               onPressed: () => MoneroDartCore.push(context),
             ),
             LongOutlinedButton(
-              text: "Variables",
-              onPressed: () => VarsDebug.push(context),
+              text: "monero.dart state",
+              onPressed: () => MoneroDartState.push(context),
+            ),
+            LongOutlinedButton(
+              text: "monero.dart advanced",
+              onPressed: () => MoneroDartAdvancedDebug.push(context),
+            ),
+            LongOutlinedButton(
+              text: "monero logs",
+              onPressed: () => MoneroLogDebug.push(context),
+            ),
+            LongOutlinedButton(
+              text: "useMaterial3",
+              onPressed: () => UseMaterial3Debug.push(context),
             ),
           ],
         ),
