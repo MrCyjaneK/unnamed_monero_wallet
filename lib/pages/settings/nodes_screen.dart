@@ -153,7 +153,7 @@ class _SingleNodeWidgetState extends State<SingleNodeWidget> {
         onTap: disabled ? null : () => _showDetails(context),
         child: Card(
           child: ListTile(
-            title: Text("${widget.node.address};$disabled;${widget.node.id}"),
+            title: Text(widget.node.address),
             subtitle: Text(
               r"Daemon Height: $height",
               style: Theme.of(context).textTheme.bodySmall,

@@ -1,10 +1,14 @@
 import 'package:anonero/pages/progress_screen.dart';
+import 'package:anonero/pages/wallet/spend_success.dart';
 import 'package:anonero/tools/format_monero.dart';
+import 'package:anonero/tools/show_alert.dart';
+import 'package:anonero/tools/wallet_ptr.dart';
 import 'package:anonero/widgets/long_outlined_button.dart';
 import 'package:anonero/widgets/padded_element.dart';
 import 'package:anonero/widgets/primary_label.dart';
 import 'package:anonero/widgets/setup_logo.dart';
 import 'package:flutter/material.dart';
+import 'package:monero/monero.dart';
 
 class TxRequest {
   final String address;
@@ -38,8 +42,7 @@ class SpendConfirm extends StatefulWidget {
 }
 
 class _SpendConfirmState extends State<SpendConfirm> {
-  bool isDone = false;
-
+  MONERO_PendingTransaction? txPtr;
   @override
   void initState() {
     _placeholderTriggerDone();
@@ -48,8 +51,31 @@ class _SpendConfirmState extends State<SpendConfirm> {
 
   void _placeholderTriggerDone() {
     Future.delayed(const Duration(milliseconds: 999)).then((value) {
+      final tx = MONERO_Wallet_createTransaction(
+        walletPtr!,
+        dst_addr: widget.tx.address,
+        payment_id: "",
+        amount: widget.tx.amount,
+        mixin_count: 0,
+        pendingTransactionPriority: 0,
+        subaddr_account: 0,
+      );
+      final status = MONERO_PendingTransaction_status(tx);
+      final errorString = MONERO_PendingTransaction_errorString(tx);
+      if (status != 0) {
+        Alert(
+          title: errorString,
+          callback: () {
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+          },
+          callbackText: "Go Back",
+        ).show(context);
+
+        return;
+      }
       setState(() {
-        isDone = true;
+        txPtr = tx;
       });
     });
   }
@@ -70,27 +96,58 @@ class _SpendConfirmState extends State<SpendConfirm> {
         StatusRow(
           title: "Amount",
           amount:
-              !isDone ? null : widget.tx.amount - (widget.tx.amount / 10) ~/ 1,
+              txPtr == null ? null : MONERO_PendingTransaction_amount(txPtr!),
         ),
         StatusRow(
           title: "Fee",
-          amount: !isDone ? null : widget.tx.amount / 10 ~/ 1,
+          amount: txPtr == null ? null : MONERO_PendingTransaction_fee(txPtr!),
         ),
         StatusRow(
           title: "Total",
-          amount: !isDone ? null : widget.tx.amount ~/ 1,
+          amount: txPtr == null
+              ? null
+              : MONERO_PendingTransaction_amount(txPtr!) +
+                  MONERO_PendingTransaction_fee(txPtr!),
         ),
         const Spacer(),
         LongOutlinedButton(
           text: "CONFIRM",
-          onPressed: !isDone ? null : _confirm,
+          onPressed: txPtr == null ? null : _confirm,
         ),
       ]),
     );
   }
 
   void _confirm() {
-    ProgressScreen.push(context, ProgressScreenFlag.txPending);
+    final stat = MONERO_PendingTransaction_commit(txPtr!,
+        filename: "", overwrite: false);
+    if (stat == false) {
+      final errorString = MONERO_PendingTransaction_errorString(txPtr!);
+      Alert(
+        title: "Failed to send transaction - $errorString",
+        callback: () {
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+        },
+        callbackText: "Go Back",
+      ).show(context);
+      return;
+    }
+
+    final status = MONERO_PendingTransaction_status(txPtr!);
+    final errorString = MONERO_PendingTransaction_errorString(txPtr!);
+    if (status != 0) {
+      Alert(
+        title: errorString,
+        callback: () {
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+        },
+        callbackText: "Go Back",
+      ).show(context);
+      return;
+    }
+    SpendSuccess.push(context);
   }
 }
 

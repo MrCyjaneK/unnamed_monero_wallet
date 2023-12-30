@@ -1,6 +1,9 @@
 import 'dart:io';
 
+import 'package:anonero/pages/debug.dart';
+import 'package:anonero/pages/debug/monero_log_level.dart';
 import 'package:anonero/pages/progress_screen.dart';
+import 'package:anonero/pages/setup/passphrase_encryption.dart';
 import 'package:anonero/pages/wallet/wallet_home.dart';
 import 'package:anonero/tools/dirs.dart';
 import 'package:anonero/tools/node.dart';
@@ -10,6 +13,7 @@ import 'package:anonero/tools/wallet_ptr.dart';
 import 'package:anonero/widgets/normal_keyboard.dart';
 import 'package:anonero/widgets/numerical_keyboard.dart';
 import 'package:anonero/widgets/setup_logo.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
 
@@ -17,7 +21,7 @@ import 'package:monero/monero.dart';
 // /|\                               \__ Doesn't match -> \
 //  |                                                      |
 //   \____________________________________________________/
-
+// same foll restore
 enum PinScreenFlag {
   createWallet,
   createWalletConfirm,
@@ -27,9 +31,15 @@ enum PinScreenFlag {
 }
 
 class PinScreen extends StatefulWidget {
-  const PinScreen(
-      {super.key, required this.flag, this.initialPin = "", this.passphrase});
+  const PinScreen({
+    super.key,
+    required this.flag,
+    this.initialPin = "",
+    this.passphrase,
+    this.restoreData,
+  });
 
+  final RestoreData? restoreData;
   final String? passphrase;
 
   final PinScreenFlag flag;
@@ -52,25 +62,27 @@ class PinScreen extends StatefulWidget {
   }
 
   static void pushConfirmRestore(BuildContext context, String pin,
-      {required String passphrase}) {
+      {required String passphrase, RestoreData? restoreData}) {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) {
         return PinScreen(
-          flag: PinScreenFlag.createWalletConfirm,
+          flag: PinScreenFlag.restoreWalletSeedConfirm,
           initialPin: pin,
           passphrase: passphrase,
+          restoreData: restoreData,
         );
       },
     ));
   }
 
   static void push(BuildContext context, PinScreenFlag flag,
-      {required String passphrase}) {
+      {required String passphrase, RestoreData? restoreData}) {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) {
         return PinScreen(
           flag: flag,
           passphrase: passphrase,
+          restoreData: restoreData,
         );
       },
     ));
@@ -85,7 +97,15 @@ class PinInput {
 class _PinScreenState extends State<PinScreen> {
   PinInput pin = PinInput();
 
+  bool debugPushed = false;
+
   void _rebuild() {
+    if (pin.value == "debug" && !debugPushed) {
+      setState(() {
+        debugPushed = true;
+      });
+      DebugPage.push(context);
+    }
     setState(() {});
   }
 
@@ -128,28 +148,82 @@ class _PinScreenState extends State<PinScreen> {
         }
       case PinScreenFlag.restoreWalletSeed:
         PinScreen.pushConfirmRestore(context, pin.value,
-            passphrase: widget.passphrase!);
+            passphrase: widget.passphrase!, restoreData: widget.restoreData);
       case PinScreenFlag.restoreWalletSeedConfirm:
-        if (pin.value != widget.initialPin) {
-          Alert(
-            title: "Pins doesn't match. Please try again.",
-            callback: () => PinScreen.push(
-                context, PinScreenFlag.restoreWalletSeed,
-                passphrase: widget.passphrase!),
-          ).show(context);
-          return;
-        } else {
-          ProgressScreen.push(context, ProgressScreenFlag.walletRestore);
-        }
+        _restoreWalletSeedConfirm();
       case PinScreenFlag.openMainWallet:
         _openMainWallet();
     }
+  }
+
+  void _restoreWalletSeedConfirm() async {
+    if (pin.value != widget.initialPin) {
+      Alert(
+        title: "Pins doesn't match. Please try again.",
+        callback: () => PinScreen.push(context, PinScreenFlag.restoreWalletSeed,
+            passphrase: widget.passphrase!),
+      ).show(context);
+      return;
+    }
+    setState(() {
+      restoreWalletSeedConfirmText = "RESTORING";
+    });
+    walletPtr = MONERO_WalletManager_recoveryWallet(
+      path: await getMainWalletPath(),
+      password: pin.value,
+      mnemonic: widget.restoreData!.seed,
+      restoreHeight: widget.restoreData!.restoreHeight,
+      seedOffset: widget.passphrase!,
+    );
+
+    setState(() {
+      restoreWalletSeedConfirmText = "Confirm your pin";
+    });
+    if (!mounted) return;
+    final status = MONERO_Wallet_status(walletPtr!);
+    if (status != 0) {
+      Alert(
+        title:
+            "Unable to restore wallet.\n${MONERO_Wallet_errorString(walletPtr!)}",
+        cancelable: true,
+      ).show(context);
+      return;
+    }
+    await _initWallet();
+    if (!mounted) return;
+    WalletHome.push(context);
+  }
+
+  Future<void> _initWallet() async {
+    final logPath = await getMoneroLogPath();
+    final logFile = File(logPath);
+    if (logFile.existsSync()) {
+      logFile.deleteSync();
+    }
+    logFile.createSync();
+    final Node? node = (await NodeStore.getCurrentNode());
+    final ProxyStore proxy = (await ProxyStore.getProxy());
+    MONERO_WalletManagerFactory_setLogLevel(logLevel);
+    MONERO_Wallet_init(
+      walletPtr!,
+      daemonAddress: node?.address ?? "",
+      daemonUsername: node?.username ?? "",
+      daemonPassword: node?.password ?? "",
+      proxyAddress: node == null ? "" : proxy.getAddress(node.network),
+    );
+    MONERO_WalletManagerFactory_setLogLevel(logLevel);
+    MONERO_Wallet_init3(walletPtr!,
+        argv0: "", defaultLogBaseName: "", logPath: logPath, console: false);
+    MONERO_WalletManagerFactory_setLogLevel(logLevel);
+    MONERO_Wallet_startRefresh(walletPtr!);
+    MONERO_Wallet_refreshAsync(walletPtr!);
   }
 
   void _openMainWallet() async {
     setState(() {
       openMainWalletUnlockText = "UNLOCKING...";
     });
+    MONERO_WalletManagerFactory_setLogLevel(logLevel);
     walletPtr = MONERO_WalletManager_openWallet(
         path: await getMainWalletPath(), password: pin.value);
     if (!mounted) return;
@@ -165,29 +239,12 @@ class _PinScreenState extends State<PinScreen> {
       });
       return;
     }
-    final Node? node = (await NodeStore.getCurrentNode());
-    final ProxyStore proxy = (await ProxyStore.getProxy());
+
     setState(() {
       openMainWalletUnlockText = "INITIALIZING...";
     });
-    final logPath = await getMoneroLogPath();
-    final logFile = File(logPath);
-    if (logFile.existsSync()) {
-      logFile.deleteSync();
-    }
-    logFile.createSync();
-    MONERO_Wallet_init(
-      walletPtr!,
-      daemonAddress: node?.address ?? "",
-      daemonUsername: node?.username ?? "",
-      daemonPassword: node?.password ?? "",
-      proxyAddress: node == null ? "" : proxy.getAddress(node.network),
-    );
 
-    MONERO_Wallet_init3(walletPtr!,
-        argv0: "", defaultLogBaseName: "", logPath: logPath, console: false);
-    MONERO_Wallet_startRefresh(walletPtr!);
-    MONERO_Wallet_refreshAsync(walletPtr!);
+    await _initWallet();
     setState(() {
       openMainWalletUnlockText = "UNLOCKED!";
     });
@@ -196,15 +253,14 @@ class _PinScreenState extends State<PinScreen> {
   }
 
   String openMainWalletUnlockText = "Unlock your wallet";
-
+  String restoreWalletSeedConfirmText = "Confirm your pin";
   String getInputText() {
     return switch (widget.flag) {
       PinScreenFlag.createWallet ||
       PinScreenFlag.restoreWalletSeed =>
         "Enter your pin",
-      PinScreenFlag.createWalletConfirm ||
-      PinScreenFlag.restoreWalletSeedConfirm =>
-        "Confirm your pin",
+      PinScreenFlag.createWalletConfirm => "Confirm your pin",
+      PinScreenFlag.restoreWalletSeedConfirm => restoreWalletSeedConfirmText,
       PinScreenFlag.openMainWallet => openMainWalletUnlockText,
     };
   }
@@ -214,6 +270,14 @@ class _PinScreenState extends State<PinScreen> {
     setState(() {
       isPin = !isPin;
     });
+  }
+
+  Widget _debug() {
+    return Column(
+      children: [
+        SelectableText(widget.flag.toString()),
+      ],
+    );
   }
 
   @override
@@ -237,6 +301,7 @@ class _PinScreenState extends State<PinScreen> {
               ),
             ],
           ),
+          if (kDebugMode) _debug(),
           Text(getInputText()),
           _printInputCircles(),
           if (isPin)

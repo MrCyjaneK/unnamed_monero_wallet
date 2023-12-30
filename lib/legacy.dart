@@ -45,7 +45,7 @@ class Transaction {
   String get description => MONERO_TransactionInfo_description(_tx);
   int get fee => MONERO_TransactionInfo_fee(_tx);
   int get confirmations => MONERO_TransactionInfo_confirmations(_tx);
-  bool get isPending => MONERO_TransactionInfo_isPending(_tx);
+  bool get isPending => confirmations < maxConfirms;
   int get blockheight => MONERO_TransactionInfo_blockHeight(_tx);
   int get accountIndex => MONERO_TransactionInfo_subaddrAccount(_tx);
   String get paymentId => MONERO_TransactionInfo_paymentId(_tx);

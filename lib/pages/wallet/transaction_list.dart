@@ -20,7 +20,23 @@ class TransactionList extends StatefulWidget {
 
 class _TransactionListState extends State<TransactionList> {
   final txHistoryPtr = MONERO_Wallet_history(walletPtr!);
-  late final transactionCount = MONERO_TransactionHistory_count(txHistoryPtr);
+  late int transactionCount = MONERO_TransactionHistory_count(txHistoryPtr);
+
+  @override
+  void initState() {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) return;
+      MONERO_TransactionHistory_refresh(txHistoryPtr);
+      final newTxCount = MONERO_TransactionHistory_count(txHistoryPtr);
+      if (newTxCount != transactionCount) {
+        setState(() {
+          transactionCount = newTxCount;
+        });
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +58,7 @@ class _TransactionListState extends State<TransactionList> {
               (index) => TransactionItem(
                 transaction: Transaction(
                   txHistoryPtr: txHistoryPtr,
-                  txIndex: index,
+                  txIndex: transactionCount - 1 - index,
                 ),
               ),
             ),
@@ -75,12 +91,14 @@ class _SyncProgressState extends State<SyncProgress> {
   int blockChainHeight = -1;
   int estimateBlockchainHeight = -1;
   bool? synchronized;
+  int? connected;
   void _refreshState() {
     setState(() {
       blockChainHeight = MONERO_Wallet_blockChainHeight(walletPtr!);
       estimateBlockchainHeight =
           MONERO_Wallet_estimateBlockChainHeight(walletPtr!);
       synchronized = MONERO_Wallet_synchronized(walletPtr!);
+      connected = MONERO_Wallet_connected(walletPtr!);
     });
   }
 
@@ -90,6 +108,7 @@ class _SyncProgressState extends State<SyncProgress> {
 blockChainHeight: $blockChainHeight
 estimateBlockchainHeight: $estimateBlockchainHeight
 synchronized: $synchronized
+connected: $connected
 """);
   }
 }

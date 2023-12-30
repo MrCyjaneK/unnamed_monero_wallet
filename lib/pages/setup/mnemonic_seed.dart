@@ -66,6 +66,11 @@ class _MnemonicSeedState extends State<MnemonicSeed> {
     PassphraseEncryption.push(
       context,
       PassphraseEncryptionFlag.restoreWalletSeed,
+      restoreData: RestoreData(
+        seed: seedCtrl.text,
+        restoreHeight: int.parse(heightCtrl.text),
+        restoreType: RestoreType.legacy,
+      ),
     );
   }
 
@@ -73,7 +78,7 @@ class _MnemonicSeedState extends State<MnemonicSeed> {
     if (seed.length == 16) {
       return LongOutlinedButton(text: "Next", onPressed: _nextPage);
     }
-    if (seed.length == 25 && num.tryParse(heightCtrl.text) != null) {
+    if (seed.length == 25 && int.tryParse(heightCtrl.text) != null) {
       return LongOutlinedButton(text: "Next", onPressed: _nextPage);
     }
     return const LongOutlinedButton(text: "Next", onPressed: null);

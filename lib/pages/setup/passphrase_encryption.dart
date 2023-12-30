@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:anonero/pages/pin_screen.dart';
 import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/widgets/labeled_text_input.dart';
 import 'package:anonero/widgets/long_outlined_button.dart';
 import 'package:anonero/widgets/setup_logo.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 enum PassphraseEncryptionFlag { createWallet, restoreWalletSeed }
@@ -10,8 +13,8 @@ enum PassphraseEncryptionFlag { createWallet, restoreWalletSeed }
 // NOTE: Use global context if this ever becomes stateful widget in function
 // _nextPage
 class PassphraseEncryption extends StatelessWidget {
-  PassphraseEncryption({super.key, required this.flag});
-
+  PassphraseEncryption({super.key, required this.flag, this.restoreData});
+  final RestoreData? restoreData;
   final PassphraseEncryptionFlag flag;
 
   final pass1Ctrl = TextEditingController();
@@ -28,6 +31,9 @@ class PassphraseEncryption extends StatelessWidget {
               child: Column(
                 children: [
                   const SetupLogo(title: "PASSPHRASE ENCRYPTION"),
+                  if (kDebugMode)
+                    SelectableText(const JsonEncoder.withIndent('    ')
+                        .convert(restoreData)),
                   LabeledTextInput(
                     label: "ENTER PASSPHRASE",
                     hintText: "",
@@ -64,27 +70,33 @@ class PassphraseEncryption extends StatelessWidget {
     );
   }
 
+  void _createWallet(BuildContext c) {
+    if (!_isPassphraseValid()) {
+      Alert(title: _passphraseInvalidReason() ?? "", cancelable: true).show(c);
+      return;
+    }
+    PinScreen.push(c, PinScreenFlag.createWallet, passphrase: pass1Ctrl.text);
+  }
+
+  void _restoreWalletSeed(BuildContext c) {
+    if (!_isPassphraseValid()) {
+      Alert(title: _passphraseInvalidReason() ?? "", cancelable: true).show(c);
+      return;
+    }
+    PinScreen.push(
+      c,
+      PinScreenFlag.restoreWalletSeed,
+      passphrase: pass1Ctrl.text,
+      restoreData: restoreData!,
+    );
+  }
+
   void _nextPage(BuildContext c) {
     switch (flag) {
       case PassphraseEncryptionFlag.createWallet:
-        if (!_isPassphraseValid()) {
-          Alert(title: _passphraseInvalidReason() ?? "", cancelable: true)
-              .show(c);
-          return;
-        }
-        PinScreen.push(c, PinScreenFlag.createWallet,
-            passphrase: pass1Ctrl.text);
+        _createWallet(c);
       case PassphraseEncryptionFlag.restoreWalletSeed:
-        if (!_isPassphraseValid()) {
-          Alert(title: _passphraseInvalidReason() ?? "", cancelable: true)
-              .show(c);
-          return;
-        }
-        PinScreen.push(
-          c,
-          PinScreenFlag.restoreWalletSeed,
-          passphrase: pass1Ctrl.text,
-        );
+        _restoreWalletSeed(c);
     }
   }
 
@@ -93,16 +105,38 @@ class PassphraseEncryption extends StatelessWidget {
   }
 
   String? _passphraseInvalidReason() {
-    if (pass1Ctrl.text.isEmpty) return "Passphrase is empty";
+    //TODO(mrcyjanek): passphrase
+    //if (pass1Ctrl.text.isEmpty) return "Passphrase is empty";
     if (pass1Ctrl.text != pass2Ctrl.text) return "Passphrases doesn't match";
     return null;
   }
 
-  static void push(BuildContext context, PassphraseEncryptionFlag flag) {
+  static void push(BuildContext context, PassphraseEncryptionFlag flag,
+      {RestoreData? restoreData}) {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) {
-        return PassphraseEncryption(flag: flag);
+        return PassphraseEncryption(flag: flag, restoreData: restoreData);
       },
     ));
+  }
+}
+
+enum RestoreType { legacy }
+
+class RestoreData {
+  RestoreData(
+      {required this.seed,
+      required this.restoreHeight,
+      required this.restoreType});
+  final String seed;
+  final int restoreHeight;
+  final RestoreType restoreType;
+
+  Map<String, dynamic> toJson() {
+    return {
+      "seed": seed,
+      "restoreHeight": restoreHeight,
+      "restoreType": restoreType.toString(),
+    };
   }
 }

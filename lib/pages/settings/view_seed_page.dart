@@ -53,7 +53,7 @@ class _ViewSeedPageState extends State<ViewSeedPage> {
 
   String viewKey = MONERO_Wallet_publicViewKey(walletPtr!);
   String spendKey = MONERO_Wallet_secretSpendKey(walletPtr!);
-  int restoreHeight = -1;
+  int restoreHeight = MONERO_Wallet_getRefreshFromBlockHeight(walletPtr!);
 
   @override
   Widget build(BuildContext context) {

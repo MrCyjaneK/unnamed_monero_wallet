@@ -39,7 +39,8 @@ class _SubAddressPageState extends State<SubAddressPage> {
           (index) => SubaddressItem(
             subaddressId: index,
             label: subaddressLabel(index),
-            received: -1,
+            received:
+                MONERO_Wallet_unlockedBalance(walletPtr!, accountIndex: index),
             squashedAddress: MONERO_Wallet_address(
               walletPtr!,
               accountIndex: 0,

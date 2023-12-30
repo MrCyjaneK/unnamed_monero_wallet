@@ -1,9 +1,11 @@
 import 'package:anonero/pages/wallet/spend_confirm.dart';
 import 'package:anonero/tools/format_monero.dart';
 import 'package:anonero/tools/show_alert.dart';
+import 'package:anonero/tools/wallet_ptr.dart';
 import 'package:anonero/widgets/labeled_text_input.dart';
 import 'package:anonero/widgets/long_outlined_button.dart';
 import 'package:flutter/material.dart';
+import 'package:monero/monero.dart';
 
 class SpendScreen extends StatefulWidget {
   const SpendScreen({super.key});
@@ -11,8 +13,6 @@ class SpendScreen extends StatefulWidget {
   @override
   State<SpendScreen> createState() => _SpendScreenState();
 }
-
-const tempAvailableBalance = "9123456789012";
 
 class _SpendScreenState extends State<SpendScreen> {
   final addressCtrl = TextEditingController();
@@ -27,6 +27,9 @@ class _SpendScreenState extends State<SpendScreen> {
       sweepAllVar = !sweepAllVar;
     });
   }
+
+  final availableBalance =
+      MONERO_Wallet_unlockedBalance(walletPtr!, accountIndex: 0);
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +47,8 @@ class _SpendScreenState extends State<SpendScreen> {
               child: Center(
                 child: Text(
                   sweepAll
-                      ? "Sweeping ${formatMonero(num.tryParse(tempAvailableBalance))} (minus fee)"
-                      : "Available Balance : ${formatMonero(num.tryParse(tempAvailableBalance))}",
+                      ? "Sweeping ${formatMonero(availableBalance)} (minus fee)"
+                      : "Available Balance : ${formatMonero(availableBalance)}",
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
@@ -69,7 +72,7 @@ class _SpendScreenState extends State<SpendScreen> {
   void _continue() {
     final amtNum = num.tryParse(amountCtrl.text);
     if (amtNum == null) {
-      Alert(title: "Invalid amount").show(context);
+      Alert(title: "Invalid amount", cancelable: true).show(context);
       return;
     }
     final amtInt = (amtNum * 1e12) ~/ 1;

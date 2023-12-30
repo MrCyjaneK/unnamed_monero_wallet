@@ -5,6 +5,13 @@ import 'package:anonero/widgets/long_outlined_button.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
 
+final _rescanBlockchainSyncInfo = """
+NOTE: (sync) waits for the entire blockchain to be synced, therefore it may
+take significant amount of time to complete. During that time wallet will be
+unresponsive, you will however observe intense network usage."""
+    .split("\n")
+    .join(" ");
+
 class MoneroDartAdvancedDebug extends StatefulWidget {
   const MoneroDartAdvancedDebug({super.key});
 
@@ -62,6 +69,16 @@ class _MoneroDartAdvancedDebugState extends State<MoneroDartAdvancedDebug> {
         .show(context);
   }
 
+  void _connectToDaemon() {
+    final rsc = MONERO_Wallet_connectToDaemon(walletPtr!);
+    Alert(
+            title: "result: $rsc\n"
+                "status: ${MONERO_Wallet_status(walletPtr!)}\n"
+                "errorString: ${MONERO_Wallet_errorString(walletPtr!)}",
+            cancelable: true)
+        .show(context);
+  }
+
   void _refreshAsync() {
     MONERO_Wallet_refreshAsync(walletPtr!);
     Alert(
@@ -84,6 +101,7 @@ class _MoneroDartAdvancedDebugState extends State<MoneroDartAdvancedDebug> {
             AET(
               "Rescan Blockchain",
               [
+                SelectableText(_rescanBlockchainSyncInfo),
                 LongOutlinedButton(
                   text: "Rescan Blockchain (sync)",
                   onPressed: _rescanBlockchain,
@@ -113,6 +131,15 @@ class _MoneroDartAdvancedDebugState extends State<MoneroDartAdvancedDebug> {
                 LongOutlinedButton(
                   text: "_store (sync)",
                   onPressed: _store,
+                ),
+              ],
+            ),
+            AET(
+              "connect do daemon",
+              [
+                LongOutlinedButton(
+                  text: "_connectToDaemon (sync)",
+                  onPressed: _connectToDaemon,
                 ),
               ],
             ),

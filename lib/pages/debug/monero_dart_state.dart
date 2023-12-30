@@ -121,6 +121,8 @@ class _MoneroDartStateState extends State<MoneroDartState> {
 // MONERO_Wallet_getBytesReceived(MONERO_wallet wallet_ptr) → int
             SET('MONERO_Wallet_getBytesReceived',
                 MONERO_Wallet_getBytesReceived(walletPtr!)),
+            const SET('(crash) MONERO_Wallet_isOffline',
+                "MONERO_Wallet_isOffline(walletPtr!)"),
 // MONERO_Wallet_getBytesSent(MONERO_wallet wallet_ptr) → int
             const SET('(crash) MONERO_Wallet_getBytesSent',
                 'MONERO_Wallet_getBytesSent(walletPtr!)'),
@@ -140,6 +142,9 @@ class _MoneroDartStateState extends State<MoneroDartState> {
 // MONERO_Wallet_importOutputs(MONERO_wallet wallet_ptr, String filename) → bool
 // MONERO_Wallet_init(MONERO_wallet wallet_ptr, {required String daemonAddress, int upperTransacationSizeLimit = 0, String daemonUsername = "", String daemonPassword = "", bool useSsl = false, bool lightWallet = false, String proxyAddress = ""}) → bool
 // MONERO_Wallet_init3(MONERO_wallet wallet_ptr, {required String argv0, required String defaultLogBaseName, required String logPath, required bool console}) → void
+            SET('MONERO_Wallet_getRefreshFromBlockHeight',
+                MONERO_Wallet_getRefreshFromBlockHeight(walletPtr!)),
+            SET('MONERO_Wallet_connected', MONERO_Wallet_connected(walletPtr!)),
 // MONERO_Wallet_numSubaddressAccounts(MONERO_wallet wallet_ptr) → int
             SET('MONERO_Wallet_numSubaddressAccounts',
                 MONERO_Wallet_numSubaddressAccounts(walletPtr!)),
