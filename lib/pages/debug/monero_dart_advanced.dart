@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
 import 'package:anonero/widgets/advanced_expansion_tile.dart';
@@ -143,9 +145,30 @@ class _MoneroDartAdvancedDebugState extends State<MoneroDartAdvancedDebug> {
                 ),
               ],
             ),
+            AET(
+              "MONERO_isLibOk",
+              [
+                LongOutlinedButton(
+                  text: "MONERO_isLibOk",
+                  onPressed: _isLibOk,
+                ),
+                if (libOk != null)
+                  SelectableText(
+                    const JsonEncoder.withIndent('    ').convert(libOk),
+                  ),
+              ],
+            ),
           ],
         ),
       ),
     );
+  }
+
+  MONERO_libOk? libOk;
+
+  void _isLibOk() {
+    setState(() {
+      libOk = MONERO_isLibOk();
+    });
   }
 }

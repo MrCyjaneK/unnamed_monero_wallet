@@ -1,9 +1,5 @@
-import 'dart:io';
-
-import 'package:anonero/tools/dirs.dart';
 import 'package:anonero/widgets/long_outlined_button.dart';
 import 'package:flutter/material.dart';
-import 'package:monero/monero.dart';
 
 int logLevel = 1;
 

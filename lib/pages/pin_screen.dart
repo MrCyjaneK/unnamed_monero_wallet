@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:anonero/pages/debug.dart';
 import 'package:anonero/pages/debug/monero_log_level.dart';
-import 'package:anonero/pages/progress_screen.dart';
 import 'package:anonero/pages/setup/passphrase_encryption.dart';
 import 'package:anonero/pages/wallet/wallet_home.dart';
 import 'package:anonero/tools/dirs.dart';
@@ -175,7 +174,6 @@ class _PinScreenState extends State<PinScreen> {
       restoreHeight: widget.restoreData!.restoreHeight,
       seedOffset: widget.passphrase!,
     );
-
     setState(() {
       restoreWalletSeedConfirmText = "Confirm your pin";
     });

@@ -127,10 +127,10 @@ packages:
     dependency: "direct main"
     description:
       name: monero
-      sha256: "98b831fba48cc035464bc916fa6ef8bb0d6a6c6bdf9aa1bfcf7ab1209d5ad3d7"
+      sha256: "7074c3672eca2b280d1c383f06817c31d7461fc4c3b108048fea5914de5b5c14"
       url: "https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/"
     source: hosted
-    version: "0.018003001.11"
+    version: "0.018003001.12"
   mutex:
     dependency: "direct main"
     description:

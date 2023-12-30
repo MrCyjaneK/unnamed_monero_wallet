@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:anonero/tools/dirs.dart';
 import 'package:flutter/material.dart';
-import 'package:monero/monero.dart';
 
 class MoneroLogDebug extends StatefulWidget {
   const MoneroLogDebug({super.key});

@@ -1,4 +1,3 @@
-import 'package:anonero/pages/progress_screen.dart';
 import 'package:anonero/pages/wallet/spend_success.dart';
 import 'package:anonero/tools/format_monero.dart';
 import 'package:anonero/tools/show_alert.dart';
