@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:anonero/pages/wallet/subaddress_page.dart';
 import 'package:anonero/tools/monero/subaddress_label.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
@@ -21,6 +23,23 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
     accountIndex: 0,
     addressIndex: currentAddressIndex,
   );
+
+  void _refreshAddr() {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) return;
+      final ns = MONERO_Wallet_numSubaddresses(walletPtr!, accountIndex: 0);
+      if (ns == currentAddressIndex) return;
+      setState(() {
+        currentAddressIndex = ns;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    _refreshAddr();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

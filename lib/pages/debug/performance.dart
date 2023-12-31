@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:anonero/widgets/long_outlined_button.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
 
@@ -24,10 +25,10 @@ int getOpenWalletTime() {
   if (debugCallLength["MONERO_Wallet_init"] == null) {
     return precalc;
   }
-  if (debugCallLength["MONERO_Wallet_init"]!.length != 1) {
+  if (debugCallLength["MONERO_Wallet_init"]!.isEmpty) {
     return precalc;
   }
-  return debugCallLength["MONERO_Wallet_init"]![0];
+  return debugCallLength["MONERO_Wallet_init"]!.last;
 }
 
 final String perfInfo = """
@@ -49,11 +50,11 @@ opening the wallet it is completely fine to freeze the UI for the time being --
 as the user won't even notice that something happened.
 
 ---- Details
-count: how many times did we call this function
-average: average execution time
-min: fastest execution
-max: slowest execution
-95th: 95% of the time, the function is slower than this amount of time
+count: how many times did we call this function [total time (% of frame)]
+average: average execution time (% of frame)
+min: fastest execution (% of frame)
+max: slowest execution (% of frame)
+95th: 95% of the time, the function is faster than this amount of time (% of frame)
 """
     .split("-\n")
     .join(" ");
@@ -91,15 +92,6 @@ class _PerformanceDebugState extends State<PerformanceDebug> {
     );
   }
 
-  bool hideSingle = true;
-
-  void _setHideSingle(bool? v) {
-    setState(() {
-      hideSingle = v ?? true;
-    });
-    _buildWidgets();
-  }
-
   void _buildWidgets() {
     List<Widget> ws = [];
     ws.add(Column(
@@ -108,11 +100,6 @@ class _PerformanceDebugState extends State<PerformanceDebug> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SelectableText(perfInfo),
-        CheckboxListTile(
-          title: const Text("Hide single"),
-          value: hideSingle,
-          onChanged: _setHideSingle,
-        ),
         cw("<   1% of a frame (max: $frameGreenTierµs)", Colors.green),
         cw("<  10% of a frame (max: $frameBlueTierµs)", Colors.blue),
         cw("<  50% of a frame (max: $frameBlueGreyTierµs)", Colors.blueGrey),
@@ -121,12 +108,17 @@ class _PerformanceDebugState extends State<PerformanceDebug> {
         cw("> 200% of a frame (UI junk visible)", Colors.red),
       ],
     ));
-    debugCallLength.forEach((key, value) {
-      if (hideSingle && value.length == 1) return;
+    final keys = debugCallLength.keys.toList();
+    keys.sort(
+        (s1, s2) => _95(debugCallLength[s2]!) - _95(debugCallLength[s1]!));
+    for (var key in keys) {
+      final value = debugCallLength[key];
+      if (value == null) continue;
       final avg = _avg(value);
       final min = _min(value);
       final max = _max(value);
       final np = _95(value);
+      final total = _total(value);
       ws.add(
         Card(
           child: ListTile(
@@ -139,7 +131,11 @@ class _PerformanceDebugState extends State<PerformanceDebug> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                cw("count: ${value.length}", null),
+                Row(children: [
+                  cw("count: ${value.length}", null),
+                  const Spacer(),
+                  cw("${_str(total / 1000)}ms", perfc(total)),
+                ]),
                 cw("average: ${_str(avg)}µs (~${_str(avg / (frameTime * 2) * 100)}%)",
                     perfc(avg)),
                 cw("min: $minµs (~${_str(min / (frameTime * 2) * 100)})",
@@ -153,10 +149,23 @@ class _PerformanceDebugState extends State<PerformanceDebug> {
           ),
         ),
       );
-    });
+    }
+    if (debugCallLength.isNotEmpty) {
+      ws.add(
+        LongOutlinedButton(
+          text: "Purge statistics",
+          onPressed: _purgeStats,
+        ),
+      );
+    }
     setState(() {
       widgets = ws;
     });
+  }
+
+  void _purgeStats() {
+    debugCallLength.clear();
+    _buildWidgets();
   }
 
   int _min(List<int> l) {
@@ -180,6 +189,14 @@ class _PerformanceDebugState extends State<PerformanceDebug> {
       c += l[i];
     }
     return c / l.length;
+  }
+
+  int _total(List<int> l) {
+    int c = 0;
+    for (var i = 0; i < l.length; i++) {
+      c += l[i];
+    }
+    return c;
   }
 
   String _str(num d) => d.toStringAsFixed(2);

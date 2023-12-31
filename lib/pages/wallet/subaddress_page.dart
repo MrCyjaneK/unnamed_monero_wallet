@@ -39,8 +39,7 @@ class _SubAddressPageState extends State<SubAddressPage> {
           (index) => SubaddressItem(
             subaddressId: index,
             label: subaddressLabel(index),
-            received:
-                MONERO_Wallet_unlockedBalance(walletPtr!, accountIndex: index),
+            received: 0,
             squashedAddress: MONERO_Wallet_address(
               walletPtr!,
               accountIndex: 0,
@@ -53,8 +52,15 @@ class _SubAddressPageState extends State<SubAddressPage> {
   }
 
   void _addSubaddress() {
+    MONERO_Wallet_setSubaddressLabel(
+      walletPtr!,
+      accountIndex: 0,
+      addressIndex: addrCount + 1,
+      label: subaddressLabel(addrCount + 1),
+    );
     setState(() {
-      addrCount++;
+      addrCount =
+          MONERO_Wallet_numSubaddresses(walletPtr!, accountIndex: 0) + 1;
     });
   }
 }

@@ -22,6 +22,14 @@ Future<String> getMaterial3FlagFile() async {
   return "${(await getWd()).path}/material3-flag";
 }
 
+Future<String> getPerformanceStoreFile() async {
+  return "${(await getWd()).path}/perfmon.json";
+}
+
+Future<String> getShowPerformanceOverlayFlagFile() async {
+  return "${(await getWd()).path}/performance-overlay-flag";
+}
+
 Future<String> getMoneroLogPath() async {
   return "${(await getWd()).path}/monero.log";
 }

@@ -43,10 +43,12 @@ class SubaddressDetailsPage extends StatelessWidget {
       ),
       cancelable: true,
       callback: () {
-        MONERO_Wallet_setSubaddressLabel(walletPtr!,
-            accountIndex: 0,
-            addressIndex: subaddressId,
-            label: renameCtrl.text);
+        MONERO_Wallet_setSubaddressLabel(
+          walletPtr!,
+          accountIndex: 0,
+          addressIndex: subaddressId,
+          label: renameCtrl.text,
+        );
         Navigator.of(c).pop();
       },
     ).show(c);

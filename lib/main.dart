@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:anonero/legacy.dart';
@@ -9,10 +10,17 @@ import 'package:monero/monero.dart';
 
 bool _walletExists = false;
 bool useMaterial3 = false;
+bool showPerformanceOverlay = false;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final pmf = File(await getPerformanceStoreFile());
+  if (pmf.existsSync()) {
+    debugCallLength = json.decode(pmf.readAsStringSync());
+  }
   _walletExists = MONERO_WalletManager_walletExists(await getMainWalletPath());
   useMaterial3 = File(await getMaterial3FlagFile()).existsSync();
+  showPerformanceOverlay =
+      File(await getShowPerformanceOverlayFlagFile()).existsSync();
   runApp(const MyApp());
 }
 
@@ -22,6 +30,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      showPerformanceOverlay: showPerformanceOverlay,
       title: 'Anonero',
       theme: ThemeData(
         fontFamily: 'RobotoMono',
