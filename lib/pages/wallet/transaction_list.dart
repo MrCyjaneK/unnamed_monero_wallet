@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:anonero/const/app_name.dart';
 import 'package:anonero/const/is_view_only.dart';
 import 'package:anonero/legacy.dart';
+import 'package:anonero/pages/debug/performance.dart';
 import 'package:anonero/pages/wallet/outputs_page.dart';
 import 'package:anonero/tools/format_monero.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
@@ -77,39 +79,90 @@ class SyncProgress extends StatefulWidget {
   _SyncProgressState createState() => _SyncProgressState();
 }
 
+const targetFrameRate = 120;
+
 class _SyncProgressState extends State<SyncProgress> {
+  Timer? refreshTimer;
+  Timer? uiRefreshTimer;
+
   @override
   void initState() {
     _refreshState();
-    Timer.periodic(const Duration(seconds: 1), (timer) {
+    refreshTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (!mounted) return;
       _refreshState();
+    });
+    uiRefreshTimer = Timer.periodic(
+        const Duration(microseconds: 1000000 ~/ targetFrameRate * 10), (timer) {
+      if (!mounted) return;
+      _refreshUi();
     });
     super.initState();
   }
 
-  int blockChainHeight = -1;
-  int estimateBlockchainHeight = -1;
-  int daemonBlockchainHeight = -1;
+  @override
+  void dispose() {
+    refreshTimer?.cancel();
+    uiRefreshTimer?.cancel();
+    super.dispose();
+  }
+
+  int blockChainHeight = MONERO_Wallet_blockChainHeight(walletPtr!);
+  int uiHeight = 0; //MONERO_Wallet_blockChainHeight(walletPtr!);
+  int daemonBlockchainHeight = MONERO_Wallet_daemonBlockChainHeight(walletPtr!);
   bool? synchronized;
   void _refreshState() {
     setState(() {
       blockChainHeight = MONERO_Wallet_blockChainHeight(walletPtr!);
-      estimateBlockchainHeight =
-          MONERO_Wallet_estimateBlockChainHeight(walletPtr!);
       daemonBlockchainHeight = MONERO_Wallet_daemonBlockChainHeight(walletPtr!);
       synchronized = MONERO_Wallet_synchronized(walletPtr!);
     });
   }
 
+  double slideFor = 0;
+
+  void _refreshUi() {
+    if (uiHeight < blockChainHeight) {
+      setState(() {
+        slideFor += (blockChainHeight - uiHeight) / frameTime / 10;
+        uiHeight +=
+            (((blockChainHeight - uiHeight) / frameTime) + slideFor).ceil();
+      });
+    } else if (uiHeight > blockChainHeight) {
+      setState(() {
+        uiHeight = blockChainHeight;
+      });
+    } else if (slideFor != 0) {
+      setState(() {
+        slideFor = 0;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SelectableText("""
-blockChainHeight: $blockChainHeight
-estimateBlockchainHeight: $estimateBlockchainHeight
-daemonBlockchainHeight: $daemonBlockchainHeight
-synchronized: $synchronized
-""");
+    if (synchronized != true || uiHeight != daemonBlockchainHeight) {
+      return SizedBox(
+        height: 50,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              LinearProgressIndicator(
+                value: (uiHeight / (daemonBlockchainHeight + 1)),
+              ),
+              Text(
+                  "height: $uiHeight; ${(uiHeight / (daemonBlockchainHeight + 1)).toStringAsFixed(4)}%"),
+              const SizedBox(height: 16),
+            ],
+          ),
+        ),
+      );
+    }
+    // retur
+    return const SizedBox(height: 50);
   }
 }
 
@@ -150,7 +203,7 @@ class _LargeBalanceWidgetState extends State<LargeBalanceWidget> {
       onLongPress: () => OutputsPage.push(context),
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.only(top: 40.0, bottom: 60),
+          padding: const EdgeInsets.only(top: 40.0, bottom: 10),
           child: Text(
             formatMonero(balance),
             style: Theme.of(context).textTheme.headlineMedium,

@@ -14,8 +14,12 @@ bool showPerformanceOverlay = false;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final pmf = File(await getPerformanceStoreFile());
-  if (pmf.existsSync()) {
-    debugCallLength = json.decode(pmf.readAsStringSync());
+  try {
+    if (pmf.existsSync()) {
+      debugCallLength = json.decode(pmf.readAsStringSync());
+    }
+  } catch (e) {
+    print(e);
   }
   _walletExists = MONERO_WalletManager_walletExists(await getMainWalletPath());
   useMaterial3 = File(await getMaterial3FlagFile()).existsSync();
