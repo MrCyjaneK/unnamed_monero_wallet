@@ -16,7 +16,7 @@ dependencies:
   ffi: ^2.1.0
   monero:
     hosted: https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
-    version: ^0.018003001.11
+    version: ^0.018003001.16
     # path: ../monero.dart
     # version: 0.0.0
   path_provider: ^2.1.1

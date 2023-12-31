@@ -91,14 +91,12 @@ class _SyncProgressState extends State<SyncProgress> {
   int blockChainHeight = -1;
   int estimateBlockchainHeight = -1;
   bool? synchronized;
-  int? connected;
   void _refreshState() {
     setState(() {
       blockChainHeight = MONERO_Wallet_blockChainHeight(walletPtr!);
       estimateBlockchainHeight =
           MONERO_Wallet_estimateBlockChainHeight(walletPtr!);
       synchronized = MONERO_Wallet_synchronized(walletPtr!);
-      connected = MONERO_Wallet_connected(walletPtr!);
     });
   }
 
@@ -108,7 +106,6 @@ class _SyncProgressState extends State<SyncProgress> {
 blockChainHeight: $blockChainHeight
 estimateBlockchainHeight: $estimateBlockchainHeight
 synchronized: $synchronized
-connected: $connected
 """);
   }
 }

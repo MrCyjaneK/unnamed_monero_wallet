@@ -4,6 +4,7 @@ import 'package:anonero/pages/debug/monero_dart_core.dart';
 import 'package:anonero/pages/debug/monero_dart_state.dart';
 import 'package:anonero/pages/debug/monero_log.dart';
 import 'package:anonero/pages/debug/monero_log_level.dart';
+import 'package:anonero/pages/debug/performance.dart';
 import 'package:anonero/pages/debug/use_material3.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
 import 'package:anonero/widgets/long_outlined_button.dart';
@@ -53,6 +54,10 @@ class DebugPage extends StatelessWidget {
           LongOutlinedButton(
             text: "useMaterial3",
             onPressed: () => UseMaterial3Debug.push(context),
+          ),
+          LongOutlinedButton(
+            text: "Performance",
+            onPressed: () => PerformanceDebug.push(context),
           ),
         ],
       ),
