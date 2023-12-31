@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:anonero/const/app_name.dart';
 import 'package:anonero/const/is_view_only.dart';
@@ -108,7 +107,7 @@ class _SyncProgressState extends State<SyncProgress> {
   }
 
   int blockChainHeight = MONERO_Wallet_blockChainHeight(walletPtr!);
-  int uiHeight = 0; //MONERO_Wallet_blockChainHeight(walletPtr!);
+  int uiHeight = MONERO_Wallet_blockChainHeight(walletPtr!);
   int daemonBlockchainHeight = MONERO_Wallet_daemonBlockChainHeight(walletPtr!);
   bool? synchronized;
   void _refreshState() {
@@ -154,7 +153,7 @@ class _SyncProgressState extends State<SyncProgress> {
                 value: (uiHeight / (daemonBlockchainHeight + 1)),
               ),
               Text(
-                  "height: $uiHeight; ${(uiHeight / (daemonBlockchainHeight + 1)).toStringAsFixed(4)}%"),
+                  "height: $uiHeight; ${(uiHeight / (daemonBlockchainHeight + 1)).toStringAsFixed(4)}% s:$synchronized"),
               const SizedBox(height: 16),
             ],
           ),

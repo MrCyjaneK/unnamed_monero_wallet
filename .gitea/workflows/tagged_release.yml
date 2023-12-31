@@ -15,15 +15,14 @@ jobs:
       #     && fdroid init
       - name: Check out repository code
         uses: actions/checkout@v3
-      - name: Download libwallet2_api_c.so
+      - name: Flutter pub get
         run: |
           cd ${{ gitea.workspace }} \
-          && make libs
+          && flutter pub get
       - name: Build apk
         run: |
           cd ${{ gitea.workspace }} \
           && flutter build apk --no-tree-shake-icons
-
       - name: Create release
         uses: akkuman/gitea-release-action@v1
         with:

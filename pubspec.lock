@@ -131,6 +131,14 @@ packages:
       url: "https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/"
     source: hosted
     version: "0.018003001.16"
+  monero_libs:
+    dependency: "direct main"
+    description:
+      name: monero_libs
+      sha256: cde074ebc9b002053f17901771af28c339450f59f91569ce5350585b935eafcc
+      url: "https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/"
+    source: hosted
+    version: "0.018003001.026"
   mutex:
     dependency: "direct main"
     description:
