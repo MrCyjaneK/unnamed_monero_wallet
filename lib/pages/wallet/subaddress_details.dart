@@ -8,14 +8,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:monero/monero.dart';
 
-class SubaddressDetailsPage extends StatelessWidget {
-  SubaddressDetailsPage({super.key, required this.subaddressId});
+class SubaddressDetailsPage extends StatefulWidget {
+  const SubaddressDetailsPage({super.key, required this.subaddressId});
 
   final int subaddressId;
 
+  @override
+  State<SubaddressDetailsPage> createState() => _SubaddressDetailsPageState();
+
+  static Future<dynamic> push(BuildContext context,
+      {required int subaddressId}) {
+    return Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return SubaddressDetailsPage(
+          subaddressId: subaddressId,
+        );
+      },
+    ));
+  }
+}
+
+class _SubaddressDetailsPageState extends State<SubaddressDetailsPage> {
   void _copyAddress() {
     Clipboard.setData(ClipboardData(
-        text: MONERO_Wallet_address(walletPtr!, addressIndex: subaddressId)));
+        text: MONERO_Wallet_address(walletPtr!,
+            addressIndex: widget.subaddressId)));
   }
 
   void _showQr(BuildContext c) {
@@ -24,13 +41,14 @@ class SubaddressDetailsPage extends StatelessWidget {
         singleBody: SizedBox(
           width: 512,
           child: Qr(
-            data: MONERO_Wallet_address(walletPtr!, addressIndex: subaddressId),
+            data: MONERO_Wallet_address(walletPtr!,
+                addressIndex: widget.subaddressId),
           ),
         )).show(c);
   }
 
   late final renameCtrl =
-      TextEditingController(text: subaddressLabel(subaddressId));
+      TextEditingController(text: subaddressLabel(widget.subaddressId));
 
   void _rename(BuildContext c) {
     Alert(
@@ -46,13 +64,18 @@ class SubaddressDetailsPage extends StatelessWidget {
         MONERO_Wallet_setSubaddressLabel(
           walletPtr!,
           accountIndex: 0,
-          addressIndex: subaddressId,
+          addressIndex: widget.subaddressId,
           label: renameCtrl.text,
         );
         Navigator.of(c).pop();
+        setState(() {
+          label = subaddressLabel(widget.subaddressId);
+        });
       },
     ).show(c);
   }
+
+  late String label = subaddressLabel(widget.subaddressId);
 
   @override
   Widget build(BuildContext context) {
@@ -77,12 +100,14 @@ class SubaddressDetailsPage extends StatelessWidget {
             children: [
               SubaddressItem(
                 shouldSquash: false,
-                subaddressId: subaddressId,
-                label: subaddressLabel(subaddressId),
-                received: MONERO_Wallet_unlockedBalance(walletPtr!,
-                    accountIndex: subaddressId),
+                subaddressId: widget.subaddressId,
+                label: label,
+                received: 0,
                 squashedAddress: MONERO_Wallet_address(walletPtr!,
-                    addressIndex: subaddressId),
+                    addressIndex: widget.subaddressId),
+                rebuildParent: () {
+                  setState(() {});
+                },
               ),
               const SizedBox(
                 height: 16,
@@ -93,15 +118,5 @@ class SubaddressDetailsPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  static void push(BuildContext context, {required int subaddressId}) {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) {
-        return SubaddressDetailsPage(
-          subaddressId: subaddressId,
-        );
-      },
-    ));
   }
 }

@@ -1,6 +1,7 @@
 import 'package:anonero/pages/wallet/subaddress_details.dart';
 import 'package:anonero/tools/format_monero.dart';
 import 'package:anonero/tools/monero/subaddress_label.dart';
+import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
@@ -34,65 +35,89 @@ class _SubAddressPageState extends State<SubAddressPage> {
       ),
       body: SingleChildScrollView(
         child: Column(
-            children: List.generate(
-          addrCount,
-          (index) => SubaddressItem(
-            subaddressId: index,
-            label: subaddressLabel(index),
-            received: 0,
-            squashedAddress: MONERO_Wallet_address(
-              walletPtr!,
-              accountIndex: 0,
-              addressIndex: index,
-            ),
-          ),
-        ).reversed.toList()),
+          children: addressList(),
+        ),
       ),
     );
   }
 
+  List<Widget> addressList() {
+    List<Widget> list = [];
+    for (var i = addrCount; i >= 0; i--) {
+      list.add(
+        SubaddressItem(
+            subaddressId: i,
+            received: 0,
+            label: subaddressLabel(i),
+            squashedAddress: MONERO_Wallet_address(
+              walletPtr!,
+              accountIndex: 0,
+              addressIndex: i,
+            ),
+            rebuildParent: () {
+              setState(() {});
+            }),
+      );
+    }
+    return list;
+  }
+
   void _addSubaddress() {
-    MONERO_Wallet_setSubaddressLabel(
-      walletPtr!,
-      accountIndex: 0,
-      addressIndex: addrCount + 1,
-      label: subaddressLabel(addrCount + 1),
-    );
+    MONERO_Wallet_addSubaddress(walletPtr!, accountIndex: 0);
     setState(() {
-      addrCount =
-          MONERO_Wallet_numSubaddresses(walletPtr!, accountIndex: 0) + 1;
+      addrCount = MONERO_Wallet_numSubaddresses(walletPtr!, accountIndex: 0);
     });
+    final status = MONERO_Wallet_status(walletPtr!);
+    if (status != 0) {
+      final errorString = MONERO_Wallet_errorString(walletPtr!);
+      Alert(title: errorString).show(context);
+    }
   }
 }
 
-class SubaddressItem extends StatelessWidget {
+class SubaddressItem extends StatefulWidget {
   final int subaddressId;
-  final String label;
   final int received;
   final String squashedAddress;
   final bool shouldSquash;
+  final String? label;
+  final VoidCallback rebuildParent;
   const SubaddressItem({
     super.key,
     required this.subaddressId,
-    required this.label,
     required this.received,
     required this.squashedAddress,
     this.shouldSquash = true,
+    this.label,
+    required this.rebuildParent,
   });
+
+  @override
+  State<SubaddressItem> createState() => _SubaddressItemState();
+}
+
+class _SubaddressItemState extends State<SubaddressItem> {
+  late String label = subaddressLabel(widget.subaddressId);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: !shouldSquash
+      onTap: !widget.shouldSquash
           ? null
-          : () =>
-              SubaddressDetailsPage.push(context, subaddressId: subaddressId),
+          : () => SubaddressDetailsPage.push(context,
+                      subaddressId: widget.subaddressId)
+                  .then((value) {
+                setState(() {
+                  label = subaddressLabel(widget.subaddressId);
+                });
+                widget.rebuildParent();
+              }),
       contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
       title: Row(
         children: [
           Expanded(
             child: Text(
-              label,
+              widget.label ?? label,
               style: Theme.of(context)
                   .textTheme
                   .titleMedium
@@ -100,7 +125,7 @@ class SubaddressItem extends StatelessWidget {
             ),
           ),
           Text(
-            formatMonero(received),
+            formatMonero(widget.received),
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: Theme.of(context).colorScheme.primary,
                 ),
@@ -108,13 +133,13 @@ class SubaddressItem extends StatelessWidget {
         ],
       ),
       subtitle: Text(
-        squash(squashedAddress),
+        squash(widget.squashedAddress),
       ),
     );
   }
 
   String squash(String s) {
-    if (s.length < 10 || !shouldSquash) return s;
+    if (s.length < 10 || !widget.shouldSquash) return s;
     return "${s.substring(0, 5)}...${s.substring(s.length - 5)}";
   }
 }

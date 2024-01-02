@@ -1,3 +1,5 @@
+import 'package:anonero/pages/sync_static_progress.dart';
+import 'package:anonero/pages/wallet/settings_page.dart';
 import 'package:anonero/tools/proxy.dart';
 import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/widgets/labeled_text_input.dart';
@@ -70,15 +72,21 @@ class _ProxySettingsState extends State<ProxySettings> {
   }
 
   void _set() async {
-    final torPort = int.tryParse(torPortCtrl.text);
-    final i2pPort = int.tryParse(i2pPortCtrl.text);
-    if (torPort == null || i2pPort == null) {
-      Alert(title: "Invalid port", cancelable: true).show(context);
-      return;
-    }
-    ProxyStore.setProxy(
-      ProxyStore(address: serverCtrl.text, torPort: torPort, i2pPort: i2pPort),
-    );
-    Navigator.of(context).pop();
+    SyncStaticProgress.push(context, "Updating proxy", () async {
+      final torPort = int.tryParse(torPortCtrl.text);
+      final i2pPort = int.tryParse(i2pPortCtrl.text);
+      if (torPort == null || i2pPort == null) {
+        await Alert(title: "Invalid port", cancelable: true).show(context);
+        return;
+      }
+      await ProxyStore.setProxy(
+        ProxyStore(
+            address: serverCtrl.text, torPort: torPort, i2pPort: i2pPort),
+      );
+      if (!mounted) return;
+      await setProxy(context);
+      if (!mounted) return;
+      Navigator.of(context).pop();
+    });
   }
 }

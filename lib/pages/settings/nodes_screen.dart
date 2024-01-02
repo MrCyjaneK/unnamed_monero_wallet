@@ -1,5 +1,6 @@
 import 'package:anonero/pages/pin_screen.dart';
 import 'package:anonero/pages/settings/add_node_screen.dart';
+import 'package:anonero/pages/wallet/settings_page.dart';
 import 'package:anonero/tools/node.dart';
 import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
@@ -140,8 +141,10 @@ class _SingleNodeWidgetState extends State<SingleNodeWidget> {
     ).show(c);
   }
 
-  void _setCurrent() {
+  void _setCurrent() async {
     NodeStore.saveNode(widget.node, current: true);
+    await setNode(context);
+    if (!mounted) return;
     Navigator.of(context).pop();
   }
 

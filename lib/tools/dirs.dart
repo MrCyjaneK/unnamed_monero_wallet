@@ -33,3 +33,11 @@ Future<String> getShowPerformanceOverlayFlagFile() async {
 Future<String> getMoneroLogPath() async {
   return "${(await getWd()).path}/monero.log";
 }
+
+Future<String> getMoneroExportKeyImagesPath() async {
+  return "${(await getWd()).path}/export_key_images";
+}
+
+Future<String> getMoneroSignedTxPath() async {
+  return "${(await getWd()).path}/signed_tx";
+}

@@ -29,6 +29,14 @@ jobs:
           body: |
             This is a **preview** release to be used by testers.
             It was build from **${{ gitea.ref }}** commit `${{ gitea.sha }}`
+            ### Android
+
+            Android has first-class support, it should work out of the box in all situations.
+
+            ### Linux support
+
+            Linux support is experimental, to get it to work you need to have compatible `libwallet2_api_c.so` in `/usr/local/lib/`
+
             ### Release info
             ${{ github.event.head_commit.message }}
           #name: "${{ gitea.reg_name }}-${{ gitea.sha }}"

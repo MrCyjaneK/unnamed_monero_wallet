@@ -44,7 +44,7 @@ that there are also UI costs that aren't part of this benchmark.
 
 For some calls it is also acceptable to exceed this amount of time, for example-
 MONERO_Wallet_init takes ~${getOpenWalletTime()}µs-
-(${(getOpenWalletTime() / 16666).toStringAsFixed(2)} frames). That time would-
+(${(getOpenWalletTime() / frameTime).toStringAsFixed(2)} frames). That time would-
 be unnaceptable in most situations but since we call this function only when-
 opening the wallet it is completely fine to freeze the UI for the time being --
 as the user won't even notice that something happened.
@@ -136,13 +136,13 @@ class _PerformanceDebugState extends State<PerformanceDebug> {
                   const Spacer(),
                   cw("${_str(total / 1000)}ms", perfc(total)),
                 ]),
-                cw("average: ${_str(avg)}µs (~${_str(avg / (frameTime * 2) * 100)}%)",
+                cw("average: ${_str(avg)}µs (~${_str(avg / (frameTime) * 100)}%)",
                     perfc(avg)),
-                cw("min: $minµs (~${_str(min / (frameTime * 2) * 100)})",
+                cw("min: $minµs (~${_str(min / (frameTime) * 100)})",
                     perfc(min)),
-                cw("max: $maxµs (~${_str(max / (frameTime * 2) * 100)}%)",
+                cw("max: $maxµs (~${_str(max / (frameTime) * 100)}%)",
                     perfc(max)),
-                cw("95th: $npµs (~${_str(np / (frameTime * 2) * 100)}%)",
+                cw("95th: $npµs (~${_str(np / (frameTime) * 100)}%)",
                     perfc(np)),
               ],
             ),

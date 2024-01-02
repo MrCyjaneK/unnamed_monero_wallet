@@ -16,7 +16,7 @@ dependencies:
   ffi: ^2.1.0
   monero:
     hosted: https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
-    version: 0.018003001.19
+    version: 0.018003001.023
     # path: ../monero.dart
     # version: 0.0.0
   path_provider: ^2.1.1
@@ -24,9 +24,12 @@ dependencies:
   monero_libs:
     hosted: https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
     version: 0.018003001.031
+  cr_file_saver: ^0.0.2
+  file_picker: ^6.1.1
+
 
 dev_dependencies:
-  flutter_test:
+  flutter_test: 
     sdk: flutter
 
   # The "flutter_lints" package below contains a set of recommended lints to

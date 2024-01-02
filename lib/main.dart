@@ -12,15 +12,27 @@ bool _walletExists = false;
 bool useMaterial3 = false;
 bool showPerformanceOverlay = false;
 void main() async {
+  if (Platform.isLinux) {
+    libPath = '/usr/local/lib/libwallet2_api_c.so';
+  }
   WidgetsFlutterBinding.ensureInitialized();
   final pmf = File(await getPerformanceStoreFile());
   try {
     if (pmf.existsSync()) {
-      debugCallLength = json.decode(pmf.readAsStringSync());
+      final perfData =
+          json.decode(pmf.readAsStringSync()) as Map<String, dynamic>;
+      debugCallLength = perfData.map((key, value) {
+        return MapEntry(
+            key,
+            (value as List<dynamic>).map((e) {
+              return e as int;
+            }).toList());
+      });
     }
   } catch (e) {
     print(e);
   }
+  printStarts = true;
   _walletExists = MONERO_WalletManager_walletExists(await getMainWalletPath());
   useMaterial3 = File(await getMaterial3FlagFile()).existsSync();
   showPerformanceOverlay =

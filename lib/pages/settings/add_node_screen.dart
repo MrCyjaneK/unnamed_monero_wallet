@@ -48,7 +48,7 @@ class _AddNodeScreenState extends State<AddNodeScreen> {
         password: passwordCtrl.text,
         id: NodeStore.getUniqueId(),
       ),
-      current: true,
+      current: false,
     );
     Navigator.of(context).pop();
   }

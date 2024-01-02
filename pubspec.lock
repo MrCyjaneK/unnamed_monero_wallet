@@ -41,6 +41,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.18.0"
+  cr_file_saver:
+    dependency: "direct main"
+    description:
+      name: cr_file_saver
+      sha256: eaa02c244881234854e13b1316eec3789f2a8a0b2737ca1cad8e03b89be85ce2
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2+1"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -65,6 +73,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  file_picker:
+    dependency: "direct main"
+    description:
+      name: file_picker
+      sha256: "4e42aacde3b993c5947467ab640882c56947d9d27342a5b6f2895b23956954a6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.1"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -78,8 +94,21 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
+  flutter_plugin_android_lifecycle:
+    dependency: transitive
+    description:
+      name: flutter_plugin_android_lifecycle
+      sha256: b068ffc46f82a55844acfa4fdbb61fad72fa2aef0905548419d97f0f95c456da
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.17"
   flutter_test:
     dependency: "direct dev"
+    description: flutter
+    source: sdk
+    version: "0.0.0"
+  flutter_web_plugins:
+    dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
@@ -127,10 +156,10 @@ packages:
     dependency: "direct main"
     description:
       name: monero
-      sha256: "835eeb6b9895d8f3b3cbd6ddfca53c3af6d84bba1b4a00bc829c9da358cb9c25"
+      sha256: "9984dea4cfafe052db323497cf818560a641dd36c1a1c8fbcab3d640b562c301"
       url: "https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/"
     source: hosted
-    version: "0.018003001.19"
+    version: "0.018003001.23"
   monero_libs:
     dependency: "direct main"
     description:

@@ -85,15 +85,19 @@ class _MoneroDartStateState extends State<MoneroDartState> {
                     accountIndex: 0, addressIndex: 2)),
 // MONERO_Wallet_addressValid(String address) → bool
             SET('MONERO_Wallet_addressValid(\'asd\')',
-                MONERO_Wallet_addressValid('asd')),
+                MONERO_Wallet_addressValid('asd', 0)),
             SET(
                 'MONERO_Wallet_addressValid(MONERO_Wallet_address(0,0))',
-                MONERO_Wallet_addressValid(MONERO_Wallet_address(walletPtr!,
-                    accountIndex: 0, addressIndex: 0))),
+                MONERO_Wallet_addressValid(
+                    MONERO_Wallet_address(walletPtr!,
+                        accountIndex: 0, addressIndex: 0),
+                    0)),
             SET(
                 'MONERO_Wallet_addressValid(MONERO_Wallet_address(0,1))',
-                MONERO_Wallet_addressValid(MONERO_Wallet_address(walletPtr!,
-                    accountIndex: 0, addressIndex: 1))),
+                MONERO_Wallet_addressValid(
+                    MONERO_Wallet_address(walletPtr!,
+                        accountIndex: 0, addressIndex: 1),
+                    0)),
 // MONERO_Wallet_approximateBlockChainHeight(MONERO_wallet wallet_ptr) → int
             SET('MONERO_Wallet_approximateBlockChainHeight',
                 MONERO_Wallet_approximateBlockChainHeight(walletPtr!)),

@@ -112,9 +112,12 @@ class _SyncProgressState extends State<SyncProgress> {
   bool? synchronized;
   void _refreshState() {
     setState(() {
-      blockChainHeight = MONERO_Wallet_blockChainHeight(walletPtr!);
-      daemonBlockchainHeight = MONERO_Wallet_daemonBlockChainHeight(walletPtr!);
       synchronized = MONERO_Wallet_synchronized(walletPtr!);
+      if (synchronized != true) {
+        blockChainHeight = MONERO_Wallet_blockChainHeight(walletPtr!);
+        daemonBlockchainHeight =
+            MONERO_Wallet_daemonBlockChainHeight(walletPtr!);
+      }
     });
   }
 
@@ -152,8 +155,10 @@ class _SyncProgressState extends State<SyncProgress> {
               LinearProgressIndicator(
                 value: (uiHeight / (daemonBlockchainHeight + 1)),
               ),
-              Text(
-                  "height: $uiHeight; ${(uiHeight / (daemonBlockchainHeight + 1)).toStringAsFixed(4)}% s:$synchronized"),
+              if (daemonBlockchainHeight == 0) const Text("disconnected"),
+              if (daemonBlockchainHeight != 0)
+                Text(
+                    "height: $uiHeight; ${(uiHeight / (daemonBlockchainHeight + 1)).toStringAsFixed(4)}% s:$synchronized"),
               const SizedBox(height: 16),
             ],
           ),

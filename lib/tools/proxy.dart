@@ -61,9 +61,8 @@ class ProxyStore {
 
   String getAddress(NodeNetwork nnet) {
     return switch (nnet) {
-      NodeNetwork.clearnet => "",
-      NodeNetwork.onion => "socks5://$address:$torPort",
-      NodeNetwork.i2p => "socks5://$address:$i2pPort",
+      NodeNetwork.clearnet || NodeNetwork.onion => "$address:$torPort",
+      NodeNetwork.i2p => "$address:$i2pPort",
     };
   }
 }

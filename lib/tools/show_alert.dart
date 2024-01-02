@@ -55,8 +55,8 @@ class Alert {
     Navigator.of(context).pop();
   }
 
-  void show(BuildContext context) {
-    showDialog(
+  Future<void> show(BuildContext context) async {
+    await showDialog(
       context: context,
       builder: _builder,
     );
