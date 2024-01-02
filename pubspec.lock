@@ -127,18 +127,18 @@ packages:
     dependency: "direct main"
     description:
       name: monero
-      sha256: "6a2f328e82090b2f5aebf31b4260484f8d2c54362bac3ff6ed5e7a0cdd76aa07"
+      sha256: "835eeb6b9895d8f3b3cbd6ddfca53c3af6d84bba1b4a00bc829c9da358cb9c25"
       url: "https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/"
     source: hosted
-    version: "0.018003001.16"
+    version: "0.018003001.19"
   monero_libs:
     dependency: "direct main"
     description:
       name: monero_libs
-      sha256: cde074ebc9b002053f17901771af28c339450f59f91569ce5350585b935eafcc
+      sha256: "06514337598e90b8ad0692055c620f40cf81eb828c58ed01b9ad126576861f2c"
       url: "https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/"
     source: hosted
-    version: "0.018003001.026"
+    version: "0.018003001.031"
   mutex:
     dependency: "direct main"
     description:
