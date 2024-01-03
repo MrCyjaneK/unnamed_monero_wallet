@@ -30,6 +30,10 @@ Future<String> getShowPerformanceOverlayFlagFile() async {
   return "${(await getWd()).path}/performance-overlay-flag";
 }
 
+Future<String> getDisableProxyFlagFile() async {
+  return "${(await getWd()).path}/disable-proxy-flag";
+}
+
 Future<String> getMoneroLogPath() async {
   return "${(await getWd()).path}/monero.log";
 }

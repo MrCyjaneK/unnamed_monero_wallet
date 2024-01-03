@@ -1,3 +1,4 @@
+import 'package:anonero/main.dart';
 import 'package:anonero/pages/setup/proxy_settings.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,7 @@ class ProxyButton extends StatelessWidget {
         context,
       ),
       label: Text(
-        "PROXY",
+        disableProxy ? "DISABLED IN DEBUG" : "PROXY",
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               fontWeight: FontWeight.bold,
               color: Theme.of(context).colorScheme.primary,

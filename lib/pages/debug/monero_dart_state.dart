@@ -1,3 +1,4 @@
+import 'package:anonero/pages/wallet/transaction_list.dart';
 import 'package:anonero/tools/dirs.dart';
 import 'package:anonero/tools/monero/subaddress_label.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
@@ -26,8 +27,6 @@ class MoneroDartState extends StatefulWidget {
 }
 
 class _MoneroDartStateState extends State<MoneroDartState> {
-  late final MONERO_TransactionHistory txHistPtr =
-      MONERO_Wallet_history(walletPtr!);
   String mainWalletPath = '';
   @override
   void initState() {
@@ -50,10 +49,10 @@ class _MoneroDartStateState extends State<MoneroDartState> {
           children: [
             const SET('about', about),
             SET('global walletPtr', walletPtr),
-            SET('txHistPtr', txHistPtr),
+            SET('txHistPtr', txHistoryPtr),
             SET('MONERO_isLibOk', MONERO_isLibOk()),
             SET('MONERO_TransactionHistory_count',
-                MONERO_TransactionHistory_count(txHistPtr)),
+                MONERO_TransactionHistory_count(txHistoryPtr)),
 // MONERO_TransactionHistory_setTxNote(MONERO_TransactionHistory txHistory_ptr, {required String txid, required String note}) → void
 // MONERO_TransactionHistory_transaction(MONERO_TransactionHistory txHistory_ptr, {required int index}) → MONERO_TransactionInfo
 // MONERO_TransactionInfo_amount(MONERO_TransactionInfo pendingTx_ptr) → int

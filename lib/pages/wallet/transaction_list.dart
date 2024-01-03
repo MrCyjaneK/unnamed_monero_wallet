@@ -9,6 +9,7 @@ import 'package:anonero/tools/format_monero.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
 import 'package:anonero/widgets/transaction_list/popup_menu.dart';
 import 'package:anonero/widgets/transaction_list/transaction_item.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
 
@@ -19,7 +20,11 @@ class TransactionList extends StatefulWidget {
   State<TransactionList> createState() => _TransactionListState();
 }
 
-final txHistoryPtr = MONERO_Wallet_history(walletPtr!);
+MONERO_TransactionHistory? txHistoryPtrVar;
+MONERO_TransactionHistory get txHistoryPtr {
+  txHistoryPtrVar ??= MONERO_Wallet_history(walletPtr!);
+  return txHistoryPtrVar!;
+}
 
 class _TransactionListState extends State<TransactionList> {
   late int transactionCount = MONERO_TransactionHistory_count(txHistoryPtr);
@@ -71,6 +76,7 @@ class _TransactionListState extends State<TransactionList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(isViewOnly ? nero : anon),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.lock)),
@@ -93,8 +99,8 @@ class _TransactionListState extends State<TransactionList> {
     final txList = List.generate(
       transactionCount,
       (index) => Transaction(
-        txHistoryPtr: txHistoryPtr,
-        txIndex: transactionCount - 1 - index,
+        txInfo: MONERO_TransactionHistory_transaction(txHistoryPtr,
+            index: transactionCount - 1 - index),
       ),
     );
     txList
@@ -141,15 +147,18 @@ class _SyncProgressState extends State<SyncProgress> {
 
   int blockChainHeight = MONERO_Wallet_blockChainHeight(walletPtr!);
   int uiHeight = MONERO_Wallet_blockChainHeight(walletPtr!);
-  int daemonBlockchainHeight =
-      MONERO_Wallet_daemonBlockChainHeight_cached(walletPtr!);
+  int daemonBlockchainHeight = kDebugMode
+      ? MONERO_Wallet_daemonBlockChainHeight(walletPtr!)
+      : MONERO_Wallet_daemonBlockChainHeight_cached(walletPtr!);
   bool? synchronized;
   void _refreshState() {
     setState(() {
       synchronized = MONERO_Wallet_synchronized(walletPtr!);
       blockChainHeight = MONERO_Wallet_blockChainHeight(walletPtr!);
-      daemonBlockchainHeight =
-          MONERO_Wallet_daemonBlockChainHeight_cached(walletPtr!);
+      if (!kDebugMode) {
+        daemonBlockchainHeight =
+            MONERO_Wallet_daemonBlockChainHeight_cached(walletPtr!);
+      }
     });
   }
 

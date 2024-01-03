@@ -11,6 +11,7 @@ import 'package:monero/monero.dart';
 bool _walletExists = false;
 bool useMaterial3 = false;
 bool showPerformanceOverlay = false;
+bool disableProxy = false;
 void main() async {
   if (Platform.isLinux) {
     libPath = '/usr/local/lib/libwallet2_api_c.so';
@@ -35,6 +36,7 @@ void main() async {
   printStarts = true;
   _walletExists = MONERO_WalletManager_walletExists(await getMainWalletPath());
   useMaterial3 = File(await getMaterial3FlagFile()).existsSync();
+  disableProxy = File(await getDisableProxyFlagFile()).existsSync();
   showPerformanceOverlay =
       File(await getShowPerformanceOverlayFlagFile()).existsSync();
   runApp(const MyApp());

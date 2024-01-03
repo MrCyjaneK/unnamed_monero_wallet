@@ -45,6 +45,7 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         actions: [
           IconButton(
             onPressed: () => SubAddressPage.push(context),

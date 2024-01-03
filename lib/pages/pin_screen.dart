@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'dart:io';
 import 'dart:isolate';
 
+import 'package:anonero/main.dart';
 import 'package:anonero/pages/debug.dart';
 import 'package:anonero/pages/debug/monero_log_level.dart';
 import 'package:anonero/pages/setup/passphrase_encryption.dart';
@@ -211,7 +212,8 @@ class _PinScreenState extends State<PinScreen> {
       daemonAddress: node?.address ?? "",
       daemonUsername: node?.username ?? "",
       daemonPassword: node?.password ?? "",
-      proxyAddress: node == null ? "" : proxy.getAddress(node.network),
+      proxyAddress:
+          (node == null || disableProxy) ? "" : proxy.getAddress(node.network),
     );
     MONERO_WalletManagerFactory_setLogLevel(logLevel);
     MONERO_Wallet_init3(walletPtr!,

@@ -25,7 +25,7 @@ dependencies:
     # path: ../flutter-monero_libs
     # version: 0.0.1
     hosted: https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
-    version: 0.018003001.037
+    version: 0.018003001.038
   cr_file_saver: ^0.0.2
   file_picker: ^6.1.1
   mobile_scanner: ^3.5.5

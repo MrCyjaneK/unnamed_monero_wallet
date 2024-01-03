@@ -43,7 +43,9 @@ class _SpendScreenState extends State<SpendScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+      ),
       body: Column(
         children: [
           LabeledTextInput(label: "ADDRESS", ctrl: addressCtrl),

@@ -93,7 +93,7 @@ class _TransactionDetailsState extends State<TransactionDetails> {
                 "TRANSACTION FEE", formatMonero(widget.transaction.fee)),
             const SizedBox(height: 24),
             _simpleDetail("CONFIRMATION BLOCK",
-                formatMonero(widget.transaction.blockheight)),
+                widget.transaction.blockheight.toString()),
             const SizedBox(height: 24),
             _simpleDetail(
                 "TIMESTAMP", widget.transaction.timeStamp.toIso8601String()),

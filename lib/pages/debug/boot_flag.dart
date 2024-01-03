@@ -23,6 +23,7 @@ class BootFlagDebug extends StatefulWidget {
 class _BootFlagDebugState extends State<BootFlagDebug> {
   File? material3Flag;
   File? poFlag;
+  File? disableProxyFlag;
   @override
   void initState() {
     super.initState();
@@ -34,6 +35,11 @@ class _BootFlagDebugState extends State<BootFlagDebug> {
     getShowPerformanceOverlayFlagFile().then((value) {
       setState(() {
         poFlag = File(value);
+      });
+    });
+    getDisableProxyFlagFile().then((value) {
+      setState(() {
+        disableProxyFlag = File(value);
       });
     });
   }
@@ -82,10 +88,29 @@ class _BootFlagDebugState extends State<BootFlagDebug> {
                   setState(() {});
                 },
               ),
+            const SelectableText("Disable proxy"),
+            if (poFlag!.existsSync())
+              LongOutlinedButton(
+                text: "Destroy flag",
+                onPressed: () {
+                  disableProxyFlag!.deleteSync();
+                  setState(() {});
+                },
+              ),
+            if (!poFlag!.existsSync())
+              LongOutlinedButton(
+                text: "Create flag",
+                onPressed: () {
+                  disableProxyFlag!.createSync();
+                  setState(() {});
+                },
+              ),
             if (material3Flag!.existsSync() != useMaterial3)
               const SelectableText("restart needed (material3)"),
             if (poFlag!.existsSync() != showPerformanceOverlay)
               const SelectableText("restart needed (showPerformanceOverlay)"),
+            if (disableProxyFlag!.existsSync() != disableProxy)
+              const SelectableText("restart needed (disableProxy)"),
           ],
         ),
       ),
