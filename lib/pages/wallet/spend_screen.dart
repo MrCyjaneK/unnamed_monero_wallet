@@ -25,11 +25,20 @@ class _SpendScreenState extends State<SpendScreen> {
   void _toggleSweep() {
     setState(() {
       sweepAllVar = !sweepAllVar;
+      amountCtrl.text = formatMonero(availableBalance);
     });
   }
 
   final availableBalance =
       MONERO_Wallet_unlockedBalance(walletPtr!, accountIndex: 0);
+
+  void _amtEdited() {
+    if (sweepAllVar) {
+      setState(() {
+        sweepAllVar = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +47,11 @@ class _SpendScreenState extends State<SpendScreen> {
       body: Column(
         children: [
           LabeledTextInput(label: "ADDRESS", ctrl: addressCtrl),
-          LabeledTextInput(label: "AMOUNT", ctrl: amountCtrl),
+          LabeledTextInput(
+            label: "AMOUNT",
+            ctrl: amountCtrl,
+            onEdit: _amtEdited,
+          ),
           LabeledTextInput(label: "NOTES", ctrl: notesCtrl),
           InkWell(
             onTap: _toggleSweep,

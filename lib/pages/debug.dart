@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:anonero/pages/debug/button_x_textfield.dart';
+import 'package:anonero/pages/debug/mobile_scanner.dart';
 import 'package:anonero/pages/debug/monero_dart_advanced.dart';
 import 'package:anonero/pages/debug/monero_dart_core.dart';
 import 'package:anonero/pages/debug/monero_dart_state.dart';
@@ -58,6 +61,12 @@ class DebugPage extends StatelessWidget {
           LongOutlinedButton(
             text: "Performance",
             onPressed: () => PerformanceDebug.push(context),
+          ),
+          LongOutlinedButton(
+            text: "Mobile_scanner",
+            onPressed: (!Platform.isAndroid)
+                ? null
+                : () => MobileScannerDebug.push(context),
           ),
         ],
       ),

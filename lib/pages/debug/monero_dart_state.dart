@@ -114,6 +114,8 @@ class _MoneroDartStateState extends State<MoneroDartState> {
 // MONERO_Wallet_daemonBlockChainHeight(MONERO_wallet wallet_ptr) → int
             SET('MONERO_Wallet_daemonBlockChainHeight',
                 MONERO_Wallet_daemonBlockChainHeight(walletPtr!)),
+            SET('MONERO_Wallet_daemonBlockChainHeight_cached',
+                MONERO_Wallet_daemonBlockChainHeight_cached(walletPtr!)),
 // MONERO_Wallet_errorString(MONERO_wallet wallet_ptr) → String
             SET('MONERO_Wallet_errorString',
                 MONERO_Wallet_errorString(walletPtr!)),
@@ -173,7 +175,10 @@ class _MoneroDartStateState extends State<MoneroDartState> {
             SET('MONERO_Wallet_secretViewKey',
                 MONERO_Wallet_secretViewKey(walletPtr!)),
 // MONERO_Wallet_seed(MONERO_wallet wallet_ptr) → String
-            SET('MONERO_Wallet_seed', MONERO_Wallet_seed(walletPtr!)),
+            SET('MONERO_Wallet_seed("")',
+                MONERO_Wallet_seed(walletPtr!, seedOffset: "")),
+            SET('MONERO_Wallet_seed("m")',
+                MONERO_Wallet_seed(walletPtr!, seedOffset: "m")),
 // MONERO_Wallet_setAutoRefreshInterval(MONERO_wallet wallet_ptr, {required int millis}) → void
 // MONERO_Wallet_setSubaddressLabel(MONERO_wallet wallet_ptr, {required int accountIndex, required int addressIndex, required String label}) → void
 // MONERO_Wallet_startRefresh(MONERO_wallet wallet_ptr) → void

@@ -1,0 +1,14 @@
+flutter_app: 
+  command: anonero
+  arch: x64
+  parent: /usr/local/lib
+  nonInteractive: true
+
+control:
+  Package: anonero
+  Version: 0.0.0
+  Architecture: amd64
+  Priority: optional
+  Depends: libwallet2-api-c (= 0.18.3.1-RC36-2-gf03ad31-1)
+  Maintainer: cyjan@mrcyjanek.net
+  Description: anonero wallet for linux

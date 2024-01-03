@@ -10,8 +10,8 @@ class AddNodeScreen extends StatefulWidget {
   @override
   State<AddNodeScreen> createState() => _AddNodeScreenState();
 
-  static void push(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(
+  static Future<void> push(BuildContext context) async {
+    await Navigator.of(context).push(MaterialPageRoute(
       builder: (context) {
         return const AddNodeScreen();
       },

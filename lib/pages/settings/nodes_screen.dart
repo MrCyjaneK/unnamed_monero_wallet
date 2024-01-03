@@ -28,6 +28,11 @@ class _NodesScreenState extends State<NodesScreen> {
 
   @override
   void initState() {
+    reload();
+    super.initState();
+  }
+
+  void reload() {
     NodeStore.getCurrentNode().then((value) {
       setState(() {
         currentNode = value;
@@ -38,8 +43,6 @@ class _NodesScreenState extends State<NodesScreen> {
         ns = value;
       });
     });
-
-    super.initState();
   }
 
   @override
@@ -51,7 +54,10 @@ class _NodesScreenState extends State<NodesScreen> {
         ),
         actions: [
           TextButton(
-            onPressed: () => AddNodeScreen.push(context),
+            onPressed: () async {
+              await AddNodeScreen.push(context);
+              reload();
+            },
             child: const Text("Add Node"),
           )
         ],
@@ -78,6 +84,7 @@ class _NodesScreenState extends State<NodesScreen> {
               (index) => SingleNodeWidget(
                 node: ns!.nodes[index],
                 disabled: ns!.nodes[index].id == ns!.currentNode,
+                rebuildParent: reload,
               ),
             ),
         ],
@@ -89,10 +96,12 @@ class _NodesScreenState extends State<NodesScreen> {
 class SingleNodeWidget extends StatefulWidget {
   final Node node;
   final bool disabled;
+  final void Function() rebuildParent;
   const SingleNodeWidget({
     super.key,
     required this.node,
     required this.disabled,
+    required this.rebuildParent,
   });
 
   @override
@@ -101,8 +110,8 @@ class SingleNodeWidget extends StatefulWidget {
 
 class _SingleNodeWidgetState extends State<SingleNodeWidget> {
   late bool disabled = widget.disabled;
-  void _showDetails(BuildContext c) {
-    Alert(
+  void _showDetails(BuildContext c) async {
+    await Alert(
       crossAxisAligment: CrossAxisAlignment.start,
       body: [
         SizedBox(
@@ -139,6 +148,7 @@ class _SingleNodeWidgetState extends State<SingleNodeWidget> {
       callback: _setCurrent,
       callbackText: "Set",
     ).show(c);
+    widget.rebuildParent();
   }
 
   void _setCurrent() async {
@@ -146,6 +156,7 @@ class _SingleNodeWidgetState extends State<SingleNodeWidget> {
     await setNode(context);
     if (!mounted) return;
     Navigator.of(context).pop();
+    widget.rebuildParent();
   }
 
   @override
@@ -157,10 +168,6 @@ class _SingleNodeWidgetState extends State<SingleNodeWidget> {
         child: Card(
           child: ListTile(
             title: Text(widget.node.address),
-            subtitle: Text(
-              r"Daemon Height: $height",
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
             trailing: IconButton(
               onPressed: disabled ? null : _delete,
               icon: const Icon(Icons.delete),
@@ -200,7 +207,7 @@ class _NodeStatusCardState extends State<NodeStatusCard> {
   void initState() {
     super.initState();
     setState(() {
-      height = MONERO_Wallet_daemonBlockChainHeight(walletPtr!);
+      height = MONERO_Wallet_daemonBlockChainHeight_cached(walletPtr!);
       status = MONERO_Wallet_status(walletPtr!);
       if (status != 0) {
         error = MONERO_Wallet_errorString(walletPtr!);

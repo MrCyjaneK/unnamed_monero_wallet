@@ -1,7 +1,7 @@
 name: anonero
 description: "monero wallet for android."
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 0.0.1+4
+version: 0.0.1+16
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
@@ -16,16 +16,19 @@ dependencies:
   ffi: ^2.1.0
   monero:
     hosted: https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
-    version: 0.018003001.023
+    version: 0.018003001.026
     # path: ../monero.dart
     # version: 0.0.0
   path_provider: ^2.1.1
   mutex: ^3.1.0
   monero_libs:
+    # path: ../flutter-monero_libs
+    # version: 0.0.1
     hosted: https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
-    version: 0.018003001.031
+    version: 0.018003001.037
   cr_file_saver: ^0.0.2
   file_picker: ^6.1.1
+  mobile_scanner: ^3.5.5
 
 
 dev_dependencies:
@@ -38,7 +41,20 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^3.0.1
+  flutter_launcher_icons: "^0.13.1"
 
+flutter_launcher_icons:
+  android: false
+  ios: false
+  image_path: "assets/anon_logo.png"
+  remove_alpha_ios: true
+  windows:
+    generate: true
+    image_path: "assets/anon_logo.png"
+    icon_size: 256 # min:48, max:256, default: 48
+  # macos:
+  #   generate: true
+  #   image_path: "assets/anon_logo.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

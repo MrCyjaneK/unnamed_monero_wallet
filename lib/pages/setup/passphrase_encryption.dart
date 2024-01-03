@@ -105,7 +105,6 @@ class PassphraseEncryption extends StatelessWidget {
   }
 
   String? _passphraseInvalidReason() {
-    //TODO(mrcyjanek): passphrase
     //if (pass1Ctrl.text.isEmpty) return "Passphrase is empty";
     if (pass1Ctrl.text != pass2Ctrl.text) return "Passphrases doesn't match";
     return null;

@@ -7,6 +7,7 @@ import 'package:anonero/tools/node.dart';
 import 'package:anonero/tools/proxy.dart';
 import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
+import 'package:anonero/widgets/labeled_text_input.dart';
 import 'package:anonero/widgets/primary_label.dart';
 import 'package:anonero/widgets/settings_list_tile.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +66,7 @@ class SettingsPage extends StatelessWidget {
           ),
           SettingsListTile(
             title: "Proxy",
-            subtitle: "Disabled",
+            subtitle: "Enabled",
             trailing: const Circle(
               color: Colors.green,
             ),
@@ -79,7 +80,7 @@ class SettingsPage extends StatelessWidget {
           ),
           SettingsListTile(
             title: "View Seed",
-            onClick: () => ViewSeedPage.push(context),
+            onClick: () => _viewSeed(context),
           ),
           const SettingsListTile(
             title: "Export Backup",
@@ -96,5 +97,17 @@ class SettingsPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _viewSeed(BuildContext c) async {
+    final tCtrl = TextEditingController();
+    await Alert(
+      body: [
+        LabeledTextInput(label: "Seed offset", ctrl: tCtrl),
+      ],
+      callback: () => Navigator.of(c).pop(),
+    ).show(c);
+    // ignore: use_build_context_synchronously
+    ViewSeedPage.push(c, seedOffset: tCtrl.text);
   }
 }

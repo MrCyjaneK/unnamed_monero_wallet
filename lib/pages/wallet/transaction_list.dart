@@ -19,24 +19,53 @@ class TransactionList extends StatefulWidget {
   State<TransactionList> createState() => _TransactionListState();
 }
 
-class _TransactionListState extends State<TransactionList> {
-  final txHistoryPtr = MONERO_Wallet_history(walletPtr!);
-  late int transactionCount = MONERO_TransactionHistory_count(txHistoryPtr);
+final txHistoryPtr = MONERO_Wallet_history(walletPtr!);
 
+class _TransactionListState extends State<TransactionList> {
+  late int transactionCount = MONERO_TransactionHistory_count(txHistoryPtr);
+  Timer? refresh;
   @override
   void initState() {
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (!mounted) return;
-      MONERO_TransactionHistory_refresh(txHistoryPtr);
-      final newTxCount = MONERO_TransactionHistory_count(txHistoryPtr);
-      if (newTxCount != transactionCount) {
-        setState(() {
-          transactionCount = newTxCount;
-        });
-      }
-    });
+    refresh = Timer.periodic(const Duration(seconds: 1), _timerCallback);
+    _timerCallback(refresh!);
     super.initState();
   }
+
+  void _timerCallback(Timer timer) {
+    if (!mounted) return;
+    MONERO_TransactionHistory_refresh(txHistoryPtr);
+    final newTxCount = MONERO_TransactionHistory_count(txHistoryPtr);
+    final newElms = _buildTxList();
+    if (newTxCount != transactionCount) {
+      setState(() {
+        transactionCount = newTxCount;
+      });
+      return;
+    }
+    bool rebuild = false;
+    if (txList.length != newElms.length) {
+      rebuild = true;
+    } else {
+      for (var i = 0; i < newElms.length; i++) {
+        rebuild =
+            rebuild || newElms[i].confirmations != txList[i].confirmations;
+        rebuild = rebuild || newElms[i].description != txList[i].description;
+      }
+    }
+    if (rebuild) {
+      setState(() {
+        txList = newElms;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    refresh?.cancel();
+    super.dispose();
+  }
+
+  late var txList = _buildTxList();
 
   @override
   Widget build(BuildContext context) {
@@ -49,24 +78,28 @@ class _TransactionListState extends State<TransactionList> {
           TxListPopupMenu()
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const LargeBalanceWidget(),
-            const SyncProgress(),
-            ...List.generate(
-              transactionCount,
-              (index) => TransactionItem(
-                transaction: Transaction(
-                  txHistoryPtr: txHistoryPtr,
-                  txIndex: transactionCount - 1 - index,
-                ),
-              ),
-            ),
-          ],
-        ),
+      body: ListView.builder(
+        itemCount: txList.length + 2,
+        itemBuilder: (context, index) {
+          if (index == 0) return const LargeBalanceWidget();
+          if (index == 1) return const SyncProgress();
+          return TransactionItem(transaction: txList[index - 2]);
+        },
       ),
     );
+  }
+
+  List<Transaction> _buildTxList() {
+    final txList = List.generate(
+      transactionCount,
+      (index) => Transaction(
+        txHistoryPtr: txHistoryPtr,
+        txIndex: transactionCount - 1 - index,
+      ),
+    );
+    txList
+        .sort((tx1, tx2) => tx2.timeStamp.difference(tx1.timeStamp).inSeconds);
+    return txList.toList();
   }
 }
 
@@ -108,16 +141,15 @@ class _SyncProgressState extends State<SyncProgress> {
 
   int blockChainHeight = MONERO_Wallet_blockChainHeight(walletPtr!);
   int uiHeight = MONERO_Wallet_blockChainHeight(walletPtr!);
-  int daemonBlockchainHeight = MONERO_Wallet_daemonBlockChainHeight(walletPtr!);
+  int daemonBlockchainHeight =
+      MONERO_Wallet_daemonBlockChainHeight_cached(walletPtr!);
   bool? synchronized;
   void _refreshState() {
     setState(() {
       synchronized = MONERO_Wallet_synchronized(walletPtr!);
-      if (synchronized != true) {
-        blockChainHeight = MONERO_Wallet_blockChainHeight(walletPtr!);
-        daemonBlockchainHeight =
-            MONERO_Wallet_daemonBlockChainHeight(walletPtr!);
-      }
+      blockChainHeight = MONERO_Wallet_blockChainHeight(walletPtr!);
+      daemonBlockchainHeight =
+          MONERO_Wallet_daemonBlockChainHeight_cached(walletPtr!);
     });
   }
 
@@ -153,12 +185,15 @@ class _SyncProgressState extends State<SyncProgress> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               LinearProgressIndicator(
-                value: (uiHeight / (daemonBlockchainHeight + 1)),
+                value: daemonBlockchainHeight == 0
+                    ? null
+                    : (uiHeight / (daemonBlockchainHeight + 1)),
               ),
               if (daemonBlockchainHeight == 0) const Text("disconnected"),
               if (daemonBlockchainHeight != 0)
                 Text(
-                    "height: $uiHeight; ${(uiHeight / (daemonBlockchainHeight + 1)).toStringAsFixed(4)}% s:$synchronized"),
+                  "height: $uiHeight; ${(uiHeight / (daemonBlockchainHeight + 1) * 100).toStringAsFixed(4)}% s:$synchronized",
+                ),
               const SizedBox(height: 16),
             ],
           ),

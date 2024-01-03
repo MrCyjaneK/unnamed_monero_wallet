@@ -35,30 +35,30 @@ const ColorScheme colorScheme = ColorScheme(
 );
 
 class Transaction {
-  String get displayLabel => MONERO_TransactionInfo_label(_tx);
-  String get subaddressLabel => sl.subaddressLabel(addressIndex);
-  String get address => MONERO_Wallet_address(
-        walletPtr!,
-        accountIndex: 0,
-        addressIndex: addressIndex,
-      );
-  String get description => MONERO_TransactionInfo_description(_tx);
-  int get fee => MONERO_TransactionInfo_fee(_tx);
-  int get confirmations => MONERO_TransactionInfo_confirmations(_tx);
-  bool get isPending => confirmations < maxConfirms;
-  int get blockheight => MONERO_TransactionInfo_blockHeight(_tx);
-  int get accountIndex => MONERO_TransactionInfo_subaddrAccount(_tx);
-  String get paymentId => MONERO_TransactionInfo_paymentId(_tx);
-  int get amount => MONERO_TransactionInfo_amount(_tx);
-  bool get isSpend =>
+  late final String displayLabel = MONERO_TransactionInfo_label(_tx);
+  late String subaddressLabel = sl.subaddressLabel(accountIndex);
+  late final String address = MONERO_Wallet_address(
+    walletPtr!,
+    accountIndex: 0,
+    addressIndex: accountIndex,
+  );
+  late String description = MONERO_TransactionInfo_description(_tx);
+  late final int fee = MONERO_TransactionInfo_fee(_tx);
+  late final int confirmations = MONERO_TransactionInfo_confirmations(_tx);
+  late final bool isPending = confirmations < maxConfirms;
+  late final int blockheight = MONERO_TransactionInfo_blockHeight(_tx);
+  late final int accountIndex = MONERO_TransactionInfo_subaddrAccount(_tx);
+  late final String paymentId = MONERO_TransactionInfo_paymentId(_tx);
+  late final int amount = MONERO_TransactionInfo_amount(_tx);
+  late final bool isSpend =
       MONERO_TransactionInfo_direction(_tx) == TransactionInfo_Direction.Out;
-  DateTime get timeStamp => DateTime.fromMillisecondsSinceEpoch(
-        MONERO_TransactionInfo_timestamp(_tx) * 1000,
-      );
-  int get addressIndex => MONERO_TransactionInfo_subaddrAccount(_tx);
-  bool get isConfirmed => !isPending;
-  String get hash => MONERO_TransactionInfo_hash(_tx);
-  // SubAddress? subAddress;
+  late DateTime timeStamp = DateTime.fromMillisecondsSinceEpoch(
+    MONERO_TransactionInfo_timestamp(_tx) * 1000,
+  );
+  // late int addressIndex = MONERO_TransactionInfo_subaddrAccount(_tx);
+  late final bool isConfirmed = !isPending;
+  late final String hash = MONERO_TransactionInfo_hash(_tx);
+  // S finalubAddress? subAddress;
   // List<Transfer> transfers = [];
   final MONERO_TransactionHistory txHistoryPtr;
   final int txIndex;

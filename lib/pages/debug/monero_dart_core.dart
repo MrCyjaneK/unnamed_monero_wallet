@@ -21,7 +21,7 @@ class MoneroDartCore extends StatefulWidget {
 
 class _MoneroDartCoreState extends State<MoneroDartCore> {
   final pathCtrl = TextEditingController(
-    text: '/data/data/com.example.anonero/files/wallet',
+    text: '/data/data/io.anonero.anonero/files/wallet',
   );
   final passwordCtrl = TextEditingController(text: 'test');
   final networkTypeCtrl = TextEditingController(text: '0');

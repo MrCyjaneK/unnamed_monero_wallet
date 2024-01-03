@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:anonero/pages/debug.dart';
 import 'package:anonero/pages/debug/monero_log_level.dart';
@@ -217,6 +219,15 @@ class _PinScreenState extends State<PinScreen> {
     MONERO_WalletManagerFactory_setLogLevel(logLevel);
     MONERO_Wallet_startRefresh(walletPtr!);
     MONERO_Wallet_refreshAsync(walletPtr!);
+    final addr = walletPtr!.address;
+    Isolate.run(() {
+      if (kDebugMode) {
+        print("Skipping enableRefresh on kDebugMode");
+        return;
+      }
+      MONERO_Wallet_daemonBlockChainHeight_runThread(
+          Pointer.fromAddress(addr), 1);
+    });
     runBackgroundTaskWallet(walletPtr!);
   }
 

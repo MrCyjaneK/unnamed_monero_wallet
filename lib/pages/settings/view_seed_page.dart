@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:anonero/const/app_name.dart';
 import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
@@ -10,15 +12,19 @@ import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
 
 class ViewSeedPage extends StatefulWidget {
-  const ViewSeedPage({super.key});
+  const ViewSeedPage({super.key, required this.seedOffset});
+
+  final String seedOffset;
 
   @override
   State<ViewSeedPage> createState() => _ViewSeedPageState();
 
-  static void push(BuildContext context) {
+  static void push(BuildContext context, {required String seedOffset}) {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) {
-        return const ViewSeedPage();
+        return ViewSeedPage(
+          seedOffset: seedOffset,
+        );
       },
     ));
   }
@@ -27,7 +33,8 @@ class ViewSeedPage extends StatefulWidget {
 class _ViewSeedPageState extends State<ViewSeedPage> {
   final address = MONERO_Wallet_address(walletPtr!);
 
-  late final legacySeed = MONERO_Wallet_seed(walletPtr!).split(' ');
+  late final legacySeed =
+      MONERO_Wallet_seed(walletPtr!, seedOffset: widget.seedOffset).split(' ');
 
   late final seed = ['unsupported'];
 
@@ -40,12 +47,19 @@ class _ViewSeedPageState extends State<ViewSeedPage> {
   }
 
   void _showNeroKeys() {
+    final data = const JsonEncoder.withIndent('   ').convert({
+      "version": 0,
+      "primaryAddress":
+          MONERO_Wallet_address(walletPtr!, accountIndex: 0, addressIndex: 0),
+      "privateViewKey": MONERO_Wallet_secretViewKey(walletPtr!),
+      "restoreHeight": MONERO_Wallet_getRefreshFromBlockHeight(walletPtr!),
+    });
     Alert(
       cancelable: false,
       singleBody: SizedBox(
         width: 512,
         child: Qr(
-          data: seed.join("____"),
+          data: data,
         ),
       ),
     ).show(context);

@@ -19,23 +19,34 @@ jobs:
         run: |
           cd ${{ gitea.workspace }} \
           && flutter pub get
+      - name: make version
+        run: |
+          cd ${{ gitea.workspace }} \
+          && make version
       - name: Build apk
+        continue-on-error: false
         run: |
           cd ${{ gitea.workspace }} \
           && flutter build apk --no-tree-shake-icons
+      - name: Build linux (debian)
+        continue-on-error: true
+        run: |
+          cd ${{ gitea.workspace }} \
+          && make deb \
+          && curl --user mrcyjanek:$PAT_SECRET_PACKAGE \
+          --upload-file build/linux/x64/release/debian/*.deb \ 
+          https://git.mrcyjanek.net/api/packages/mrcyjanek/debian/pool/no-distro/main/upload
+      - name: Build linux (tarball)
+        continue-on-error: true
+        run: |
+          cd ${{ gitea.workspace }} \
+          && make linux
       - name: Create release
         uses: akkuman/gitea-release-action@v1
         with:
           body: |
             This is a **preview** release to be used by testers.
             It was build from **${{ gitea.ref }}** commit `${{ gitea.sha }}`
-            ### Android
-
-            Android has first-class support, it should work out of the box in all situations.
-
-            ### Linux support
-
-            Linux support is experimental, to get it to work you need to have compatible `libwallet2_api_c.so` in `/usr/local/lib/`
 
             ### Release info
             ${{ github.event.head_commit.message }}
@@ -43,3 +54,4 @@ jobs:
           #tagname: "${{ gitea.reg_name }}-${{ gitea.sha }}"
           files: |-
             ${{ gitea.workspace }}/build/app/outputs/flutter-apk/app-release.apk
+            ${{ gitea.workspace }}/build/linux/x64/release/anonero-linux-amd64.tar

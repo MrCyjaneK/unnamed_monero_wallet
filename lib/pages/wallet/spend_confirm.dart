@@ -49,12 +49,12 @@ class _SpendConfirmState extends State<SpendConfirm> {
   }
 
   void _placeholderTriggerDone() {
-    Future.delayed(const Duration(milliseconds: 999)).then((value) {
+    Future.delayed(const Duration(milliseconds: 700)).then((value) {
       final tx = MONERO_Wallet_createTransaction(
         walletPtr!,
         dst_addr: widget.tx.address,
         payment_id: "",
-        amount: widget.tx.amount,
+        amount: widget.tx.isSweep ? 0 : widget.tx.amount,
         mixin_count: 0,
         pendingTransactionPriority: 0,
         subaddr_account: 0,

@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:anonero/main.dart';
@@ -92,6 +91,4 @@ class _BootFlagDebugState extends State<BootFlagDebug> {
       ),
     );
   }
-
-  String _debug(dynamic v) => const JsonEncoder.withIndent('    ').convert(v);
 }
