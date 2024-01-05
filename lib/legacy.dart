@@ -1,4 +1,3 @@
-import 'package:anonero/pages/wallet/transaction_list.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';

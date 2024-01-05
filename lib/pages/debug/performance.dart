@@ -109,15 +109,15 @@ class _PerformanceDebugState extends State<PerformanceDebug> {
       ],
     ));
     final keys = debugCallLength.keys.toList();
-    keys.sort(
-        (s1, s2) => _95(debugCallLength[s2]!) - _95(debugCallLength[s1]!));
+    keys.sort((s1, s2) =>
+        _n95th(debugCallLength[s2]!) - _n95th(debugCallLength[s1]!));
     for (var key in keys) {
       final value = debugCallLength[key];
       if (value == null) continue;
       final avg = _avg(value);
       final min = _min(value);
       final max = _max(value);
-      final np = _95(value);
+      final np = _n95th(value);
       final total = _total(value);
       ws.add(
         Card(
@@ -176,7 +176,7 @@ class _PerformanceDebugState extends State<PerformanceDebug> {
     return l.reduce(max);
   }
 
-  int _95(List<int> l) {
+  int _n95th(List<int> l) {
     final l0 = l.toList();
     l0.sort();
     int i = (0.95 * l.length).ceil() - 1;
