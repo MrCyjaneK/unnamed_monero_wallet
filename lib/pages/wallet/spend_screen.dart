@@ -84,40 +84,41 @@ class _SpendScreenState extends State<SpendScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
       ),
-      body: Column(
-        children: [
-          LabeledTextInput(label: "ADDRESS", ctrl: addressCtrl),
-          LabeledTextInput(
-            label: "AMOUNT",
-            ctrl: amountCtrl,
-            onEdit: _amtEdited,
-          ),
-          LabeledTextInput(label: "NOTES", ctrl: notesCtrl),
-          InkWell(
-            onTap: _toggleSweep,
-            child: SizedBox(
-              height: 80,
-              child: Center(
-                child: Text(
-                  sweepAll
-                      ? "Sweeping ${formatMonero(availableBalance)} (minus fee)"
-                      : "Available Balance : ${formatMonero(availableBalance)}",
-                  style: Theme.of(context).textTheme.bodySmall,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            LabeledTextInput(label: "ADDRESS", ctrl: addressCtrl),
+            LabeledTextInput(
+              label: "AMOUNT",
+              ctrl: amountCtrl,
+              onEdit: _amtEdited,
+            ),
+            // LabeledTextInput(label: "NOTES", ctrl: notesCtrl),
+            InkWell(
+              onTap: _toggleSweep,
+              child: SizedBox(
+                height: 80,
+                child: Center(
+                  child: Text(
+                    sweepAll
+                        ? "Sweeping ${formatMonero(availableBalance)} (minus fee)"
+                        : "Available Balance : ${formatMonero(availableBalance)}",
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
                 ),
               ),
             ),
-          ),
-          IconButton(
-            iconSize: 48,
-            onPressed: () {},
-            icon: const Icon(Icons.crop_free_sharp),
-          ),
-          const Spacer(),
-          LongOutlinedButton(
-            text: "Continue",
-            onPressed: _continue,
-          ),
-        ],
+            IconButton(
+              iconSize: 48,
+              onPressed: () {},
+              icon: const Icon(Icons.crop_free_sharp),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: LongOutlinedButton(
+        text: "Continue",
+        onPressed: _continue,
       ),
     );
   }

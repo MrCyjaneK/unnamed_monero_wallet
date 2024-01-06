@@ -33,6 +33,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  bytewords:
+    dependency: "direct main"
+    description:
+      name: bytewords
+      sha256: "4dae933653572bf72701e76fff455bb1b1e06e881d0437c54bc15bed5c2c0041"
+      url: "https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/"
+    source: hosted
+    version: "0.0.10"
   characters:
     dependency: transitive
     description:

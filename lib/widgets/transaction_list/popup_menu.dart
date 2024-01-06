@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:anonero/pages/sync_static_progress.dart';
 import 'package:anonero/tools/dirs.dart';
 import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
+import 'package:anonero/widgets/urqr.dart';
+import 'package:bytewords/bytewords.dart';
 import 'package:cr_file_saver/file_saver.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -35,8 +39,22 @@ class TxListPopupMenu extends StatelessWidget {
             .show(c);
         return;
       }
-      CRFileSaver.saveFileWithDialog(SaveFileDialogParams(
-          sourceFilePath: p, destinationFileName: 'export_key_images'));
+      final bytes = File(p).readAsBytesSync();
+      final frames = uint8ListToURQR(bytes, 'xmr-keyimage');
+      // ignore: use_build_context_synchronously
+      await Alert(
+        singleBody: SizedBox(
+          width: double.maxFinite,
+          height: double.maxFinite,
+          child: URQR(
+            frames: frames,
+          ),
+        ),
+        cancelable: true,
+        callback: () => CRFileSaver.saveFileWithDialog(SaveFileDialogParams(
+            sourceFilePath: p, destinationFileName: 'export_key_image')),
+        callbackText: "File",
+      ).show(c);
     });
   }
 

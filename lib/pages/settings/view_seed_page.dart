@@ -69,7 +69,7 @@ class _ViewSeedPageState extends State<ViewSeedPage> {
     ).show(context);
   }
 
-  String viewKey = MONERO_Wallet_publicViewKey(walletPtr!);
+  String viewKey = MONERO_Wallet_secretViewKey(walletPtr!);
   String spendKey = MONERO_Wallet_secretSpendKey(walletPtr!);
   int restoreHeight = MONERO_Wallet_getRefreshFromBlockHeight(walletPtr!);
 
@@ -99,7 +99,7 @@ class _ViewSeedPageState extends State<ViewSeedPage> {
               PrimaryLabel(
                   title: useLegacy ? "LEGACY MNEMONIC" : "POLYSEED MNEMONIC"),
               InkWell(
-                onTap: _toggleSeed,
+                onTap: !seed.isNotEmpty ? null : _toggleSeed,
                 onLongPress: _copySeed,
                 child: PaddedElement(child: _seedWidget()),
               ),
