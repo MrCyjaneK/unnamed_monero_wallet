@@ -8,19 +8,36 @@ import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
 
 class SpendScreen extends StatefulWidget {
-  const SpendScreen({super.key});
-
+  const SpendScreen({super.key, this.outputs = const [], this.address = ""});
+  final String address;
+  final List<String> outputs;
   @override
   State<SpendScreen> createState() => _SpendScreenState();
+
+  static void push(BuildContext context,
+      {List<String> outputs = const [], String address = ""}) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return SpendScreen(outputs: outputs, address: address);
+      },
+    ));
+  }
 }
 
 class _SpendScreenState extends State<SpendScreen> {
-  final addressCtrl = TextEditingController();
+  late final addressCtrl = TextEditingController(text: widget.address);
   final amountCtrl = TextEditingController();
   final notesCtrl = TextEditingController();
 
   bool sweepAllVar = false;
   bool get sweepAll => sweepAllVar;
+  final coins = MONERO_Wallet_coins(walletPtr!);
+
+  @override
+  void initState() {
+    _loadBalance();
+    super.initState();
+  }
 
   void _toggleSweep() {
     setState(() {
@@ -29,8 +46,29 @@ class _SpendScreenState extends State<SpendScreen> {
     });
   }
 
-  final availableBalance =
-      MONERO_Wallet_unlockedBalance(walletPtr!, accountIndex: 0);
+  int availableBalance = 0;
+  void _loadBalance() {
+    if (widget.outputs.isEmpty) {
+      setState(() {
+        availableBalance =
+            MONERO_Wallet_unlockedBalance(walletPtr!, accountIndex: 0);
+      });
+      return;
+    }
+    MONERO_Coins_refresh(coins);
+    final count = MONERO_Coins_count(coins);
+    int amt = 0;
+    for (var i = 0; i < count; i++) {
+      final c = MONERO_Coins_coin(coins, i);
+      final keyImage = MONERO_CoinsInfo_keyImage(c);
+      if (widget.outputs.contains(keyImage)) {
+        amt += MONERO_CoinsInfo_amount(c);
+      }
+    }
+    setState(() {
+      availableBalance = amt;
+    });
+  }
 
   void _amtEdited() {
     if (sweepAllVar) {
@@ -98,6 +136,7 @@ class _SpendScreenState extends State<SpendScreen> {
         amount: amtInt,
         notes: notesCtrl.text,
         isSweep: sweepAll,
+        outputs: widget.outputs,
       ),
     );
   }

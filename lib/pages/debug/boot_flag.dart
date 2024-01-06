@@ -89,7 +89,7 @@ class _BootFlagDebugState extends State<BootFlagDebug> {
                 },
               ),
             const SelectableText("Disable proxy"),
-            if (poFlag!.existsSync())
+            if (disableProxyFlag!.existsSync())
               LongOutlinedButton(
                 text: "Destroy flag",
                 onPressed: () {
@@ -97,7 +97,7 @@ class _BootFlagDebugState extends State<BootFlagDebug> {
                   setState(() {});
                 },
               ),
-            if (!poFlag!.existsSync())
+            if (!disableProxyFlag!.existsSync())
               LongOutlinedButton(
                 text: "Create flag",
                 onPressed: () {

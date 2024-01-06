@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'package:anonero/const/app_name.dart';
 import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
+import 'package:anonero/widgets/labeled_text_input.dart';
 import 'package:anonero/widgets/long_outlined_button.dart';
 import 'package:anonero/widgets/padded_element.dart';
 import 'package:anonero/widgets/primary_label.dart';
 import 'package:anonero/widgets/qr_code.dart';
 import 'package:anonero/widgets/tiny_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:monero/monero.dart';
 
 class ViewSeedPage extends StatefulWidget {
@@ -36,9 +38,11 @@ class _ViewSeedPageState extends State<ViewSeedPage> {
   late final legacySeed =
       MONERO_Wallet_seed(walletPtr!, seedOffset: widget.seedOffset).split(' ');
 
-  late final seed = ['unsupported'];
+  late final seed =
+      MONERO_Wallet_getPolyseed(walletPtr!, passphrase: widget.seedOffset)
+          .split(' ');
 
-  bool useLegacy = true;
+  late bool useLegacy = seed.isEmpty;
 
   void _toggleSeed() {
     setState(() {
@@ -69,6 +73,14 @@ class _ViewSeedPageState extends State<ViewSeedPage> {
   String spendKey = MONERO_Wallet_secretSpendKey(walletPtr!);
   int restoreHeight = MONERO_Wallet_getRefreshFromBlockHeight(walletPtr!);
 
+  void _copySeed() {
+    Clipboard.setData(
+      ClipboardData(
+        text: (useLegacy ? legacySeed : seed).join(' '),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,6 +100,7 @@ class _ViewSeedPageState extends State<ViewSeedPage> {
                   title: useLegacy ? "LEGACY MNEMONIC" : "POLYSEED MNEMONIC"),
               InkWell(
                 onTap: _toggleSeed,
+                onLongPress: _copySeed,
                 child: PaddedElement(child: _seedWidget()),
               ),
               const Divider(),
@@ -98,7 +111,10 @@ class _ViewSeedPageState extends State<ViewSeedPage> {
               PaddedElement(child: SelectableText(spendKey)),
               const Divider(),
               const PrimaryLabel(title: "RESTORE HEIGHT"),
-              PaddedElement(child: SelectableText(restoreHeight.toString())),
+              InkWell(
+                  onTap: _changeHeight,
+                  child: PaddedElement(
+                      child: SelectableText(restoreHeight.toString()))),
               const Divider(),
               LongOutlinedButton(
                 text: "EXPORT $nero KEYS",
@@ -117,5 +133,26 @@ class _ViewSeedPageState extends State<ViewSeedPage> {
         return TinyCard(e);
       }).toList(),
     );
+  }
+
+  void _changeHeight() {
+    final tCtrl = TextEditingController(text: restoreHeight.toString());
+    Alert(
+      singleBody: LabeledTextInput(label: "Update restore height", ctrl: tCtrl),
+      cancelable: true,
+      callback: () {
+        final i = int.tryParse(tCtrl.text);
+        if (i == null) return;
+        MONERO_Wallet_setRefreshFromBlockHeight(
+          walletPtr!,
+          refresh_from_block_height: i,
+        );
+        setState(() {
+          restoreHeight = i;
+        });
+        Navigator.of(context).pop();
+      },
+      callbackText: "Set",
+    ).show(context);
   }
 }

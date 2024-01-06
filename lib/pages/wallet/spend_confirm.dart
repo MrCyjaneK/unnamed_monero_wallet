@@ -14,12 +14,13 @@ class TxRequest {
   final int amount;
   final String notes;
   final bool isSweep;
-
+  final List<String> outputs;
   TxRequest({
     required this.address,
     required this.amount,
     required this.notes,
     required this.isSweep,
+    required this.outputs,
   });
 }
 
@@ -50,6 +51,7 @@ class _SpendConfirmState extends State<SpendConfirm> {
 
   void _placeholderTriggerDone() {
     Future.delayed(const Duration(milliseconds: 700)).then((value) {
+      print("outs: ${widget.tx.outputs}");
       final tx = MONERO_Wallet_createTransaction(
         walletPtr!,
         dst_addr: widget.tx.address,
@@ -58,6 +60,7 @@ class _SpendConfirmState extends State<SpendConfirm> {
         mixin_count: 0,
         pendingTransactionPriority: 0,
         subaddr_account: 0,
+        preferredInputs: widget.tx.outputs,
       );
       final status = MONERO_PendingTransaction_status(tx);
       final errorString = MONERO_PendingTransaction_errorString(tx);

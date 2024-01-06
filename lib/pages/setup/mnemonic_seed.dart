@@ -68,7 +68,7 @@ class _MnemonicSeedState extends State<MnemonicSeed> {
       PassphraseEncryptionFlag.restoreWalletSeed,
       restoreData: RestoreData(
         seed: seedCtrl.text,
-        restoreHeight: int.parse(heightCtrl.text),
+        restoreHeight: int.tryParse(heightCtrl.text),
         restoreType: RestoreType.legacy,
       ),
     );

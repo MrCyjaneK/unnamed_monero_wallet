@@ -4,8 +4,11 @@ import 'package:anonero/const/app_name.dart';
 import 'package:anonero/const/is_view_only.dart';
 import 'package:anonero/legacy.dart';
 import 'package:anonero/pages/debug/performance.dart';
+import 'package:anonero/pages/pin_screen.dart';
+import 'package:anonero/pages/scanner/base_scan.dart';
 import 'package:anonero/pages/wallet/outputs_page.dart';
 import 'package:anonero/tools/format_monero.dart';
+import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
 import 'package:anonero/widgets/transaction_list/popup_menu.dart';
 import 'package:anonero/widgets/transaction_list/transaction_item.dart';
@@ -37,13 +40,12 @@ class _TransactionListState extends State<TransactionList> {
   }
 
   void _timerCallback(Timer timer) {
+    _synchronized();
     if (!mounted) return;
-    MONERO_TransactionHistory_refresh(txHistoryPtr);
-    final newTxCount = MONERO_TransactionHistory_count(txHistoryPtr);
     final newElms = _buildTxList();
-    if (newTxCount != transactionCount) {
+    if (newElms.length != transactionCount) {
       setState(() {
-        transactionCount = newTxCount;
+        transactionCount = newElms.length;
       });
       return;
     }
@@ -72,6 +74,40 @@ class _TransactionListState extends State<TransactionList> {
 
   late var txList = _buildTxList();
 
+  void _lockWallet() {
+    if (tempWalletPassword != "") {
+      final stat = MONERO_Wallet_setupBackgroundSync(
+        walletPtr!,
+        backgroundSyncType: 1,
+        walletPassword: tempWalletPassword,
+        backgroundCachePassword: "",
+      );
+      if (!stat) {
+        Alert(title: MONERO_Wallet_errorString(walletPtr!), cancelable: true)
+            .show(context);
+        return;
+      }
+      tempWalletPassword = "";
+    }
+    final status = MONERO_Wallet_startBackgroundSync(walletPtr!);
+    if (!status) {
+      Alert(
+        title: MONERO_Wallet_errorString(walletPtr!),
+        cancelable: true,
+      ).show(context);
+      return;
+    }
+    PinScreen.pushLock(context);
+  }
+
+  void _synchronized() {
+    setState(() {
+      synchronized = MONERO_Wallet_synchronized(walletPtr!);
+    });
+  }
+
+  bool synchronized = MONERO_Wallet_synchronized(walletPtr!);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,8 +115,13 @@ class _TransactionListState extends State<TransactionList> {
         automaticallyImplyLeading: false,
         title: Text(isViewOnly ? nero : anon),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.lock)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.crop_free)),
+          IconButton(
+            onPressed: synchronized ? _lockWallet : null,
+            icon: const Icon(Icons.lock),
+          ),
+          IconButton(
+              onPressed: () => BaseScannerPage.push(context),
+              icon: const Icon(Icons.crop_free)),
           TxListPopupMenu()
         ],
       ),
@@ -96,6 +137,7 @@ class _TransactionListState extends State<TransactionList> {
   }
 
   List<Transaction> _buildTxList() {
+    MONERO_TransactionHistory_refresh(txHistoryPtr);
     final txList = List.generate(
       transactionCount,
       (index) => Transaction(

@@ -18,7 +18,7 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
   late int currentAddressIndex =
       MONERO_Wallet_numSubaddresses(walletPtr!, accountIndex: 0);
 
-  late final address = MONERO_Wallet_address(
+  late String address = MONERO_Wallet_address(
     walletPtr!,
     accountIndex: 0,
     addressIndex: currentAddressIndex,
@@ -31,6 +31,11 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
       if (ns == currentAddressIndex) return;
       setState(() {
         currentAddressIndex = ns;
+        address = MONERO_Wallet_address(
+          walletPtr!,
+          accountIndex: 0,
+          addressIndex: currentAddressIndex,
+        );
       });
     });
   }

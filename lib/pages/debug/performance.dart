@@ -136,7 +136,7 @@ class _PerformanceDebugState extends State<PerformanceDebug> {
                   const Spacer(),
                   cw("${_str(total / 1000)}ms", perfc(total)),
                 ]),
-                cw("average: ${_str(avg)}µs (~${_str(avg / (frameTime) * 100)}%)",
+                cw("average: ${_str(avg)}µs (~${_str(avg / (frameTime))}f)",
                     perfc(avg)),
                 cw("min: $minµs (~${_str(min / (frameTime) * 100)})",
                     perfc(min)),

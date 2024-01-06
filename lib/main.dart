@@ -5,6 +5,7 @@ import 'package:anonero/legacy.dart';
 import 'package:anonero/pages/anon/firstrun.dart';
 import 'package:anonero/pages/pin_screen.dart';
 import 'package:anonero/tools/dirs.dart';
+import 'package:anonero/tools/fuck_firebase.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
 
@@ -17,6 +18,7 @@ void main() async {
     libPath = '/usr/local/lib/libwallet2_api_c.so';
   }
   WidgetsFlutterBinding.ensureInitialized();
+  await fuckFirebase(); // MLkit privacy patch
   final pmf = File(await getPerformanceStoreFile());
   try {
     if (pmf.existsSync()) {
@@ -33,7 +35,7 @@ void main() async {
   } catch (e) {
     print(e);
   }
-  printStarts = true;
+  // printStarts = true;
   _walletExists = MONERO_WalletManager_walletExists(await getMainWalletPath());
   useMaterial3 = File(await getMaterial3FlagFile()).existsSync();
   disableProxy = File(await getDisableProxyFlagFile()).existsSync();

@@ -128,7 +128,7 @@ class RestoreData {
       required this.restoreHeight,
       required this.restoreType});
   final String seed;
-  final int restoreHeight;
+  final int? restoreHeight;
   final RestoreType restoreType;
 
   Map<String, dynamic> toJson() {
