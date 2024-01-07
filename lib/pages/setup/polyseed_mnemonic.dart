@@ -1,29 +1,14 @@
 import 'package:anonero/pages/wallet/wallet_home.dart';
+import 'package:anonero/tools/wallet_ptr.dart';
 import 'package:anonero/widgets/long_outlined_button.dart';
 import 'package:anonero/widgets/setup_logo.dart';
 import 'package:flutter/material.dart';
+import 'package:monero/monero.dart';
 
 class PolyseedMnemonic extends StatelessWidget {
   PolyseedMnemonic({super.key});
 
-  final words = [
-    "confirm",
-    "mesh",
-    "fine",
-    "hawk",
-    "feburary",
-    "toward",
-    "avoid",
-    "rural",
-    "profit",
-    "learn",
-    "throw",
-    "patrol",
-    "risk",
-    "course",
-    "mesh",
-    "table"
-  ];
+  final words = MONERO_Wallet_getPolyseed(walletPtr!, passphrase: "");
 
   @override
   Widget build(BuildContext context) {

@@ -123,19 +123,25 @@ class PassphraseEncryption extends StatelessWidget {
 enum RestoreType { legacy }
 
 class RestoreData {
-  RestoreData(
-      {required this.seed,
-      required this.restoreHeight,
-      required this.restoreType});
+  RestoreData({
+    required this.seed,
+    required this.restoreHeight,
+    required this.restoreType,
+    this.privateViewKey,
+    this.primaryAddress,
+  });
   final String seed;
   final int? restoreHeight;
   final RestoreType restoreType;
-
+  final String? privateViewKey;
+  final String? primaryAddress;
   Map<String, dynamic> toJson() {
     return {
       "seed": seed,
       "restoreHeight": restoreHeight,
       "restoreType": restoreType.toString(),
+      "privateViewKey": privateViewKey,
+      "primaryAddress": primaryAddress,
     };
   }
 }

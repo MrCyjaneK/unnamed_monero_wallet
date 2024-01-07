@@ -1,3 +1,4 @@
+import 'package:anonero/const/app_name.dart';
 import 'package:anonero/const/resource.g.dart';
 import 'package:anonero/pages/debug.dart';
 import 'package:anonero/pages/setup/node_connection.dart';
@@ -27,8 +28,12 @@ class AnonFirstRun extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           SetupOutlinedButton(
-            text: "RESTORE WALLET",
+            text: "RESTORE WALLET $anon",
             onPressed: () => _restoreWallet(context),
+          ),
+          SetupOutlinedButton(
+            text: "RESTORE WALLET $nero",
+            onPressed: () => _restoreWalletNero(context),
           ),
           if (kDebugMode)
             SetupOutlinedButton(
@@ -39,6 +44,10 @@ class AnonFirstRun extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _restoreWalletNero(BuildContext c) {
+    SetupNodeConnection.push(c, SetupNodeConnectionFlag.restoreWalletNero);
   }
 
   void _restoreWallet(BuildContext c) {

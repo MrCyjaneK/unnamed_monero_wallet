@@ -43,7 +43,19 @@ Future<String> getMoneroExportKeyImagesPath() async {
 }
 
 Future<String> getMoneroImportOutputsPath() async {
-  return "${(await getWd()).path}/outputs";
+  return "${(await getWd()).path}/import_outputs";
+}
+
+Future<String> getMoneroExportOutputsPath() async {
+  return "${(await getWd()).path}/export_outputs";
+}
+
+Future<String> getMoneroImportKeyImagesPath() async {
+  return "${(await getWd()).path}/import_key_images";
+}
+
+Future<String> getMoneroUnsignedTxPath() async {
+  return "${(await getWd()).path}/unsigned_tx";
 }
 
 Future<String> getMoneroSignedTxPath() async {

@@ -1,11 +1,17 @@
+import 'dart:io';
+
 import 'package:anonero/pages/wallet/spend_success.dart';
+import 'package:anonero/tools/dirs.dart';
 import 'package:anonero/tools/format_monero.dart';
+import 'package:anonero/tools/is_view_only.dart';
 import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
 import 'package:anonero/widgets/long_outlined_button.dart';
 import 'package:anonero/widgets/padded_element.dart';
 import 'package:anonero/widgets/primary_label.dart';
 import 'package:anonero/widgets/setup_logo.dart';
+import 'package:anonero/widgets/urqr.dart';
+import 'package:bytewords/bytewords.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
 
@@ -15,12 +21,16 @@ class TxRequest {
   final String notes;
   final bool isSweep;
   final List<String> outputs;
+  final MONERO_UnsignedTransaction? txPtr;
+  final bool isUR;
   TxRequest({
     required this.address,
     required this.amount,
     required this.notes,
     required this.isSweep,
     required this.outputs,
+    this.isUR = false,
+    this.txPtr,
   });
 }
 
@@ -45,11 +55,11 @@ class _SpendConfirmState extends State<SpendConfirm> {
   MONERO_PendingTransaction? txPtr;
   @override
   void initState() {
-    _placeholderTriggerDone();
+    _prepTx();
     super.initState();
   }
 
-  void _placeholderTriggerDone() {
+  void _prepTx() {
     Future.delayed(const Duration(milliseconds: 700)).then((value) {
       print("outs: ${widget.tx.outputs}");
       final tx = MONERO_Wallet_createTransaction(
@@ -121,6 +131,45 @@ class _SpendConfirmState extends State<SpendConfirm> {
   }
 
   void _confirm() {
+    isViewOnly ? _confirmNero() : _confirmAnon();
+  }
+
+  void _confirmNero() async {
+    final p = await getMoneroUnsignedTxPath();
+    if (File(p).existsSync()) File(p).deleteSync();
+    final stat =
+        MONERO_PendingTransaction_commit(txPtr!, filename: p, overwrite: false);
+    if (stat == false) {
+      final errorString = MONERO_PendingTransaction_errorString(txPtr!);
+      // ignore: use_build_context_synchronously
+      Alert(
+        title: "Failed to send transaction - $errorString",
+        callback: () {
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+        },
+        callbackText: "Go Back",
+      ).show(context);
+      return;
+    }
+    // ignore: use_build_context_synchronously
+    Alert(
+      singleBody: SizedBox(
+        width: double.maxFinite,
+        height: double.maxFinite,
+        child: URQR(
+          frames: uint8ListToURQR(
+            File(p).readAsBytesSync(),
+            "xmr-txunsigned",
+            fragLength: 500,
+          ),
+        ),
+      ),
+      cancelable: true,
+    ).show(context);
+  }
+
+  void _confirmAnon() {
     final stat = MONERO_PendingTransaction_commit(txPtr!,
         filename: "", overwrite: false);
     if (stat == false) {

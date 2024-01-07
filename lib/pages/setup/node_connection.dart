@@ -1,5 +1,6 @@
 import 'package:anonero/pages/setup/mnemonic_seed.dart';
 import 'package:anonero/pages/setup/passphrase_encryption.dart';
+import 'package:anonero/pages/setup/view_only_keys.dart';
 import 'package:anonero/tools/node.dart';
 import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/widgets/labeled_text_input.dart';
@@ -8,7 +9,11 @@ import 'package:anonero/widgets/proxy_button.dart';
 import 'package:anonero/widgets/setup_logo.dart';
 import 'package:flutter/material.dart';
 
-enum SetupNodeConnectionFlag { createWallet, restoreWalletSeed }
+enum SetupNodeConnectionFlag {
+  createWallet,
+  restoreWalletSeed,
+  restoreWalletNero
+}
 
 class SetupNodeConnection extends StatefulWidget {
   const SetupNodeConnection({super.key, required this.flag});
@@ -84,8 +89,15 @@ class _SetupNodeConnectionState extends State<SetupNodeConnection> {
             ),
           ),
           LongOutlinedButton(
-            text: nodeCtrl.text == "" ? "Skip" : "Connect",
-            onPressed: _nextScreenSafe,
+            text: (widget.flag != SetupNodeConnectionFlag.restoreWalletNero &&
+                    nodeCtrl.text == "")
+                ? "Skip"
+                : "Connect",
+            onPressed:
+                (widget.flag == SetupNodeConnectionFlag.restoreWalletNero &&
+                        nodeCtrl.text == "")
+                    ? null
+                    : _nextScreenSafe,
           ),
         ],
       ),
@@ -131,6 +143,8 @@ class _SetupNodeConnectionState extends State<SetupNodeConnection> {
         );
       case SetupNodeConnectionFlag.restoreWalletSeed:
         MnemonicSeed.push(context);
+      case SetupNodeConnectionFlag.restoreWalletNero:
+        ViewOnlyKeysSetup.push(context);
     }
   }
 }

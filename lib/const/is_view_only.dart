@@ -1,1 +1,1 @@
-bool isViewOnly = false;
+

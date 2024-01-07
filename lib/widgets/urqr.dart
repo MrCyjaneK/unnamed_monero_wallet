@@ -21,7 +21,7 @@ class _URQRState extends State<URQR> {
   void initState() {
     super.initState();
     setState(() {
-      t = Timer.periodic(const Duration(milliseconds: 1000 ~/ 1), (timer) {
+      t = Timer.periodic(const Duration(milliseconds: 1000 ~/ 2), (timer) {
         _nextFrame();
       });
     });

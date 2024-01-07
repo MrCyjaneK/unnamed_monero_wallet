@@ -8,6 +8,7 @@ import 'package:anonero/pages/pin_screen.dart';
 import 'package:anonero/pages/scanner/base_scan.dart';
 import 'package:anonero/pages/wallet/outputs_page.dart';
 import 'package:anonero/tools/format_monero.dart';
+import 'package:anonero/tools/is_view_only.dart';
 import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
 import 'package:anonero/widgets/transaction_list/popup_menu.dart';

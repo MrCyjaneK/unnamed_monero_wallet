@@ -22,10 +22,26 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+
 android {
     namespace "io.anonero.anonero"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
+
+    flavorDimensions "default"
+
+    productFlavors {
+        anon {
+            dimension "default"
+            resValue "string", "app_name", "ANON"
+            applicationId "io.anonero.anon"
+        }
+        nero {
+            dimension "default"
+            resValue "string", "app_name", "NERO"
+            applicationId "io.anonero.nero"
+        }
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

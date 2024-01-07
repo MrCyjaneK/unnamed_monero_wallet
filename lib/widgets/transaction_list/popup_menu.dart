@@ -125,21 +125,55 @@ class TxListPopupMenu extends StatelessWidget {
         break;
       case TxListPopupAction.exportKeyImages:
         _exportKeyImages(c);
+      case TxListPopupAction.exportOutputs:
+        _exportOutputs(c);
       case TxListPopupAction.importOutputs:
         _importOutputs(c);
       case TxListPopupAction.signTx:
         _signTx(c);
       default:
-        Alert(title: " $action").show(c);
+        Alert(title: "$action").show(c);
     }
+  }
+
+  void _exportOutputs(BuildContext c) async {
+    final p = await getMoneroExportOutputsPath();
+    if (File(p).existsSync()) File(p).deleteSync();
+    final stat = MONERO_Wallet_exportOutputs(walletPtr!, p, all: true);
+    if (!stat) {
+      // ignore: use_build_context_synchronously
+      Alert(
+        title: MONERO_Wallet_errorString(walletPtr!),
+        cancelable: true,
+      ).show(c);
+      return;
+    }
+    final bytes = File(p).readAsBytesSync();
+    final frames = uint8ListToURQR(bytes, 'xmr-output');
+    // ignore: use_build_context_synchronously
+    await Alert(
+      singleBody: SizedBox(
+        width: double.maxFinite,
+        height: double.maxFinite,
+        child: URQR(
+          frames: frames,
+        ),
+      ),
+      cancelable: true,
+      callback: () => CRFileSaver.saveFileWithDialog(SaveFileDialogParams(
+          sourceFilePath: p, destinationFileName: 'export_key_image')),
+      callbackText: "File",
+    ).show(c);
   }
 
   final enabledActions = [
     TxListPopupAction.resync,
     TxListPopupAction.exportKeyImages,
-    TxListPopupAction.importOutputs,
+    TxListPopupAction.exportOutputs,
+    TxListPopupAction.broadcastTx,
     TxListPopupAction.signTx,
-    TxListPopupAction.coinControl
+    TxListPopupAction.importOutputs,
+    TxListPopupAction.coinControl,
   ];
 
   List<PopupMenuItem<TxListPopupAction>> _getWidgets() {

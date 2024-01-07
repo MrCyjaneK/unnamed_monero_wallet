@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:anonero/pages/wallet/spend_confirm.dart';
 import 'package:anonero/pages/wallet/spend_screen.dart';
 import 'package:anonero/tools/dirs.dart';
 import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
-import 'package:anonero/widgets/transaction_list/popup_menu.dart';
 import 'package:bytewords/bytewords.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -84,11 +84,57 @@ class _BaseScannerPageState extends State<BaseScannerPage> {
         if (!ok) {
           // ignore: use_build_context_synchronously
           await Alert(
-                  title: MONERO_Wallet_errorString(walletPtr!),
-                  cancelable: true)
-              .show(context);
+            title: MONERO_Wallet_errorString(walletPtr!),
+            cancelable: true,
+          ).show(context);
           return;
         }
+      case "xmr-keyimage":
+        final p = await getMoneroImportKeyImagesPath();
+        File(p).writeAsBytesSync(ur.data);
+        final preState = MONERO_Wallet_trustedDaemon(walletPtr!);
+        MONERO_Wallet_setTrustedDaemon(walletPtr!, arg: true);
+        final ok = MONERO_Wallet_importKeyImages(walletPtr!, p);
+        if (!ok) {
+          // ignore: use_build_context_synchronously
+          Alert(
+            title: MONERO_Wallet_errorString(walletPtr!),
+            cancelable: true,
+          ).show(context);
+          MONERO_Wallet_setTrustedDaemon(walletPtr!, arg: preState);
+          return;
+        }
+        MONERO_Wallet_setTrustedDaemon(walletPtr!, arg: preState);
+        // ignore: use_build_context_synchronously
+        Alert(title: "Key images imported", cancelable: true).show(context);
+      case "xmr-txunsigned":
+        final p = await getMoneroUnsignedTxPath();
+        File(p).writeAsBytesSync(ur.data);
+        final MONERO_UnsignedTransaction tx =
+            MONERO_Wallet_loadUnsignedTx(walletPtr!, unsigned_filename: p);
+        if (MONERO_UnsignedTransaction_status(tx) != 0) {
+          // ignore: use_build_context_synchronously
+          await Alert(
+            title: MONERO_UnsignedTransaction_errorString(tx),
+            cancelable: true,
+          ).show(context);
+          return;
+        }
+        print(MONERO_UnsignedTransaction_amount(tx));
+        // ignore: use_build_context_synchronously
+        SpendConfirm.push(
+          context,
+          TxRequest(
+            address: MONERO_UnsignedTransaction_recipientAddress(tx),
+            amount:
+                (num.parse(MONERO_UnsignedTransaction_amount(tx)) * 10e12) ~/ 1,
+            notes: "N/A",
+            isSweep: false,
+            outputs: [],
+            isUR: true,
+            txPtr: tx,
+          ),
+        );
       case _:
         Alert(title: ur.data.toString(), cancelable: true).show(context);
     }

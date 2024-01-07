@@ -30,7 +30,9 @@ enum PinScreenFlag {
   createWallet,
   createWalletConfirm,
   restoreWalletSeed,
+  restoreWalletNero,
   restoreWalletSeedConfirm,
+  restoreWalletNeroConfirm,
   openMainWallet,
   backgroundSyncLock
 }
@@ -72,6 +74,20 @@ class PinScreen extends StatefulWidget {
       builder: (context) {
         return PinScreen(
           flag: PinScreenFlag.restoreWalletSeedConfirm,
+          initialPin: pin,
+          passphrase: passphrase,
+          restoreData: restoreData,
+        );
+      },
+    ));
+  }
+
+  static void pushConfirmRestoreNero(BuildContext context, String pin,
+      {required String passphrase, RestoreData? restoreData}) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return PinScreen(
+          flag: PinScreenFlag.restoreWalletNeroConfirm,
           initialPin: pin,
           passphrase: passphrase,
           restoreData: restoreData,
@@ -180,7 +196,63 @@ class _PinScreenState extends State<PinScreen> {
         _openMainWallet();
       case PinScreenFlag.backgroundSyncLock:
         _backgroundSyncUnlock();
+      case PinScreenFlag.restoreWalletNero:
+        PinScreen.pushConfirmRestoreNero(context, pin.value,
+            passphrase: widget.passphrase!, restoreData: widget.restoreData);
+      case PinScreenFlag.restoreWalletNeroConfirm:
+        _restoreWalletNeroConfirm();
     }
+  }
+
+  void _restoreWalletNeroConfirm() async {
+    if (pin.value != widget.initialPin) {
+      Alert(
+        title: "Pins doesn't match. Please try again.",
+        callback: () => PinScreen.push(context, PinScreenFlag.restoreWalletNero,
+            passphrase: widget.passphrase!),
+      ).show(context);
+      return;
+    }
+    setState(() {
+      restoreWalletSeedConfirmText = "RESTORING";
+    });
+
+    walletPtr = MONERO_WalletManager_createWalletFromKeys(
+        path: await getMainWalletPath(),
+        password: pin.value,
+        restoreHeight: widget.restoreData!.restoreHeight!,
+        addressString: widget.restoreData!.primaryAddress!,
+        viewKeyString: widget.restoreData!.privateViewKey!,
+        spendKeyString: "",
+        nettype: 0);
+
+    setState(() {
+      restoreWalletSeedConfirmText = "Confirm your pin";
+    });
+    if (!mounted) return;
+    final status = MONERO_Wallet_status(walletPtr!);
+    if (status != 0) {
+      Alert(
+        title: """
+Unable to restore wallet.
+${MONERO_Wallet_errorString(walletPtr!)}
+restoreHeight: ${widget.restoreData!.restoreHeight!},
+addressString: ${widget.restoreData!.primaryAddress!},
+viewKeyString: ${widget.restoreData!.privateViewKey!},
+""",
+        cancelable: true,
+      ).show(context);
+      return;
+    }
+    if (widget.restoreData!.restoreHeight != null) {
+      MONERO_Wallet_setRefreshFromBlockHeight(
+        walletPtr!,
+        refresh_from_block_height: widget.restoreData!.restoreHeight!,
+      );
+    }
+    await _initWallet();
+    if (!mounted) return;
+    WalletHome.push(context);
   }
 
   void _backgroundSyncUnlock() async {
@@ -334,10 +406,13 @@ class _PinScreenState extends State<PinScreen> {
   String getInputText() {
     return switch (widget.flag) {
       PinScreenFlag.createWallet ||
-      PinScreenFlag.restoreWalletSeed =>
+      PinScreenFlag.restoreWalletSeed ||
+      PinScreenFlag.restoreWalletNero =>
         "Enter your pin",
       PinScreenFlag.createWalletConfirm => "Confirm your pin",
-      PinScreenFlag.restoreWalletSeedConfirm => restoreWalletSeedConfirmText,
+      PinScreenFlag.restoreWalletSeedConfirm ||
+      PinScreenFlag.restoreWalletNeroConfirm =>
+        restoreWalletSeedConfirmText,
       PinScreenFlag.openMainWallet => openMainWalletUnlockText,
       PinScreenFlag.backgroundSyncLock => openMainWalletUnlockText,
     };
