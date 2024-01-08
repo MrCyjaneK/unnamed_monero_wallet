@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
 import 'dart:isolate';
@@ -348,6 +349,13 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
       proxyAddress:
           (node == null || disableProxy) ? "" : proxy.getAddress(node.network),
     );
+    print(const JsonEncoder.withIndent('    ').convert({
+      "daemonAddress": node?.address ?? "",
+      "daemonUsername": node?.username ?? "",
+      "daemonPassword": node?.password ?? "",
+      "proxyAddress":
+          (node == null || disableProxy) ? "" : proxy.getAddress(node.network)
+    }));
     MONERO_WalletManagerFactory_setLogLevel(logLevel);
     MONERO_Wallet_init3(walletPtr!,
         argv0: "", defaultLogBaseName: "", logPath: logPath, console: false);

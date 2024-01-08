@@ -37,10 +37,10 @@ packages:
     dependency: "direct main"
     description:
       name: bytewords
-      sha256: f2ffc0eea346cfebc2b9b940e308fdf6212e5436352c6df6fe759b02c93de1bd
+      sha256: "338a1982dd068bd22a81b9cd18316ec048a85338c1b79c24825394fa54c31397"
       url: "https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/"
     source: hosted
-    version: "0.0.16"
+    version: "0.0.19"
   characters:
     dependency: transitive
     description:
@@ -251,17 +251,19 @@ packages:
   monero:
     dependency: "direct main"
     description:
-      path: "../monero.dart"
-      relative: true
-    source: path
-    version: "0.0.0"
+      name: monero
+      sha256: "14911bb7e041aae62302a58833480d6b44d2c9630c226798c190842a064df5e5"
+      url: "https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/"
+    source: hosted
+    version: "0.018003001.30"
   monero_libs:
     dependency: "direct main"
     description:
-      path: "../flutter-monero_libs"
-      relative: true
-    source: path
-    version: "0.0.1"
+      name: monero_libs
+      sha256: c4ab9cccf2d03504d3b5ef826a93d6dbec4c0771345e2c9319ecee2d137ff158
+      url: "https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/"
+    source: hosted
+    version: "0.018003001.044"
   mutex:
     dependency: "direct main"
     description:

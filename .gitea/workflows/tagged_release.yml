@@ -53,5 +53,6 @@ jobs:
           #name: "${{ gitea.reg_name }}-${{ gitea.sha }}"
           #tagname: "${{ gitea.reg_name }}-${{ gitea.sha }}"
           files: |-
-            ${{ gitea.workspace }}/build/app/outputs/flutter-apk/app-release.apk
+            ${{ gitea.workspace }}/build/app/outputs/flutter-apk/app-anon-release.apk
+            ${{ gitea.workspace }}/build/app/outputs/flutter-apk/app-nero-release.apk
             ${{ gitea.workspace }}/build/linux/x64/release/anonero-linux-amd64.tar

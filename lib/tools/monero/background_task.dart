@@ -7,8 +7,9 @@ import 'package:monero/monero.dart';
 
 void runBackgroundTaskWallet(MONERO_wallet wPtr) async {
   final pmf = File(await getPerformanceStoreFile());
-  Timer.periodic(const Duration(seconds: 10), (Timer timer) async {
+  while (true) {
+    await Future.delayed(const Duration(seconds: 10));
     MONERO_Wallet_store(wPtr);
-    pmf.writeAsString(json.encode(debugCallLength));
-  });
+    pmf.writeAsStringSync(json.encode(debugCallLength));
+  }
 }

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:anonero/pages/wallet/spend_confirm.dart';
 import 'package:anonero/pages/wallet/spend_screen.dart';
 import 'package:anonero/tools/dirs.dart';
+import 'package:anonero/tools/hexdump.dart';
 import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
 import 'package:bytewords/bytewords.dart';
@@ -29,6 +30,16 @@ class BaseScannerPage extends StatefulWidget {
 class _BaseScannerPageState extends State<BaseScannerPage> {
   List<String> urCodes = [];
   late var ur = URQRToURQRData(urCodes);
+
+  Widget _debug() {
+    return SingleChildScrollView(
+      child: SelectableText(
+        const JsonEncoder.withIndent('    ').convert(ur.toJson()),
+        style: const TextStyle(fontSize: 8),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,6 +78,7 @@ class _BaseScannerPageState extends State<BaseScannerPage> {
               }
             },
           ),
+          _debug(),
         ],
       ),
     );
@@ -89,6 +101,11 @@ class _BaseScannerPageState extends State<BaseScannerPage> {
           ).show(context);
           return;
         }
+        // ignore: use_build_context_synchronously
+        Alert(
+          title: "Outputs imported",
+          cancelable: true,
+        ).show(context);
       case "xmr-keyimage":
         final p = await getMoneroImportKeyImagesPath();
         File(p).writeAsBytesSync(ur.data);
@@ -109,6 +126,7 @@ class _BaseScannerPageState extends State<BaseScannerPage> {
         Alert(title: "Key images imported", cancelable: true).show(context);
       case "xmr-txunsigned":
         final p = await getMoneroUnsignedTxPath();
+        if (File(p).existsSync()) File(p).deleteSync();
         File(p).writeAsBytesSync(ur.data);
         final MONERO_UnsignedTransaction tx =
             MONERO_Wallet_loadUnsignedTx(walletPtr!, unsigned_filename: p);
@@ -126,8 +144,8 @@ class _BaseScannerPageState extends State<BaseScannerPage> {
           context,
           TxRequest(
             address: MONERO_UnsignedTransaction_recipientAddress(tx),
-            amount:
-                (num.parse(MONERO_UnsignedTransaction_amount(tx)) * 10e12) ~/ 1,
+            amount: (num.parse(MONERO_UnsignedTransaction_amount(tx))) ~/ 1,
+            fee: (num.parse(MONERO_UnsignedTransaction_fee(tx))) ~/ 1,
             notes: "N/A",
             isSweep: false,
             outputs: [],
@@ -135,8 +153,32 @@ class _BaseScannerPageState extends State<BaseScannerPage> {
             txPtr: tx,
           ),
         );
+      case "xmr-txsigned":
+        final p = await getMoneroSignedTxPath();
+        File(p).writeAsBytesSync(ur.data);
+        final tx = MONERO_Wallet_submitTransaction(walletPtr!, p);
+        if (tx == false) {
+          // ignore: use_build_context_synchronously
+          await Alert(
+            title: MONERO_Wallet_errorString(walletPtr!),
+            cancelable: true,
+          ).show(context);
+          return;
+        }
+// ignore: use_build_context_synchronously
+        await Alert(
+          title: "Transaction broadcasted",
+          cancelable: true,
+        ).show(context);
+
       case _:
-        Alert(title: ur.data.toString(), cancelable: true).show(context);
+        Alert(
+          singleBody: SelectableText(
+            hexDump(ur.data),
+            style: const TextStyle(fontSize: 8),
+          ),
+          cancelable: true,
+        ).show(context);
     }
   }
 }

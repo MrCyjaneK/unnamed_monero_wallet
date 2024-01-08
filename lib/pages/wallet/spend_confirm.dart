@@ -1,8 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:anonero/pages/wallet/spend_success.dart';
 import 'package:anonero/tools/dirs.dart';
 import 'package:anonero/tools/format_monero.dart';
+import 'package:anonero/tools/is_offline.dart';
 import 'package:anonero/tools/is_view_only.dart';
 import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
@@ -12,12 +15,14 @@ import 'package:anonero/widgets/primary_label.dart';
 import 'package:anonero/widgets/setup_logo.dart';
 import 'package:anonero/widgets/urqr.dart';
 import 'package:bytewords/bytewords.dart';
+import 'package:cr_file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
 
 class TxRequest {
   final String address;
   final int amount;
+  final int fee;
   final String notes;
   final bool isSweep;
   final List<String> outputs;
@@ -27,6 +32,7 @@ class TxRequest {
     required this.address,
     required this.amount,
     required this.notes,
+    this.fee = 0,
     required this.isSweep,
     required this.outputs,
     this.isUR = false,
@@ -60,6 +66,7 @@ class _SpendConfirmState extends State<SpendConfirm> {
   }
 
   void _prepTx() {
+    if (widget.tx.isUR) return;
     Future.delayed(const Duration(milliseconds: 700)).then((value) {
       print("outs: ${widget.tx.outputs}");
       final tx = MONERO_Wallet_createTransaction(
@@ -92,6 +99,26 @@ class _SpendConfirmState extends State<SpendConfirm> {
     });
   }
 
+  int? _getAmount() {
+    if (widget.tx.isUR) return widget.tx.amount;
+    return txPtr == null ? null : MONERO_PendingTransaction_amount(txPtr!);
+  }
+
+  int? _getFee() {
+    if (widget.tx.isUR) return widget.tx.fee;
+    return txPtr == null ? null : MONERO_PendingTransaction_fee(txPtr!);
+  }
+
+  int? _getTotal() {
+    if (widget.tx.isUR) return widget.tx.amount + widget.tx.fee;
+    txPtr == null
+        ? null
+        : MONERO_PendingTransaction_amount(txPtr!) +
+            MONERO_PendingTransaction_fee(txPtr!);
+
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,7 +126,9 @@ class _SpendConfirmState extends State<SpendConfirm> {
       body: Column(children: [
         const SetupLogo(title: null),
         const PrimaryLabel(title: "Address"),
-        PaddedElement(child: SelectableText(widget.tx.address)),
+        PaddedElement(
+            child: SelectableText(
+                widget.tx.address.replaceAll(";", "\n\n").trim())),
         const PrimaryLabel(title: "Description"),
         PaddedElement(
           child:
@@ -107,24 +136,20 @@ class _SpendConfirmState extends State<SpendConfirm> {
         ),
         StatusRow(
           title: "Amount",
-          amount:
-              txPtr == null ? null : MONERO_PendingTransaction_amount(txPtr!),
+          amount: _getAmount(),
         ),
         StatusRow(
           title: "Fee",
-          amount: txPtr == null ? null : MONERO_PendingTransaction_fee(txPtr!),
+          amount: _getFee(),
         ),
         StatusRow(
           title: "Total",
-          amount: txPtr == null
-              ? null
-              : MONERO_PendingTransaction_amount(txPtr!) +
-                  MONERO_PendingTransaction_fee(txPtr!),
+          amount: _getTotal(),
         ),
         const Spacer(),
         LongOutlinedButton(
           text: "CONFIRM",
-          onPressed: txPtr == null ? null : _confirm,
+          onPressed: (txPtr == null && !widget.tx.isUR) ? null : _confirm,
         ),
       ]),
     );
@@ -141,7 +166,6 @@ class _SpendConfirmState extends State<SpendConfirm> {
         MONERO_PendingTransaction_commit(txPtr!, filename: p, overwrite: false);
     if (stat == false) {
       final errorString = MONERO_PendingTransaction_errorString(txPtr!);
-      // ignore: use_build_context_synchronously
       Alert(
         title: "Failed to send transaction - $errorString",
         callback: () {
@@ -152,7 +176,6 @@ class _SpendConfirmState extends State<SpendConfirm> {
       ).show(context);
       return;
     }
-    // ignore: use_build_context_synchronously
     Alert(
       singleBody: SizedBox(
         width: double.maxFinite,
@@ -161,15 +184,41 @@ class _SpendConfirmState extends State<SpendConfirm> {
           frames: uint8ListToURQR(
             File(p).readAsBytesSync(),
             "xmr-txunsigned",
-            fragLength: 500,
+            fragLength: 200,
           ),
         ),
       ),
       cancelable: true,
+      callback: () => CRFileSaver.saveFileWithDialog(SaveFileDialogParams(
+          sourceFilePath: p, destinationFileName: 'unsigned_transaction')),
+      callbackText: "File",
     ).show(context);
   }
 
-  void _confirmAnon() {
+  void _confirmAnon() async {
+    if (await isOffline()) {
+      final signedFileName = await getMoneroSignedTxPath();
+      MONERO_UnsignedTransaction_sign(widget.tx.txPtr!, signedFileName);
+      await Alert(
+        singleBody: SizedBox(
+          width: double.maxFinite,
+          height: double.maxFinite,
+          child: URQR(
+            frames: uint8ListToURQR(
+              File(signedFileName).readAsBytesSync(),
+              "xmr-txsigned",
+              fragLength: 200,
+            ),
+          ),
+        ),
+        cancelable: true,
+        callback: () => CRFileSaver.saveFileWithDialog(SaveFileDialogParams(
+            sourceFilePath: signedFileName,
+            destinationFileName: 'signed_transaction')),
+        callbackText: "File",
+      ).show(context);
+      return;
+    }
     final stat = MONERO_PendingTransaction_commit(txPtr!,
         filename: "", overwrite: false);
     if (stat == false) {

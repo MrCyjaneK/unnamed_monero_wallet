@@ -1,6 +1,7 @@
 .PHONY: apk
 apk:
-	flutter build apk
+	flutter build apk --flavor anon
+	flutter build apk --flavor nero
 
 .PHONY: linux
 linux:
@@ -24,6 +25,6 @@ lib/const/resource.g.dart:
 
 .PHONY: version
 version:
-	sed -i "s/^version: .*/version: 0.0.1+$(shell git rev-list --count HEAD)/" "pubspec.yaml"
-	sed -i "s/^  Version: .*/  Version: 0.0.1+$(shell git rev-list --count HEAD)/" "debian/debian.yaml"
-	sed -i "s/^Version=.*/Version=0.0.1+$(shell git rev-list --count HEAD)/" "debian/gui/anonero.desktop"
+	sed -i "s/^version: .*/version: 1.0.0+$(shell git rev-list --count HEAD)/" "pubspec.yaml"
+	sed -i "s/^  Version: .*/  Version: 1.0.0+$(shell git rev-list --count HEAD)/" "debian/debian.yaml"
+	sed -i "s/^Version=.*/Version=1.0.0+$(shell git rev-list --count HEAD)/" "debian/gui/anonero.desktop"

@@ -86,7 +86,7 @@ class TxListPopupMenu extends StatelessWidget {
   }
 
   void _signTx(BuildContext c) async {
-    SyncStaticProgress.push(c, "Import outputs", () async {
+    SyncStaticProgress.push(c, "Sign transaction", () async {
       final p = await FilePicker.platform.pickFiles();
 
       if (p == null) {
@@ -115,6 +115,25 @@ class TxListPopupMenu extends StatelessWidget {
             .show(c);
         return;
       }
+      // ignore: use_build_context_synchronously
+      await Alert(
+        singleBody: SizedBox(
+          width: double.maxFinite,
+          height: double.maxFinite,
+          child: URQR(
+            frames: uint8ListToURQR(
+              File(signedFileName).readAsBytesSync(),
+              "xmr-txsigned",
+              fragLength: 200,
+            ),
+          ),
+        ),
+        cancelable: true,
+        callback: () => CRFileSaver.saveFileWithDialog(SaveFileDialogParams(
+            sourceFilePath: signedFileName,
+            destinationFileName: 'signed_transaction')),
+        callbackText: "File",
+      ).show(c);
     });
   }
 
@@ -127,6 +146,8 @@ class TxListPopupMenu extends StatelessWidget {
         _exportKeyImages(c);
       case TxListPopupAction.exportOutputs:
         _exportOutputs(c);
+      case TxListPopupAction.broadcastTx:
+        _broadcastTx(c);
       case TxListPopupAction.importOutputs:
         _importOutputs(c);
       case TxListPopupAction.signTx:
@@ -161,8 +182,40 @@ class TxListPopupMenu extends StatelessWidget {
       ),
       cancelable: true,
       callback: () => CRFileSaver.saveFileWithDialog(SaveFileDialogParams(
-          sourceFilePath: p, destinationFileName: 'export_key_image')),
+          sourceFilePath: p, destinationFileName: 'export_outputs')),
       callbackText: "File",
+    ).show(c);
+  }
+
+  void _broadcastTx(BuildContext c) async {
+    final p = await FilePicker.platform.pickFiles();
+
+    if (p == null) {
+      // ignore: use_build_context_synchronously
+      await Alert(title: "No file picked", cancelable: true).show(c);
+      return;
+    }
+    try {
+      MONERO_Wallet_importOutputs(walletPtr!, p.files.first.path!);
+    } catch (e) {
+      // ignore: use_build_context_synchronously
+      await Alert(title: "$e", cancelable: true).show(c);
+      return;
+    }
+    final stat =
+        MONERO_Wallet_submitTransaction(walletPtr!, p.files.single.path!);
+    if (!stat) {
+      // ignore: use_build_context_synchronously
+      Alert(
+        title: MONERO_Wallet_errorString(walletPtr!),
+        cancelable: true,
+      ).show(c);
+      return;
+    }
+    // ignore: use_build_context_synchronously
+    await Alert(
+      title: "Broadcasted!",
+      cancelable: true,
     ).show(c);
   }
 
