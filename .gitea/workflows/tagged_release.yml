@@ -27,7 +27,7 @@ jobs:
         continue-on-error: false
         run: |
           cd ${{ gitea.workspace }} \
-          && flutter build apk --no-tree-shake-icons
+          && make apk
       - name: Build linux (debian)
         continue-on-error: true
         run: |
