@@ -1,9 +1,11 @@
 import 'package:anonero/pages/wallet/spend_confirm.dart';
 import 'package:anonero/tools/format_monero.dart';
+import 'package:anonero/tools/is_offline.dart';
 import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
 import 'package:anonero/widgets/labeled_text_input.dart';
 import 'package:anonero/widgets/long_outlined_button.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
 
@@ -36,6 +38,11 @@ class _SpendScreenState extends State<SpendScreen> {
   @override
   void initState() {
     _loadBalance();
+    isOffline().then((value) {
+      setState(() {
+        enabled = !value;
+      });
+    });
     super.initState();
   }
 
@@ -78,6 +85,13 @@ class _SpendScreenState extends State<SpendScreen> {
     }
   }
 
+  final viewOnlyBalance =
+      MONERO_Wallet_viewOnlyBalance(walletPtr!, accountIndex: 0);
+
+  final hasUnknownKeyImages = MONERO_Wallet_hasUnknownKeyImages(walletPtr!);
+
+  bool enabled = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,13 +101,18 @@ class _SpendScreenState extends State<SpendScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            LabeledTextInput(label: "ADDRESS", ctrl: addressCtrl),
+            LabeledTextInput(
+              label: "ADDRESS",
+              ctrl: addressCtrl,
+              enabled: enabled,
+            ),
             LabeledTextInput(
               label: "AMOUNT",
               ctrl: amountCtrl,
               onEdit: _amtEdited,
+              enabled: enabled,
             ),
-            // LabeledTextInput(label: "NOTES", ctrl: notesCtrl),
+            // LabeledTextInput(label: "NOTES", ctrl: notesCtrl, enabled: enabled),
             InkWell(
               onTap: _toggleSweep,
               child: SizedBox(
@@ -108,6 +127,17 @@ class _SpendScreenState extends State<SpendScreen> {
                 ),
               ),
             ),
+            if (kDebugMode)
+              SizedBox(
+                height: 80,
+                child: Center(
+                  child: Text(
+                    "View Only balance: ${formatMonero(viewOnlyBalance)}\n"
+                    "(hasUnknownKeyImages: $hasUnknownKeyImages)",
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ),
+              ),
             IconButton(
               iconSize: 48,
               onPressed: () {},
@@ -118,7 +148,7 @@ class _SpendScreenState extends State<SpendScreen> {
       ),
       bottomNavigationBar: LongOutlinedButton(
         text: "Continue",
-        onPressed: _continue,
+        onPressed: !enabled ? null : _continue,
       ),
     );
   }

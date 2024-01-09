@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:anonero/pages/sync_static_progress.dart';
+import 'package:anonero/pages/ur_broadcast.dart';
 import 'package:anonero/tools/dirs.dart';
 import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
@@ -10,6 +11,44 @@ import 'package:cr_file_saver/file_saver.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
+
+Future<void> exportOutputs(BuildContext c) async {
+  final p = await getMoneroExportOutputsPath();
+  if (File(p).existsSync()) File(p).deleteSync();
+  final stat = MONERO_Wallet_exportOutputs(walletPtr!, p, all: true);
+  if (!stat) {
+    // ignore: use_build_context_synchronously
+    await Alert(
+      title: MONERO_Wallet_errorString(walletPtr!),
+      cancelable: true,
+    ).show(c);
+    return;
+  }
+  // ignore: use_build_context_synchronously
+  await UrBroadcastPage.push(
+    c,
+    filePath: p,
+    flag: UrBroadcastPageFlag.xmrOutputs,
+  );
+}
+
+void exportKeyImages(BuildContext c) async {
+  final p = await getMoneroExportKeyImagesPath();
+  MONERO_Wallet_exportKeyImages(walletPtr!, p, all: true);
+  final status = MONERO_Wallet_status(walletPtr!);
+  if (status != 0) {
+    // ignore: use_build_context_synchronously
+    await Alert(title: MONERO_Wallet_errorString(walletPtr!), cancelable: true)
+        .show(c);
+    return;
+  }
+  // ignore: use_build_context_synchronously
+  await UrBroadcastPage.push(
+    c,
+    filePath: p,
+    flag: UrBroadcastPageFlag.xmrKeyImage,
+  );
+}
 
 class TxListPopupMenu extends StatelessWidget {
   TxListPopupMenu({super.key});
@@ -25,37 +64,6 @@ class TxListPopupMenu extends StatelessWidget {
   void _resync() {
     MONERO_Wallet_rescanBlockchainAsync(walletPtr!);
     MONERO_Wallet_refreshAsync(walletPtr!);
-  }
-
-  void _exportKeyImages(BuildContext c) async {
-    SyncStaticProgress.push(c, "Exporting key images", () async {
-      final p = await getMoneroExportKeyImagesPath();
-      MONERO_Wallet_exportKeyImages(walletPtr!, p, all: true);
-      final status = MONERO_Wallet_status(walletPtr!);
-      if (status != 0) {
-        // ignore: use_build_context_synchronously
-        await Alert(
-                title: MONERO_Wallet_errorString(walletPtr!), cancelable: true)
-            .show(c);
-        return;
-      }
-      final bytes = File(p).readAsBytesSync();
-      final frames = uint8ListToURQR(bytes, 'xmr-keyimage');
-      // ignore: use_build_context_synchronously
-      await Alert(
-        singleBody: SizedBox(
-          width: double.maxFinite,
-          height: double.maxFinite,
-          child: URQR(
-            frames: frames,
-          ),
-        ),
-        cancelable: true,
-        callback: () => CRFileSaver.saveFileWithDialog(SaveFileDialogParams(
-            sourceFilePath: p, destinationFileName: 'export_key_image')),
-        callbackText: "File",
-      ).show(c);
-    });
   }
 
   void _importOutputs(BuildContext c) async {
@@ -143,9 +151,9 @@ class TxListPopupMenu extends StatelessWidget {
         _resync();
         break;
       case TxListPopupAction.exportKeyImages:
-        _exportKeyImages(c);
+        exportKeyImages(c);
       case TxListPopupAction.exportOutputs:
-        _exportOutputs(c);
+        exportOutputs(c);
       case TxListPopupAction.broadcastTx:
         _broadcastTx(c);
       case TxListPopupAction.importOutputs:
@@ -155,36 +163,6 @@ class TxListPopupMenu extends StatelessWidget {
       default:
         Alert(title: "$action").show(c);
     }
-  }
-
-  void _exportOutputs(BuildContext c) async {
-    final p = await getMoneroExportOutputsPath();
-    if (File(p).existsSync()) File(p).deleteSync();
-    final stat = MONERO_Wallet_exportOutputs(walletPtr!, p, all: true);
-    if (!stat) {
-      // ignore: use_build_context_synchronously
-      Alert(
-        title: MONERO_Wallet_errorString(walletPtr!),
-        cancelable: true,
-      ).show(c);
-      return;
-    }
-    final bytes = File(p).readAsBytesSync();
-    final frames = uint8ListToURQR(bytes, 'xmr-output');
-    // ignore: use_build_context_synchronously
-    await Alert(
-      singleBody: SizedBox(
-        width: double.maxFinite,
-        height: double.maxFinite,
-        child: URQR(
-          frames: frames,
-        ),
-      ),
-      cancelable: true,
-      callback: () => CRFileSaver.saveFileWithDialog(SaveFileDialogParams(
-          sourceFilePath: p, destinationFileName: 'export_outputs')),
-      callbackText: "File",
-    ).show(c);
   }
 
   void _broadcastTx(BuildContext c) async {

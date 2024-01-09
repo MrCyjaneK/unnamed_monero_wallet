@@ -8,6 +8,7 @@ class LabeledTextInput extends StatelessWidget {
   final VoidCallback? onEdit;
   final int? minLines;
   final int? maxLines;
+  final bool? enabled;
   const LabeledTextInput({
     super.key,
     required this.label,
@@ -17,6 +18,7 @@ class LabeledTextInput extends StatelessWidget {
     this.onEdit,
     this.minLines,
     this.maxLines,
+    this.enabled,
   });
 
   @override
@@ -36,6 +38,7 @@ class LabeledTextInput extends StatelessWidget {
               ),
             ),
       subtitle: TextField(
+        enabled: enabled,
         minLines: minLines,
         maxLines: maxLines,
         controller: ctrl,

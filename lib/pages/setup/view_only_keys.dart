@@ -1,11 +1,9 @@
 import 'package:anonero/pages/pin_screen.dart';
 import 'package:anonero/pages/setup/passphrase_encryption.dart';
-import 'package:anonero/tools/dirs.dart';
 import 'package:anonero/widgets/labeled_text_input.dart';
 import 'package:anonero/widgets/long_outlined_button.dart';
 import 'package:anonero/widgets/setup_logo.dart';
 import 'package:flutter/material.dart';
-import 'package:monero/monero.dart';
 
 class ViewOnlyKeysSetup extends StatefulWidget {
   const ViewOnlyKeysSetup({super.key});

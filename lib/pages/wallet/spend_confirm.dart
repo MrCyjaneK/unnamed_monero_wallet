@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:anonero/pages/ur_broadcast.dart';
 import 'package:anonero/pages/wallet/spend_success.dart';
 import 'package:anonero/tools/dirs.dart';
 import 'package:anonero/tools/format_monero.dart';
@@ -13,11 +14,9 @@ import 'package:anonero/widgets/long_outlined_button.dart';
 import 'package:anonero/widgets/padded_element.dart';
 import 'package:anonero/widgets/primary_label.dart';
 import 'package:anonero/widgets/setup_logo.dart';
-import 'package:anonero/widgets/urqr.dart';
-import 'package:bytewords/bytewords.dart';
-import 'package:cr_file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
+import 'package:anonero/widgets/transaction_list/popup_menu.dart';
 
 class TxRequest {
   final String address;
@@ -55,6 +54,14 @@ class SpendConfirm extends StatefulWidget {
       },
     ));
   }
+
+  static void pushReplace(BuildContext context, TxRequest tx) {
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) {
+        return SpendConfirm(tx: tx);
+      },
+    ));
+  }
 }
 
 class _SpendConfirmState extends State<SpendConfirm> {
@@ -62,6 +69,11 @@ class _SpendConfirmState extends State<SpendConfirm> {
   @override
   void initState() {
     _prepTx();
+    isOffline().then((value) {
+      setState(() {
+        offline = value;
+      });
+    });
     super.initState();
   }
 
@@ -111,12 +123,10 @@ class _SpendConfirmState extends State<SpendConfirm> {
 
   int? _getTotal() {
     if (widget.tx.isUR) return widget.tx.amount + widget.tx.fee;
-    txPtr == null
+    return txPtr == null
         ? null
         : MONERO_PendingTransaction_amount(txPtr!) +
             MONERO_PendingTransaction_fee(txPtr!);
-
-    return null;
   }
 
   @override
@@ -148,11 +158,20 @@ class _SpendConfirmState extends State<SpendConfirm> {
         ),
         const Spacer(),
         LongOutlinedButton(
-          text: "CONFIRM",
+          text: _needExportOutputs() ? "IMPORT OUTPUTS" : "CONFIRM",
           onPressed: (txPtr == null && !widget.tx.isUR) ? null : _confirm,
         ),
       ]),
     );
+  }
+
+  bool offline = false;
+
+  bool _needExportOutputs() {
+    if (offline) return false;
+    return MONERO_Wallet_hasUnknownKeyImages(walletPtr!) |
+        (MONERO_Wallet_viewOnlyBalance(walletPtr!, accountIndex: 0) <
+            (_getAmount() ?? 0x7FFFFFFFFFFFFFFF));
   }
 
   void _confirm() {
@@ -160,6 +179,12 @@ class _SpendConfirmState extends State<SpendConfirm> {
   }
 
   void _confirmNero() async {
+    if (_needExportOutputs()) {
+      await exportOutputs(context);
+      setState(() {});
+      return;
+    }
+
     final p = await getMoneroUnsignedTxPath();
     if (File(p).existsSync()) File(p).deleteSync();
     final stat =
@@ -176,47 +201,24 @@ class _SpendConfirmState extends State<SpendConfirm> {
       ).show(context);
       return;
     }
-    Alert(
-      singleBody: SizedBox(
-        width: double.maxFinite,
-        height: double.maxFinite,
-        child: URQR(
-          frames: uint8ListToURQR(
-            File(p).readAsBytesSync(),
-            "xmr-txunsigned",
-            fragLength: 200,
-          ),
-        ),
-      ),
-      cancelable: true,
-      callback: () => CRFileSaver.saveFileWithDialog(SaveFileDialogParams(
-          sourceFilePath: p, destinationFileName: 'unsigned_transaction')),
-      callbackText: "File",
-    ).show(context);
+    UrBroadcastPage.push(
+      context,
+      filePath: p,
+      flag: UrBroadcastPageFlag.xmrUnsignedTx,
+    );
   }
 
   void _confirmAnon() async {
     if (await isOffline()) {
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
       final signedFileName = await getMoneroSignedTxPath();
       MONERO_UnsignedTransaction_sign(widget.tx.txPtr!, signedFileName);
-      await Alert(
-        singleBody: SizedBox(
-          width: double.maxFinite,
-          height: double.maxFinite,
-          child: URQR(
-            frames: uint8ListToURQR(
-              File(signedFileName).readAsBytesSync(),
-              "xmr-txsigned",
-              fragLength: 200,
-            ),
-          ),
-        ),
-        cancelable: true,
-        callback: () => CRFileSaver.saveFileWithDialog(SaveFileDialogParams(
-            sourceFilePath: signedFileName,
-            destinationFileName: 'signed_transaction')),
-        callbackText: "File",
-      ).show(context);
+      UrBroadcastPage.push(
+        context,
+        filePath: signedFileName,
+        flag: UrBroadcastPageFlag.xmrSignedTx,
+      );
       return;
     }
     final stat = MONERO_PendingTransaction_commit(txPtr!,

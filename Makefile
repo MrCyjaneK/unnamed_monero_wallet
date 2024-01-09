@@ -4,8 +4,13 @@ apk:
 	flutter build apk --flavor nero
 
 .PHONY: linux
-linux:
+linux: 
 	flutter build linux
+	echo https://git.mrcyjanek.net/mrcyjanek/monero_c/releases/download/${shell ./get_current_build.sh}/x86_64-linux-gnu_libwallet2_api_c.so.xz
+	wget https://git.mrcyjanek.net/mrcyjanek/monero_c/releases/download/v0.18.3.1-RC45/x86_64-linux-gnu_libwallet2_api_c.so.xz \
+		-O build/linux/x64/release/bundle/lib/libwallet2_api_c.so.xz
+	-rm build/linux/x64/release/bundle/lib/libwallet2_api_c.so
+	unxz build/linux/x64/release/bundle/lib/libwallet2_api_c.so.xz
 	(cd build/linux/x64/release && cp -a bundle anonero && tar -cvf anonero-linux-amd64.tar anonero)
 
 deb: linux

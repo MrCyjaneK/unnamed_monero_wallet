@@ -10,7 +10,7 @@ class Qr extends StatelessWidget {
   Widget build(BuildContext context) {
     return QrImageView(
       backgroundColor: Colors.black,
-      gapless: false,
+      gapless: true,
       dataModuleStyle: const QrDataModuleStyle(
           dataModuleShape: QrDataModuleShape.square, color: Colors.white),
       eyeStyle:

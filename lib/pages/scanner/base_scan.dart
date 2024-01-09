@@ -1,12 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:anonero/pages/sync_static_progress.dart';
 import 'package:anonero/pages/wallet/spend_confirm.dart';
 import 'package:anonero/pages/wallet/spend_screen.dart';
+import 'package:anonero/pages/wallet/spend_success.dart';
 import 'package:anonero/tools/dirs.dart';
 import 'package:anonero/tools/hexdump.dart';
 import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
+import 'package:anonero/widgets/transaction_list/popup_menu.dart';
 import 'package:bytewords/bytewords.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -18,8 +21,16 @@ class BaseScannerPage extends StatefulWidget {
   @override
   _BaseScannerPageState createState() => _BaseScannerPageState();
 
-  static void push(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(
+  static Future<void> push(BuildContext context) async {
+    await Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return const BaseScannerPage();
+      },
+    ));
+  }
+
+  static void pushReplace(BuildContext context) {
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
       builder: (context) {
         return const BaseScannerPage();
       },
@@ -102,28 +113,30 @@ class _BaseScannerPageState extends State<BaseScannerPage> {
           return;
         }
         // ignore: use_build_context_synchronously
-        Alert(
-          title: "Outputs imported",
-          cancelable: true,
-        ).show(context);
-      case "xmr-keyimage":
-        final p = await getMoneroImportKeyImagesPath();
-        File(p).writeAsBytesSync(ur.data);
-        final preState = MONERO_Wallet_trustedDaemon(walletPtr!);
-        MONERO_Wallet_setTrustedDaemon(walletPtr!, arg: true);
-        final ok = MONERO_Wallet_importKeyImages(walletPtr!, p);
-        if (!ok) {
-          // ignore: use_build_context_synchronously
-          Alert(
-            title: MONERO_Wallet_errorString(walletPtr!),
-            cancelable: true,
-          ).show(context);
-          MONERO_Wallet_setTrustedDaemon(walletPtr!, arg: preState);
-          return;
-        }
-        MONERO_Wallet_setTrustedDaemon(walletPtr!, arg: preState);
+        Navigator.of(context).pop();
         // ignore: use_build_context_synchronously
-        Alert(title: "Key images imported", cancelable: true).show(context);
+        exportKeyImages(context);
+      case "xmr-keyimage":
+        SyncStaticProgress.push(context, "IMPORTING KEY IMAGES", () async {
+          await Future.delayed(const Duration(milliseconds: 100));
+          final p = await getMoneroImportKeyImagesPath();
+          File(p).writeAsBytesSync(ur.data);
+          final preState = MONERO_Wallet_trustedDaemon(walletPtr!);
+          MONERO_Wallet_setTrustedDaemon(walletPtr!, arg: true);
+          final ok = MONERO_Wallet_importKeyImages(walletPtr!, p);
+          if (!ok) {
+            // ignore: use_build_context_synchronously
+            Alert(
+              title: MONERO_Wallet_errorString(walletPtr!),
+              cancelable: true,
+            ).show(context);
+            MONERO_Wallet_setTrustedDaemon(walletPtr!, arg: preState);
+            return;
+          }
+          MONERO_Wallet_setTrustedDaemon(walletPtr!, arg: preState);
+          // ignore: use_build_context_synchronously
+          Navigator.of(context).pop();
+        });
       case "xmr-txunsigned":
         final p = await getMoneroUnsignedTxPath();
         if (File(p).existsSync()) File(p).deleteSync();
@@ -138,9 +151,8 @@ class _BaseScannerPageState extends State<BaseScannerPage> {
           ).show(context);
           return;
         }
-        print(MONERO_UnsignedTransaction_amount(tx));
         // ignore: use_build_context_synchronously
-        SpendConfirm.push(
+        SpendConfirm.pushReplace(
           context,
           TxRequest(
             address: MONERO_UnsignedTransaction_recipientAddress(tx),
@@ -165,11 +177,8 @@ class _BaseScannerPageState extends State<BaseScannerPage> {
           ).show(context);
           return;
         }
-// ignore: use_build_context_synchronously
-        await Alert(
-          title: "Transaction broadcasted",
-          cancelable: true,
-        ).show(context);
+        // ignore: use_build_context_synchronously
+        SpendSuccess.push(context);
 
       case _:
         Alert(

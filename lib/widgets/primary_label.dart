@@ -4,11 +4,15 @@ class PrimaryLabel extends StatelessWidget {
   final String title;
   final bool expand;
   final bool enablePadding;
+  final double? fontSize;
+  final TextAlign textAlign;
   const PrimaryLabel({
     super.key,
     required this.title,
     this.expand = true,
     this.enablePadding = true,
+    this.fontSize,
+    this.textAlign = TextAlign.left,
   });
 
   @override
@@ -21,9 +25,10 @@ class PrimaryLabel extends StatelessWidget {
         width: expand ? double.maxFinite : null,
         child: Text(
           title,
-          textAlign: TextAlign.left,
+          textAlign: textAlign,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: Theme.of(context).colorScheme.primary,
+                fontSize: fontSize,
               ),
         ),
       ),

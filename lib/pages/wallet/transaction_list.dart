@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:anonero/const/app_name.dart';
-import 'package:anonero/const/is_view_only.dart';
 import 'package:anonero/legacy.dart';
 import 'package:anonero/pages/debug/performance.dart';
 import 'package:anonero/pages/pin_screen.dart';
@@ -114,7 +113,7 @@ class _TransactionListState extends State<TransactionList> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(isViewOnly ? nero : anon),
+        title: SelectableText(isViewOnly ? nero : anon),
         actions: [
           IconButton(
             onPressed: synchronized ? _lockWallet : null,

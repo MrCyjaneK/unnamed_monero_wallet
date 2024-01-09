@@ -14,9 +14,6 @@ bool useMaterial3 = false;
 bool showPerformanceOverlay = false;
 bool disableProxy = false;
 void main() async {
-  if (Platform.isLinux) {
-    libPath = '/usr/local/lib/libwallet2_api_c.so';
-  }
   WidgetsFlutterBinding.ensureInitialized();
   await fuckFirebase(); // MLkit privacy patch
   final pmf = File(await getPerformanceStoreFile());
