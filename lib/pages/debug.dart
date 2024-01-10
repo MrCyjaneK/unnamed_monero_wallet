@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:anonero/pages/debug/backup_test.dart';
 import 'package:anonero/pages/debug/button_x_textfield.dart';
 import 'package:anonero/pages/debug/mobile_scanner.dart';
 import 'package:anonero/pages/debug/monero_dart_advanced.dart';
@@ -74,6 +75,12 @@ class DebugPage extends StatelessWidget {
             onPressed: (!Platform.isAndroid)
                 ? null
                 : () => URQRCodeDebug.push(context),
+          ),
+          LongOutlinedButton(
+            text: "Backup",
+            onPressed: (!Platform.isAndroid)
+                ? null
+                : () => BackupTestDebug.push(context),
           ),
         ],
       ),

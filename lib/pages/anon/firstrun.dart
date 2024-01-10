@@ -1,7 +1,10 @@
+import 'package:anonero/pages/setup/backup_restore.dart';
 import 'package:anonero/pages/setup/node_connection.dart';
+import 'package:anonero/tools/backup_class.dart';
 import 'package:anonero/tools/is_view_only.dart';
 import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/widgets/debug_icon_first_run.dart';
+import 'package:anonero/widgets/labeled_text_input.dart';
 import 'package:anonero/widgets/setup_logo.dart';
 import 'package:flutter/material.dart';
 
@@ -54,7 +57,10 @@ class AnonFirstRun extends StatelessWidget {
         fontSize: 18,
       ),
       overrideActions: [
-        const LongAlertButtonAlt(text: "RESTORE FROM BACKUP"),
+        LongAlertButtonAlt(
+          text: "RESTORE FROM BACKUP",
+          callback: () => _restoreFromBackup(c),
+        ),
         const Divider(),
         LongAlertButtonAlt(
           text: "RESTORE FROM SEED",
@@ -66,7 +72,27 @@ class AnonFirstRun extends StatelessWidget {
   }
 
   void _restoreFromSeed(BuildContext c) {
+    Navigator.of(c).pop();
     SetupNodeConnection.push(c, SetupNodeConnectionFlag.restoreWalletSeed);
+  }
+
+  void _restoreFromBackup(BuildContext c) async {
+    Navigator.of(c).pop();
+    final pwdCtrl = TextEditingController();
+    await Alert(
+      singleBody: LabeledTextInput(
+        ctrl: pwdCtrl,
+        label: "Encryption Password",
+      ),
+      callbackText: "Continue",
+      callback: () => _restoreStep2(c, pwdCtrl.text),
+    ).show(c);
+  }
+
+  void _restoreStep2(BuildContext c, String pwd) async {
+    final bd = await BackupDetails.decrypt(pwd);
+    // ignore: use_build_context_synchronously
+    BackupRestorePage.push(c, bd);
   }
 }
 

@@ -11,9 +11,9 @@ class SyncStaticProgress extends StatefulWidget {
 
   @override
   State<SyncStaticProgress> createState() => _SyncStaticProgressState();
-  static void push(
-      BuildContext context, String text, FutureOr<void> Function() func) {
-    Navigator.of(context).push(MaterialPageRoute(
+  static Future<void> push(
+      BuildContext context, String text, FutureOr<void> Function() func) async {
+    await Navigator.of(context).push(MaterialPageRoute(
       builder: (context) {
         return SyncStaticProgress(text: text, func: func);
       },

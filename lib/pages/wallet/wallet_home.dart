@@ -43,6 +43,7 @@ class WalletHomeState extends State<WalletHome> {
           );
           return;
         }
+        if (!mounted) return;
         Alert(
           title: "Exit wallet?",
           callback: () {

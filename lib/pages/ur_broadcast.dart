@@ -111,6 +111,10 @@ class UrBroadcastPage extends StatelessWidget {
   }
 
   void _continue(BuildContext c) async {
+    if (flag == UrBroadcastPageFlag.xmrSignedTx) {
+      Navigator.of(c).pop();
+      return;
+    }
     BaseScannerPage.pushReplace(c);
   }
 

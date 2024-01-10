@@ -32,6 +32,11 @@ dependencies:
   bytewords:
     hosted: https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
     version: 0.0.19
+  anonero_backup:
+    hosted: https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
+    version: 0.0.1
+  flutter_svg: ^2.0.9
+  archive: ^3.4.10
     # path: ../bytewords
     # version: 1.0.0
 
@@ -75,6 +80,7 @@ flutter:
   assets:
     - assets/anon_logo.png
     - assets/fonts/RobotoMono.ttf
+    - assets/scanner_frame.svg
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

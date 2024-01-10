@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:anonero/const/resource.g.dart';
+import 'package:anonero/legacy.dart';
 import 'package:anonero/pages/sync_static_progress.dart';
 import 'package:anonero/pages/wallet/spend_confirm.dart';
 import 'package:anonero/pages/wallet/spend_screen.dart';
@@ -9,9 +11,11 @@ import 'package:anonero/tools/dirs.dart';
 import 'package:anonero/tools/hexdump.dart';
 import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
+import 'package:anonero/widgets/primary_label.dart';
 import 'package:anonero/widgets/transaction_list/popup_menu.dart';
 import 'package:bytewords/bytewords.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:monero/monero.dart';
 
@@ -45,24 +49,28 @@ class _BaseScannerPageState extends State<BaseScannerPage> {
   Widget _debug() {
     return SingleChildScrollView(
       child: SelectableText(
-        const JsonEncoder.withIndent('    ').convert(ur.toJson()),
+        "${const JsonEncoder.withIndent('    ').convert(ur.toJson())}\n\n${_urParts()}",
         style: const TextStyle(fontSize: 8),
       ),
     );
   }
 
+  List<int> _urParts() {
+    List<int> l = [];
+    for (var inp in ur.inputs) {
+      try {
+        l.add(int.parse(inp.split("/")[1].split("-")[0]));
+      } catch (e) {}
+    }
+    return l;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Scan"),
-      ),
+      appBar: AppBar(),
       body: Stack(
         children: [
-          if (urCodes.isNotEmpty)
-            LinearProgressIndicator(
-              value: ur.progress,
-            ),
           MobileScanner(
             fit: BoxFit.contain,
             controller: MobileScannerController(
@@ -89,13 +97,54 @@ class _BaseScannerPageState extends State<BaseScannerPage> {
               }
             },
           ),
-          _debug(),
+          Center(
+            child: PrimaryLabel(
+              title:
+                  "${_urParts().length.toString().padLeft(ur.count.toString().length, "0")}/${ur.count}",
+              textAlign: TextAlign.center,
+              enablePadding: false,
+            ),
+          ),
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            margin: const EdgeInsets.all(68),
+            child: SvgPicture.asset(
+              R.ASSETS_SCANNER_FRAME_SVG,
+              color: Colors.white24, // what. what am I supposed to use.
+            ),
+          ),
+          SizedBox(
+            child: Center(
+              child: SizedBox(
+                width: 250,
+                height: 250,
+                child: CustomPaint(
+                  painter: ProgressPainter(
+                    urQrProgress: URQrProgress(
+                      expectedPartCount: ur.count - 1,
+                      processedPartsCount: ur.inputs.length,
+                      receivedPartIndexes: _urParts(),
+                      percentage: ur.progress,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          //_debug(),
         ],
       ),
     );
   }
 
+  bool isProcessing = false;
+
   void _processUr() async {
+    if (isProcessing) return;
+    setState(() {
+      isProcessing = true;
+    });
     print(const JsonEncoder.withIndent('    ').convert(ur));
     switch (ur.tag) {
       case "debug":

@@ -111,6 +111,19 @@ class PinScreen extends StatefulWidget {
     ));
   }
 
+  static void pushReplace(BuildContext context, PinScreenFlag flag,
+      {required String passphrase, RestoreData? restoreData}) {
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) {
+        return PinScreen(
+          flag: flag,
+          passphrase: passphrase,
+          restoreData: restoreData,
+        );
+      },
+    ));
+  }
+
   static void pushLock(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) {

@@ -2,7 +2,6 @@
 
 import 'dart:io';
 
-import 'package:anonero/pages/sync_static_progress.dart';
 import 'package:anonero/pages/ur_broadcast.dart';
 import 'package:anonero/pages/wallet/spend_success.dart';
 import 'package:anonero/tools/dirs.dart';
@@ -169,13 +168,7 @@ class _SpendConfirmState extends State<SpendConfirm> {
   }
 
   void _confirm() {
-    SyncStaticProgress.push(
-      context,
-      "PREPARING TX",
-      () async {
-        isViewOnly ? _confirmNero() : _confirmAnon();
-      },
-    );
+    isViewOnly ? _confirmNero() : _confirmAnon();
   }
 
   void _confirmNero() async {
