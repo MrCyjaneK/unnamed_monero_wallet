@@ -1,10 +1,8 @@
-import 'package:anonero/const/app_name.dart';
-import 'package:anonero/const/resource.g.dart';
-import 'package:anonero/pages/debug.dart';
 import 'package:anonero/pages/setup/node_connection.dart';
+import 'package:anonero/tools/is_view_only.dart';
 import 'package:anonero/tools/show_alert.dart';
+import 'package:anonero/widgets/debug_icon_first_run.dart';
 import 'package:anonero/widgets/setup_logo.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // _restoreWallet -> BuildContext
@@ -17,28 +15,26 @@ class AnonFirstRun extends StatelessWidget {
       body: Column(
         children: [
           const Spacer(),
-          Center(child: Image.asset(R.ASSETS_ANON_LOGO_PNG)),
+          const Center(child: DebugIconFirstRun()),
           const Spacer(),
-          SetupOutlinedButton(
-            text: "CREATE WALLET",
-            onPressed: () => SetupNodeConnection.push(
-              context,
-              SetupNodeConnectionFlag.createWallet,
-            ),
-          ),
-          const SizedBox(height: 24),
-          SetupOutlinedButton(
-            text: "RESTORE WALLET $anon",
-            onPressed: () => _restoreWallet(context),
-          ),
-          SetupOutlinedButton(
-            text: "RESTORE WALLET $nero",
-            onPressed: () => _restoreWalletNero(context),
-          ),
-          if (kDebugMode)
+          if (isAnon)
             SetupOutlinedButton(
-              text: "D3B8G",
-              onPressed: () => DebugPage.push(context),
+              text: "CREATE WALLET",
+              onPressed: () => SetupNodeConnection.push(
+                context,
+                SetupNodeConnectionFlag.createWallet,
+              ),
+            ),
+          const SizedBox(height: 24),
+          if (isAnon)
+            SetupOutlinedButton(
+              text: "RESTORE WALLET",
+              onPressed: () => _restoreWallet(context),
+            ),
+          if (isNero)
+            SetupOutlinedButton(
+              text: "RESTORE WALLET",
+              onPressed: () => _restoreWalletNero(context),
             ),
           const Spacer(flex: 3),
         ],

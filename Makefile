@@ -11,7 +11,15 @@ linux:
 		-O build/linux/x64/release/bundle/lib/libwallet2_api_c.so.xz
 	-rm build/linux/x64/release/bundle/lib/libwallet2_api_c.so
 	unxz build/linux/x64/release/bundle/lib/libwallet2_api_c.so.xz
-	(cd build/linux/x64/release && cp -a bundle anonero && tar -cvf anonero-linux-amd64.tar anonero)
+	(cd build/linux/x64/release && cp -a bundle anonero && tar -cvf anonero-linux-amd64.tar anonero && xz -e anonero-linux-amd64.tar)
+
+
+.PHONY: linux_debug_lib
+linux_debug_lib:
+	wget https://git.mrcyjanek.net/mrcyjanek/monero_c/releases/download/v0.18.3.1-RC45/x86_64-linux-gnu_libwallet2_api_c.so.xz \
+		-O build/linux/x64/debug/bundle/lib/libwallet2_api_c.so.xz
+	-rm build/linux/x64/debug/bundle/lib/libwallet2_api_c.so
+	unxz build/linux/x64/debug/bundle/lib/libwallet2_api_c.so.xz
 
 deb: linux
 	dart pub global activate --source git https://github.com/tomekit/flutter_to_debian.git

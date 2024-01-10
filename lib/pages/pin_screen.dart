@@ -10,6 +10,7 @@ import 'package:anonero/pages/debug/monero_log_level.dart';
 import 'package:anonero/pages/setup/passphrase_encryption.dart';
 import 'package:anonero/pages/wallet/wallet_home.dart';
 import 'package:anonero/tools/dirs.dart';
+import 'package:anonero/tools/is_offline.dart';
 import 'package:anonero/tools/monero/background_task.dart';
 import 'package:anonero/tools/node.dart';
 import 'package:anonero/tools/proxy.dart';
@@ -374,6 +375,7 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
           Pointer.fromAddress(addr), 1);
     });
     runBackgroundTaskWallet(walletPtr!);
+    await isOfflineRefresh();
   }
 
   void _openMainWallet() async {

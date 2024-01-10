@@ -6,6 +6,7 @@ import 'package:anonero/pages/anon/firstrun.dart';
 import 'package:anonero/pages/pin_screen.dart';
 import 'package:anonero/tools/dirs.dart';
 import 'package:anonero/tools/fuck_firebase.dart';
+import 'package:anonero/tools/is_view_only.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
 
@@ -16,6 +17,10 @@ bool disableProxy = false;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await fuckFirebase(); // MLkit privacy patch
+  final wd = await getWd();
+  isNero = await isNeroFn();
+  isAnon = await isAnonFn();
+  if (!wd.existsSync()) wd.createSync();
   final pmf = File(await getPerformanceStoreFile());
   try {
     if (pmf.existsSync()) {

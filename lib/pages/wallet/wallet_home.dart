@@ -1,9 +1,14 @@
+import 'dart:io';
+
 import 'package:anonero/pages/wallet/receive_screen.dart';
 import 'package:anonero/pages/wallet/settings_page.dart';
 import 'package:anonero/pages/wallet/spend_screen.dart';
 import 'package:anonero/pages/wallet/transaction_list.dart';
+import 'package:anonero/tools/show_alert.dart';
+import 'package:anonero/tools/wallet_ptr.dart';
 import 'package:anonero/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:monero/monero.dart';
 
 enum Page { home, receive, send, settings }
 
@@ -29,6 +34,25 @@ class WalletHomeState extends State<WalletHome> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
+      onPopInvoked: (didPop) {
+        if (_pageController.page != Page.home.index) {
+          _pageController.animateToPage(
+            Page.home.index,
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.linear,
+          );
+          return;
+        }
+        Alert(
+          title: "Exit wallet?",
+          callback: () {
+            MONERO_Wallet_store(walletPtr!);
+            exit(0);
+          },
+          callbackText: "Exit",
+          cancelable: true,
+        ).show(context);
+      },
       canPop: false,
       child: Scaffold(
         body: PageView(

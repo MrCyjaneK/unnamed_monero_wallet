@@ -1,5 +1,7 @@
 import 'package:anonero/tools/node.dart';
 
-Future<bool> isOffline() async {
-  return (await NodeStore.getCurrentNode()) == null;
+late bool isOffline;
+
+Future<void> isOfflineRefresh() async {
+  isOffline = (await NodeStore.getCurrentNode()) == null;
 }

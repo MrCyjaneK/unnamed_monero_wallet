@@ -14,6 +14,8 @@ class URQR extends StatefulWidget {
   _URQRState createState() => _URQRState();
 }
 
+const urFrameTime = 1000 ~/ 5;
+
 class _URQRState extends State<URQR> {
   Timer? t;
   int frame = 0;
@@ -21,7 +23,7 @@ class _URQRState extends State<URQR> {
   void initState() {
     super.initState();
     setState(() {
-      t = Timer.periodic(const Duration(milliseconds: 1000 ~/ 3), (timer) {
+      t = Timer.periodic(const Duration(milliseconds: urFrameTime), (timer) {
         _nextFrame();
       });
     });

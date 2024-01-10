@@ -6,6 +6,7 @@ class PrimaryLabel extends StatelessWidget {
   final bool enablePadding;
   final double? fontSize;
   final TextAlign textAlign;
+  final FontWeight? fontWeight;
   const PrimaryLabel({
     super.key,
     required this.title,
@@ -13,6 +14,7 @@ class PrimaryLabel extends StatelessWidget {
     this.enablePadding = true,
     this.fontSize,
     this.textAlign = TextAlign.left,
+    this.fontWeight,
   });
 
   @override
@@ -29,6 +31,7 @@ class PrimaryLabel extends StatelessWidget {
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: Theme.of(context).colorScheme.primary,
                 fontSize: fontSize,
+                fontWeight: fontWeight,
               ),
         ),
       ),

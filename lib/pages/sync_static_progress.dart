@@ -24,8 +24,8 @@ class SyncStaticProgress extends StatefulWidget {
 class _SyncStaticProgressState extends State<SyncStaticProgress> {
   @override
   void initState() {
-    _doTaskDelayed();
     super.initState();
+    _doTaskDelayed();
   }
 
   void _doTaskDelayed() async {

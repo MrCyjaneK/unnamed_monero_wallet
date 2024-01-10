@@ -1,3 +1,4 @@
+import 'package:anonero/pages/scanner/base_scan.dart';
 import 'package:anonero/pages/wallet/spend_confirm.dart';
 import 'package:anonero/tools/format_monero.dart';
 import 'package:anonero/tools/is_offline.dart';
@@ -38,11 +39,6 @@ class _SpendScreenState extends State<SpendScreen> {
   @override
   void initState() {
     _loadBalance();
-    isOffline().then((value) {
-      setState(() {
-        enabled = !value;
-      });
-    });
     super.initState();
   }
 
@@ -90,8 +86,6 @@ class _SpendScreenState extends State<SpendScreen> {
 
   final hasUnknownKeyImages = MONERO_Wallet_hasUnknownKeyImages(walletPtr!);
 
-  bool enabled = true;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,13 +98,13 @@ class _SpendScreenState extends State<SpendScreen> {
             LabeledTextInput(
               label: "ADDRESS",
               ctrl: addressCtrl,
-              enabled: enabled,
+              enabled: !isOffline,
             ),
             LabeledTextInput(
               label: "AMOUNT",
               ctrl: amountCtrl,
               onEdit: _amtEdited,
-              enabled: enabled,
+              enabled: !isOffline,
             ),
             // LabeledTextInput(label: "NOTES", ctrl: notesCtrl, enabled: enabled),
             InkWell(
@@ -140,7 +134,7 @@ class _SpendScreenState extends State<SpendScreen> {
               ),
             IconButton(
               iconSize: 48,
-              onPressed: () {},
+              onPressed: isOffline ? null : () => BaseScannerPage.push(context),
               icon: const Icon(Icons.crop_free_sharp),
             ),
           ],
@@ -148,7 +142,7 @@ class _SpendScreenState extends State<SpendScreen> {
       ),
       bottomNavigationBar: LongOutlinedButton(
         text: "Continue",
-        onPressed: !enabled ? null : _continue,
+        onPressed: isOffline ? null : _continue,
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:anonero/pages/scanner/base_scan.dart';
+import 'package:anonero/pages/wallet/wallet_home.dart';
 import 'package:anonero/widgets/long_outlined_button.dart';
 import 'package:anonero/widgets/primary_label.dart';
 import 'package:anonero/widgets/urqr.dart';
@@ -65,21 +66,26 @@ class UrBroadcastPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        leading: IconButton(
+          onPressed: () => WalletHome.push(context),
+          icon: const Icon(Icons.arrow_back),
+        ),
       ),
       body: Column(
         children: [
-          const Spacer(),
+          const SizedBox(height: 16),
           PrimaryLabel(
             title: _urBroadcastPageFlagToTitle(flag),
-            fontSize: 42,
+            fontSize: 26,
             textAlign: TextAlign.center,
             enablePadding: false,
+            fontWeight: FontWeight.w600,
           ),
           const SizedBox(height: 16),
           SizedBox(
             width: double.maxFinite,
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(32.0),
               child: URQR(
                 frames: uint8ListToURQR(
                   File(filePath).readAsBytesSync(),
@@ -105,9 +111,7 @@ class UrBroadcastPage extends StatelessWidget {
   }
 
   void _continue(BuildContext c) async {
-    await BaseScannerPage.push(c);
-    // ignore: use_build_context_synchronously
-    Navigator.of(c).pop();
+    BaseScannerPage.pushReplace(c);
   }
 
   static Future<void> push(BuildContext context,

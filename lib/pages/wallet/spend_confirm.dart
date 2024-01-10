@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:anonero/pages/sync_static_progress.dart';
 import 'package:anonero/pages/ur_broadcast.dart';
 import 'package:anonero/pages/wallet/spend_success.dart';
 import 'package:anonero/tools/dirs.dart';
@@ -69,11 +70,6 @@ class _SpendConfirmState extends State<SpendConfirm> {
   @override
   void initState() {
     _prepTx();
-    isOffline().then((value) {
-      setState(() {
-        offline = value;
-      });
-    });
     super.initState();
   }
 
@@ -158,24 +154,28 @@ class _SpendConfirmState extends State<SpendConfirm> {
         ),
         const Spacer(),
         LongOutlinedButton(
-          text: _needExportOutputs() ? "IMPORT OUTPUTS" : "CONFIRM",
+          text: _needExportOutputs() ? "EXPORT OUTPUTS" : "CONFIRM",
           onPressed: (txPtr == null && !widget.tx.isUR) ? null : _confirm,
         ),
       ]),
     );
   }
 
-  bool offline = false;
-
   bool _needExportOutputs() {
-    if (offline) return false;
+    if (isOffline) return false;
     return MONERO_Wallet_hasUnknownKeyImages(walletPtr!) |
         (MONERO_Wallet_viewOnlyBalance(walletPtr!, accountIndex: 0) <
             (_getAmount() ?? 0x7FFFFFFFFFFFFFFF));
   }
 
   void _confirm() {
-    isViewOnly ? _confirmNero() : _confirmAnon();
+    SyncStaticProgress.push(
+      context,
+      "PREPARING TX",
+      () async {
+        isViewOnly ? _confirmNero() : _confirmAnon();
+      },
+    );
   }
 
   void _confirmNero() async {
@@ -209,7 +209,7 @@ class _SpendConfirmState extends State<SpendConfirm> {
   }
 
   void _confirmAnon() async {
-    if (await isOffline()) {
+    if (isOffline) {
       Navigator.of(context).pop();
       Navigator.of(context).pop();
       final signedFileName = await getMoneroSignedTxPath();

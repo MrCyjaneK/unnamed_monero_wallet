@@ -7,6 +7,7 @@ import 'package:anonero/pages/pin_screen.dart';
 import 'package:anonero/pages/scanner/base_scan.dart';
 import 'package:anonero/pages/wallet/outputs_page.dart';
 import 'package:anonero/tools/format_monero.dart';
+import 'package:anonero/tools/is_offline.dart';
 import 'package:anonero/tools/is_view_only.dart';
 import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
@@ -116,7 +117,7 @@ class _TransactionListState extends State<TransactionList> {
         title: SelectableText(isViewOnly ? nero : anon),
         actions: [
           IconButton(
-            onPressed: synchronized ? _lockWallet : null,
+            onPressed: synchronized || isOffline ? _lockWallet : null,
             icon: const Icon(Icons.lock),
           ),
           IconButton(
@@ -226,6 +227,9 @@ class _SyncProgressState extends State<SyncProgress> {
 
   @override
   Widget build(BuildContext context) {
+    if (isOffline) {
+      return const SizedBox(height: 50);
+    }
     if (synchronized != true || uiHeight != daemonBlockchainHeight) {
       return SizedBox(
         height: 50,
