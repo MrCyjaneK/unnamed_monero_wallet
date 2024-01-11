@@ -1,20 +1,22 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ffi' as ffi;
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
 import 'package:anonero/const/app_name.dart';
+import 'package:anonero/pages/pin_screen.dart';
 import 'package:anonero/tools/dirs.dart';
 import 'package:anonero/tools/node.dart';
 import 'package:anonero/tools/proxy.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:monero/monero.dart';
 import 'package:anonero/tools/monero/subaddress_label.dart' as sl;
+import 'package:mutex/mutex.dart';
 import 'package:path/path.dart' as p;
 import 'package:tor_binary/tor_binary_platform_interface.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
@@ -299,10 +301,22 @@ Future<void> showServiceNotification() async {
   }
 }
 
-String getStats(int ptrAddr) {
-  return "$kDebugMode";
-  // final ptr = Pointer<Void>.fromAddress(ptrAddr);
-  // return "${MONERO_Wallet_blockChainHeight(ptr)}";
+final statsMx = Mutex();
+Future<String> getStats() async {
+  await statsMx.acquire();
+  final ptrAddr =
+      int.parse(File(await getWalletPointerAddrPath()).readAsStringSync());
+  // return const JsonEncoder().convert(MONERO_isLibOk());
+  final ptr = ffi.Pointer<ffi.Void>.fromAddress(ptrAddr);
+  bool embeddedTor = await isSocks5ProxyListening("127.0.0.1", 42142);
+  final height = MONERO_Wallet_daemonBlockChainHeight(ptr);
+  final lh = MONERO_Wallet_blockChainHeight(ptr);
+  final isBSync = MONERO_Wallet_isBackgroundSyncing(ptr) || isLockedMonero;
+  final leftText = ((height - lh) <= 0) ? "" : "${height - lh} left ";
+  statsMx.release();
+  return "${((!embeddedTor) ? "" : "[Tor] ")}"
+      "${(lh == height) ? "Synced: $lh " : "Syncing $leftText"}"
+      "${(isBSync) ? "[BSYNC]" : ""}";
 }
 
 @pragma('vm:entry-point')
@@ -328,33 +342,34 @@ void onStart(ServiceInstance service) async {
   });
 
   // bring to foreground
-  Timer.periodic(const Duration(seconds: kDebugMode ? 1 : 10), (timer) async {
-    if (false /* || await getStatsExist() == false */) {
+  while (true) {
+    await Future.delayed(const Duration(seconds: 1));
+    try {
+      if (service is AndroidServiceInstance) {
+        flutterLocalNotificationsPlugin.show(
+          notificationId,
+          anonero,
+          await getStats(),
+          const NotificationDetails(
+            android: AndroidNotificationDetails(
+              'anon_foreground',
+              'Anon Foreground Notification',
+              icon: 'anon_mono',
+              ongoing: true,
+              playSound: false,
+              enableVibration: false,
+              onlyAlertOnce: true,
+              showWhen: false,
+              importance: Importance.low,
+              priority: Priority.low,
+            ),
+          ),
+        );
+      }
+    } catch (e) {
       await flutterLocalNotificationsPlugin.cancel(notificationId);
       await service.stopSelf();
-      timer.cancel();
       return;
     }
-    if (service is AndroidServiceInstance) {
-      flutterLocalNotificationsPlugin.show(
-        notificationId,
-        anonero,
-        getStats(0),
-        const NotificationDetails(
-          android: AndroidNotificationDetails(
-            'anon_foreground',
-            'Anon Foreground Notification',
-            icon: 'anon_mono',
-            ongoing: true,
-            playSound: false,
-            enableVibration: false,
-            onlyAlertOnce: true,
-            showWhen: false,
-            importance: Importance.low,
-            priority: Priority.low,
-          ),
-        ),
-      );
-    }
-  });
+  }
 }

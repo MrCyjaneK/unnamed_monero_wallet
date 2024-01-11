@@ -68,3 +68,7 @@ Future<String> getMoneroSignedTxPath() async {
 Future<String> getTempBackupPath() async {
   return "${(await getWd()).path}/backup_test";
 }
+
+Future<String> getWalletPointerAddrPath() async {
+  return "${(await getWd()).path}/ptr_addr";
+}

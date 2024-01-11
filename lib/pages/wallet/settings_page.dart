@@ -155,8 +155,9 @@ class SettingsPage extends StatelessWidget {
         ),
       ),
     );
+    await Future.delayed(const Duration(milliseconds: 200));
     // ignore: use_build_context_synchronously
-    bd.encrypt(c, seedOffset);
+    await bd.encrypt(c, seedOffset);
   }
 
   void _viewSeed(BuildContext c) async {

@@ -7,6 +7,7 @@ import 'package:anonero/tools/dirs.dart';
 import 'package:anonero/tools/fuck_firebase.dart';
 import 'package:anonero/tools/is_view_only.dart';
 import 'package:anonero/tools/load_perf_data.dart';
+import 'package:anonero/tools/wallet_lock.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
 
@@ -29,7 +30,16 @@ void main() async {
   disableProxy = File(await getDisableProxyFlagFile()).existsSync();
   showPerformanceOverlay =
       File(await getShowPerformanceOverlayFlagFile()).existsSync();
-  runApp(const MyApp());
+  runApp(
+    Listener(
+      onPointerDown: (_) => _uh(),
+      child: const MyApp(),
+    ),
+  );
+}
+
+void _uh() {
+  lastClick = DateTime.now();
 }
 
 class MyApp extends StatelessWidget {
@@ -38,6 +48,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
       showPerformanceOverlay: showPerformanceOverlay,
       title: 'Anonero',
       theme: ThemeData(

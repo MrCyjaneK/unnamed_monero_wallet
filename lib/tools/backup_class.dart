@@ -22,18 +22,13 @@ class BackupDetails {
   AnonJSON? metadata;
 
   Future<void> encrypt(BuildContext c, String password) async {
-    print("a");
     final ze = ZipFileEncoder();
-    print("b");
     final tempPath = await getTempBackupPath();
     ze.create(tempPath);
-    print("c");
     File("$tempPath.default").writeAsBytesSync(walletData!);
     await ze.addFile(File("$tempPath.default"), "default");
-    print("d");
     File("$tempPath.default.keys").writeAsBytesSync(walletKeysData!);
     await ze.addFile(File("$tempPath.default.keys"), "default.keys");
-    print("e");
 
     final metaJson = utf8.encode(
       const JsonEncoder.withIndent('    ').convert(metadata),
@@ -41,23 +36,19 @@ class BackupDetails {
     File("$tempPath.anon.json").writeAsBytesSync(metaJson);
     await ze.addFile(File("$tempPath.anon.json"), "anon.json");
 
-    print("f");
     ze.close();
-    print("g");
 
     await AnoneroBackup().encryptFile(
       seedPassphrase: password,
       inFileName: tempPath,
       outFileName: "$tempPath.enc",
     );
-    print("h");
     await CRFileSaver.saveFileWithDialog(
       SaveFileDialogParams(
         sourceFilePath: "$tempPath.enc",
         destinationFileName: "backup_${DateTime.now().toIso8601String()}.anon",
       ),
     );
-    print("i");
   }
 
   static Future<BackupDetails> decrypt(BuildContext c) async {
@@ -96,7 +87,6 @@ class BackupDetails {
           bd.walletKeysData = file.content as Uint8List;
         case "anon.json":
           final c = file.content as Uint8List;
-          print(c);
           bd.metadata = AnonJSON.fromJson(
             json.decode(
               utf8.decode(

@@ -16,6 +16,7 @@ import 'package:anonero/tools/monero/background_task.dart';
 import 'package:anonero/tools/node.dart';
 import 'package:anonero/tools/proxy.dart';
 import 'package:anonero/tools/show_alert.dart';
+import 'package:anonero/tools/wallet_lock.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
 import 'package:anonero/widgets/normal_keyboard.dart';
 import 'package:anonero/widgets/numerical_keyboard.dart';
@@ -40,6 +41,9 @@ enum PinScreenFlag {
   openMainWallet,
   backgroundSyncLock
 }
+
+bool isLocked = false;
+bool get isLockedMonero => MONERO_Wallet_isBackgroundSyncing(walletPtr!);
 
 class PinScreen extends StatefulWidget {
   const PinScreen({
@@ -126,8 +130,9 @@ class PinScreen extends StatefulWidget {
     ));
   }
 
-  static void pushLock(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(
+  static void pushLock(BuildContext context) async {
+    isLocked = true;
+    await Navigator.of(context).push(MaterialPageRoute(
       builder: (context) {
         return const PinScreen(
           flag: PinScreenFlag.backgroundSyncLock,
@@ -136,6 +141,7 @@ class PinScreen extends StatefulWidget {
         );
       },
     ));
+    isLocked = false;
   }
 }
 
@@ -369,6 +375,9 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
               : proxy.getAddress(node.network))
           : "127.0.0.1:42142",
     );
+    File(await getWalletPointerAddrPath()).writeAsString(
+      walletPtr!.address.toString(),
+    );
     print(const JsonEncoder.withIndent('    ').convert({
       "daemonAddress": node?.address ?? "",
       "daemonUsername": node?.username ?? "",
@@ -400,6 +409,7 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
     if (Platform.isAndroid) await Permission.notification.request();
     unawaited(isOfflineRefresh());
     unawaited(showServiceNotification());
+    initLock();
   }
 
   void _openMainWallet() async {
