@@ -4,6 +4,7 @@ import 'dart:ffi';
 import 'dart:io';
 import 'dart:isolate';
 
+import 'package:anonero/legacy.dart';
 import 'package:anonero/main.dart';
 import 'package:anonero/pages/debug.dart';
 import 'package:anonero/pages/debug/monero_log_level.dart';
@@ -22,6 +23,7 @@ import 'package:anonero/widgets/setup_logo.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 // createWallet -> createWalletConfirm -> "wallet"
 // /|\                               \__ Doesn't match -> \
@@ -352,6 +354,7 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
       logFile.deleteSync();
     }
     logFile.createSync();
+    await runEmbeddedTor();
     final Node? node = (await NodeStore.getCurrentNode());
     final ProxyStore proxy = (await ProxyStore.getProxy());
     MONERO_WalletManagerFactory_setLogLevel(logLevel);
@@ -360,15 +363,21 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
       daemonAddress: node?.address ?? "",
       daemonUsername: node?.username ?? "",
       daemonPassword: node?.password ?? "",
-      proxyAddress:
-          (node == null || disableProxy) ? "" : proxy.getAddress(node.network),
+      proxyAddress: proc == null
+          ? ((node == null || disableProxy)
+              ? ""
+              : proxy.getAddress(node.network))
+          : "127.0.0.1:42142",
     );
     print(const JsonEncoder.withIndent('    ').convert({
       "daemonAddress": node?.address ?? "",
       "daemonUsername": node?.username ?? "",
       "daemonPassword": node?.password ?? "",
-      "proxyAddress":
-          (node == null || disableProxy) ? "" : proxy.getAddress(node.network)
+      "proxyAddress": proc == null
+          ? ((node == null || disableProxy)
+              ? ""
+              : proxy.getAddress(node.network))
+          : "127.0.0.1:42142"
     }));
     MONERO_WalletManagerFactory_setLogLevel(logLevel);
     MONERO_Wallet_init3(walletPtr!,
@@ -388,7 +397,9 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
           Pointer.fromAddress(addr), 1);
     });
     runBackgroundTaskWallet(walletPtr!);
-    await isOfflineRefresh();
+    if (Platform.isAndroid) await Permission.notification.request();
+    unawaited(isOfflineRefresh());
+    unawaited(showServiceNotification());
   }
 
   void _openMainWallet() async {

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:anonero/pages/debug/backup_test.dart';
+import 'package:anonero/pages/debug/battery_optimization.dart';
 import 'package:anonero/pages/debug/button_x_textfield.dart';
 import 'package:anonero/pages/debug/mobile_scanner.dart';
 import 'package:anonero/pages/debug/monero_dart_advanced.dart';
@@ -10,9 +11,11 @@ import 'package:anonero/pages/debug/monero_log.dart';
 import 'package:anonero/pages/debug/monero_log_level.dart';
 import 'package:anonero/pages/debug/performance.dart';
 import 'package:anonero/pages/debug/boot_flag.dart';
+import 'package:anonero/pages/debug/tor_test.dart';
 import 'package:anonero/pages/debug/urqr_codes.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
 import 'package:anonero/widgets/long_outlined_button.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class DebugPage extends StatelessWidget {
@@ -81,6 +84,19 @@ class DebugPage extends StatelessWidget {
             onPressed: (!Platform.isAndroid)
                 ? null
                 : () => BackupTestDebug.push(context),
+          ),
+          if (kDebugMode)
+            LongOutlinedButton(
+              text: "Tor test debug",
+              onPressed: (!Platform.isAndroid)
+                  ? null
+                  : () => TorTestDebug.push(context),
+            ),
+          LongOutlinedButton(
+            text: "Battery Optimization",
+            onPressed: (!Platform.isAndroid)
+                ? null
+                : () => BatteryOptimizationDebug.push(context),
           ),
         ],
       ),

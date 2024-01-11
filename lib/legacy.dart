@@ -1,9 +1,23 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
+import 'dart:ui';
 
+import 'package:anonero/const/app_name.dart';
+import 'package:anonero/tools/dirs.dart';
+import 'package:anonero/tools/node.dart';
+import 'package:anonero/tools/proxy.dart';
 import 'package:anonero/tools/wallet_ptr.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:monero/monero.dart';
 import 'package:anonero/tools/monero/subaddress_label.dart' as sl;
+import 'package:path/path.dart' as p;
+import 'package:tor_binary/tor_binary_platform_interface.dart';
+import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 
 const ColorScheme colorScheme = ColorScheme(
   brightness: Brightness.dark,
@@ -159,4 +173,188 @@ class URQrProgress {
     }
     return processedPartsCount == progress.processedPartsCount;
   }
+}
+
+Process? proc;
+
+Future<void> runEmbeddedTor() async {
+  final docs = await getWd();
+  const port = 42142;
+
+  final node = await NodeStore.getCurrentNode();
+  if ((node?.address.contains('.i2p:') == true)) {
+    print("We are connected to i2p (or not at all), ignoring tor config.");
+    return;
+  }
+  // final torBinPath = p.join(
+  //     await BackUpRestoreChannel().getAndroidNativeLibraryDirectory(),
+  //     "libKmpTor.so");
+  final torBinPath =
+      p.join((await TorBinaryPlatform.instance.getBinaryPath())!, "libtor.so");
+  print("torPath: $torBinPath");
+  final proxy = await ProxyStore.getProxy();
+  final isProxyRunning = await isSocks5ProxyListening(
+      proxy.getAddress(NodeNetwork.onion), proxy.torPort);
+
+  if (isProxyRunning) {
+    print("Proxy is running");
+    return;
+  }
+
+  print("Starting embedded tor");
+  print("app docs: $docs");
+  final torrc = """
+SocksPort $port
+Log notice file ${p.join(docs.absolute.path, "tor.log")}
+RunAsDaemon 0
+DataDirectory ${p.join(docs.absolute.path, "tor-data")}
+""";
+  final torrcPath = p.join(docs.absolute.path, "torrc");
+  File(torrcPath).writeAsStringSync(torrc);
+
+  if (proc != null) {
+    proc?.kill();
+    await Future.delayed(const Duration(seconds: 1));
+    proc?.kill(ProcessSignal.sigkill);
+    await Future.delayed(const Duration(seconds: 1));
+    final td = Directory(p.join(docs.absolute.path, "tor-data"));
+    if (td.existsSync()) {
+      td.deleteSync(recursive: true);
+    }
+    proc?.kill(ProcessSignal.sigkill);
+    await Future.delayed(const Duration(seconds: 1));
+  }
+  proc = await Process.start(torBinPath, ["-f", torrcPath]);
+  proc?.stdout.transform(utf8.decoder).forEach(print);
+  proc?.stderr.transform(utf8.decoder).forEach(print);
+}
+
+Future<bool> isSocks5ProxyListening(String host, int port) async {
+  try {
+    final socket = await Socket.connect(host, port);
+    socket.destroy();
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+const notificationId = 777;
+
+Future<void> showServiceNotification() async {
+  final service = FlutterBackgroundService();
+
+  /// OPTIONAL, using custom notification channel id
+  const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    'anon_foreground',
+    'Anon Foreground Notification',
+    description: 'This channel is used for foreground notification.',
+    importance: Importance.low, // importance must be at low or higher level
+  );
+
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  if (Platform.isIOS || Platform.isAndroid) {
+    await flutterLocalNotificationsPlugin.initialize(
+      const InitializationSettings(
+        iOS: DarwinInitializationSettings(),
+        android: AndroidInitializationSettings('anon_mono'),
+      ),
+    );
+  }
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+
+  final confOk = await service.configure(
+    androidConfiguration: AndroidConfiguration(
+      // this will be executed when app is in foreground or background in separated isolate
+      onStart: onStart,
+
+      // auto start service
+      autoStart: false,
+      autoStartOnBoot: false,
+      isForegroundMode: false,
+
+      notificationChannelId: 'anon_foreground',
+      initialNotificationTitle: 'anon',
+      initialNotificationContent: 'Loading wallet',
+      foregroundServiceNotificationId: notificationId,
+    ),
+    iosConfiguration: IosConfiguration(
+      autoStart: false,
+    ),
+  );
+  if (!confOk) {
+    debugPrint(
+      "WARN: Failed to service.configure. Background mode will not work as expected",
+    );
+  }
+  final startOk = await service.startService();
+  if (!startOk) {
+    debugPrint("WARN: failed to start service");
+  }
+}
+
+String getStats(int ptrAddr) {
+  return "$kDebugMode";
+  // final ptr = Pointer<Void>.fromAddress(ptrAddr);
+  // return "${MONERO_Wallet_blockChainHeight(ptr)}";
+}
+
+@pragma('vm:entry-point')
+void onStart(ServiceInstance service) async {
+  // Only available for flutter 3.0.0 and later
+  DartPluginRegistrant.ensureInitialized();
+
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  if (service is AndroidServiceInstance) {
+    service.on('setAsForeground').listen((event) {
+      service.setAsForegroundService();
+    });
+
+    service.on('setAsBackground').listen((event) {
+      service.setAsBackgroundService();
+    });
+  }
+
+  service.on('stopService').listen((event) {
+    service.stopSelf();
+  });
+
+  // bring to foreground
+  Timer.periodic(const Duration(seconds: kDebugMode ? 1 : 10), (timer) async {
+    if (false /* || await getStatsExist() == false */) {
+      await flutterLocalNotificationsPlugin.cancel(notificationId);
+      await service.stopSelf();
+      timer.cancel();
+      return;
+    }
+    if (service is AndroidServiceInstance) {
+      flutterLocalNotificationsPlugin.show(
+        notificationId,
+        anonero,
+        getStats(0),
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'anon_foreground',
+            'Anon Foreground Notification',
+            icon: 'anon_mono',
+            ongoing: true,
+            playSound: false,
+            enableVibration: false,
+            onlyAlertOnce: true,
+            showWhen: false,
+            importance: Importance.low,
+            priority: Priority.low,
+          ),
+        ),
+      );
+    }
+  });
 }

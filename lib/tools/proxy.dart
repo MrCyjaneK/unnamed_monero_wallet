@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:anonero/legacy.dart';
 import 'package:anonero/tools/dirs.dart';
 import 'package:anonero/tools/node.dart';
 import 'package:mutex/mutex.dart';
@@ -60,6 +61,7 @@ class ProxyStore {
   }
 
   String getAddress(NodeNetwork nnet) {
+    if (proc != null) return "127.0.0.1:42142";
     return switch (nnet) {
       NodeNetwork.clearnet || NodeNetwork.onion => "$address:$torPort",
       NodeNetwork.i2p => "$address:$i2pPort",

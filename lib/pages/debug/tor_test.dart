@@ -4,22 +4,22 @@ import 'package:anonero/tools/backup_class.dart';
 import 'package:anonero/widgets/long_outlined_button.dart';
 import 'package:flutter/material.dart';
 
-class BackupTestDebug extends StatefulWidget {
-  const BackupTestDebug({super.key});
+class TorTestDebug extends StatefulWidget {
+  const TorTestDebug({super.key});
 
   @override
-  State<BackupTestDebug> createState() => _BackupTestDebugState();
+  State<TorTestDebug> createState() => _TorTestDebugState();
 
   static void push(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) {
-        return const BackupTestDebug();
+        return const TorTestDebug();
       },
     ));
   }
 }
 
-class _BackupTestDebugState extends State<BackupTestDebug> {
+class _TorTestDebugState extends State<TorTestDebug> {
   var bd = BackupDetails();
 
   void _decrypt() async {

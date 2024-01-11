@@ -1,10 +1,10 @@
 import 'package:anonero/pages/setup/backup_restore.dart';
 import 'package:anonero/pages/setup/node_connection.dart';
 import 'package:anonero/tools/backup_class.dart';
+import 'package:anonero/tools/can_backup.dart';
 import 'package:anonero/tools/is_view_only.dart';
 import 'package:anonero/tools/show_alert.dart';
 import 'package:anonero/widgets/debug_icon_first_run.dart';
-import 'package:anonero/widgets/labeled_text_input.dart';
 import 'package:anonero/widgets/setup_logo.dart';
 import 'package:flutter/material.dart';
 
@@ -59,7 +59,7 @@ class AnonFirstRun extends StatelessWidget {
       overrideActions: [
         LongAlertButtonAlt(
           text: "RESTORE FROM BACKUP",
-          callback: () => _restoreFromBackup(c),
+          callback: !canBackup() ? null : () => _restoreFromBackup(c),
         ),
         const Divider(),
         LongAlertButtonAlt(
@@ -78,19 +78,7 @@ class AnonFirstRun extends StatelessWidget {
 
   void _restoreFromBackup(BuildContext c) async {
     Navigator.of(c).pop();
-    final pwdCtrl = TextEditingController();
-    await Alert(
-      singleBody: LabeledTextInput(
-        ctrl: pwdCtrl,
-        label: "Encryption Password",
-      ),
-      callbackText: "Continue",
-      callback: () => _restoreStep2(c, pwdCtrl.text),
-    ).show(c);
-  }
-
-  void _restoreStep2(BuildContext c, String pwd) async {
-    final bd = await BackupDetails.decrypt(pwd);
+    final bd = await BackupDetails.decrypt(c);
     // ignore: use_build_context_synchronously
     BackupRestorePage.push(c, bd);
   }

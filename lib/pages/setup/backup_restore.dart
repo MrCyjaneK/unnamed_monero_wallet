@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:anonero/pages/pin_screen.dart';
 import 'package:anonero/pages/sync_static_progress.dart';
-import 'package:anonero/pages/wallet/wallet_home.dart';
 import 'package:anonero/tools/backup_class.dart';
 import 'package:anonero/tools/dirs.dart';
 import 'package:anonero/tools/format_monero.dart';

@@ -57,6 +57,8 @@ class _NodesScreenState extends State<NodesScreen> {
             onPressed: () async {
               await AddNodeScreen.push(context);
               reload();
+              Future.delayed(const Duration(milliseconds: 222))
+                  .then((value) => reload());
             },
             child: const Text("Add Node"),
           )

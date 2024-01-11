@@ -1,24 +1,84 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:anonero/tools/dirs.dart';
+import 'package:anonero/tools/show_alert.dart';
+import 'package:anonero/widgets/labeled_text_input.dart';
 import 'package:anonero_backup/anonero_backup.dart';
 import 'package:archive/archive_io.dart';
+import 'package:cr_file_saver/file_saver.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 
 class BackupDetails {
-  BackupDetails();
+  BackupDetails({
+    this.walletData,
+    this.walletKeysData,
+    this.metadata,
+  });
   Uint8List? walletData;
   Uint8List? walletKeysData;
   AnonJSON? metadata;
-  static Future<BackupDetails> decrypt(String password) async {
+
+  Future<void> encrypt(BuildContext c, String password) async {
+    print("a");
+    final ze = ZipFileEncoder();
+    print("b");
+    final tempPath = await getTempBackupPath();
+    ze.create(tempPath);
+    print("c");
+    File("$tempPath.default").writeAsBytesSync(walletData!);
+    await ze.addFile(File("$tempPath.default"), "default");
+    print("d");
+    File("$tempPath.default.keys").writeAsBytesSync(walletKeysData!);
+    await ze.addFile(File("$tempPath.default.keys"), "default.keys");
+    print("e");
+
+    final metaJson = utf8.encode(
+      const JsonEncoder.withIndent('    ').convert(metadata),
+    );
+    File("$tempPath.anon.json").writeAsBytesSync(metaJson);
+    await ze.addFile(File("$tempPath.anon.json"), "anon.json");
+
+    print("f");
+    ze.close();
+    print("g");
+
+    await AnoneroBackup().encryptFile(
+      seedPassphrase: password,
+      inFileName: tempPath,
+      outFileName: "$tempPath.enc",
+    );
+    print("h");
+    await CRFileSaver.saveFileWithDialog(
+      SaveFileDialogParams(
+        sourceFilePath: "$tempPath.enc",
+        destinationFileName: "backup_${DateTime.now().toIso8601String()}.anon",
+      ),
+    );
+    print("i");
+  }
+
+  static Future<BackupDetails> decrypt(BuildContext c) async {
     final fp = await FilePicker.platform.pickFiles();
     if (fp == null) return BackupDetails();
-    AnoneroBackup().decryptFile(
-      seedPassphrase: password,
+    final pwdCtrl = TextEditingController();
+    // ignore: use_build_context_synchronously
+    await Alert(
+      singleBody: LabeledTextInput(
+        ctrl: pwdCtrl,
+        label: "Encryption Password",
+      ),
+      callbackText: "Continue",
+      callback: () => Navigator.of(c).pop(),
+    ).show(c);
+
+    await AnoneroBackup().decryptFile(
+      seedPassphrase: pwdCtrl.text,
       inFileName: fp.files.single.path!,
       outFileName: "${fp.files.single.path!}.dec",
     );
-    print(fp.files.single.path!);
     final inputStream = InputFileStream('${fp.files.single.path!}.dec');
     // Decode the zip from the InputFileStream. The archive will have the contents of the
     // zip, without having stored the data in memory.

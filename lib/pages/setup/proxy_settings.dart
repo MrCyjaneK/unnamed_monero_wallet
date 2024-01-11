@@ -1,3 +1,4 @@
+import 'package:anonero/legacy.dart';
 import 'package:anonero/pages/sync_static_progress.dart';
 import 'package:anonero/pages/wallet/settings_page.dart';
 import 'package:anonero/tools/proxy.dart';
@@ -56,6 +57,12 @@ class _ProxySettingsState extends State<ProxySettings> {
             hintText: "9050",
             ctrl: torPortCtrl,
           ),
+          if (proc != null)
+            const Padding(
+              padding: EdgeInsets.only(left: 16.0, right: 16, top: 16),
+              child: SelectableText(
+                  "NOTE: Embedded tor is running, if you don't want it to run provide a proper port."),
+            ),
           LabeledTextInput(
             label: "I2P PORT",
             hintText: "4447",

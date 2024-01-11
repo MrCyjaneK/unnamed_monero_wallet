@@ -1,8 +1,14 @@
+import 'dart:io';
+
+import 'package:anonero/legacy.dart';
 import 'package:anonero/pages/debug.dart';
 import 'package:anonero/pages/pin_screen.dart';
 import 'package:anonero/pages/setup/proxy_settings.dart';
 import 'package:anonero/pages/settings/nodes_screen.dart';
 import 'package:anonero/pages/settings/view_seed_page.dart';
+import 'package:anonero/tools/backup_class.dart' as b;
+import 'package:anonero/tools/can_backup.dart';
+import 'package:anonero/tools/dirs.dart';
 import 'package:anonero/tools/node.dart';
 import 'package:anonero/tools/proxy.dart';
 import 'package:anonero/tools/show_alert.dart';
@@ -16,6 +22,7 @@ import 'package:monero/monero.dart';
 bool isProxyOn = false;
 
 Future<void> setProxy(BuildContext c) async {
+  if (proc != null) return;
   final p = await ProxyStore.getProxy();
   final node = await NodeStore.getCurrentNode();
   if (node == null) {
@@ -83,8 +90,9 @@ class SettingsPage extends StatelessWidget {
             title: "View Seed",
             onClick: () => _viewSeed(context),
           ),
-          const SettingsListTile(
+          SettingsListTile(
             title: "Export Backup",
+            onClick: !canBackup() ? null : () => _exportBackup(context),
           ),
           const SettingsListTile(
             title: "Secure Wipe",
@@ -98,6 +106,57 @@ class SettingsPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _exportBackup(BuildContext c) async {
+    final tCtrl = TextEditingController();
+    await Alert(
+      body: [
+        LabeledTextInput(label: "Seed offset", ctrl: tCtrl),
+      ],
+      callback: () => Navigator.of(c).pop(),
+    ).show(c);
+    final seedOffset = tCtrl.text;
+    if (tCtrl.text == "") {
+      return;
+    }
+    final mwp = await getMainWalletPath();
+    final node = await NodeStore.getCurrentNode();
+
+    final b.BackupDetails bd = b.BackupDetails(
+      walletData: File(mwp).readAsBytesSync(),
+      walletKeysData: File("$mwp.keys").readAsBytesSync(),
+      metadata: b.AnonJSON(
+        version: "1.0",
+        backup: b.Backup(
+          node: b.Node(
+            host: node?.address.split(":")[0],
+            username: node?.username,
+            password: node?.password,
+            rpcPort: int.tryParse(node?.address.split(":")[1] ?? "?Sdatf"),
+            isOnion: true,
+            networkType: "NetworkType_Mainnet",
+          ),
+          wallet: b.Wallet(
+            address: MONERO_Wallet_address(walletPtr!),
+            seed: MONERO_Wallet_seed(walletPtr!, seedOffset: seedOffset),
+            restoreHeight: MONERO_Wallet_getRefreshFromBlockHeight(walletPtr!),
+            balanceAll: MONERO_Wallet_balance(walletPtr!, accountIndex: 0),
+            numAccounts: MONERO_Wallet_numSubaddressAccounts(walletPtr!),
+            numSubaddresses:
+                MONERO_Wallet_numSubaddresses(walletPtr!, accountIndex: 0),
+            isWatchOnly: false, // v1 doesn't care. We can work both ways.
+            isSynchronized: false, // this file was literally kept offline?
+          ),
+          meta: b.Meta(
+            network: "NetworkType_Mainnet",
+            timestamp: DateTime.now().millisecondsSinceEpoch,
+          ),
+        ),
+      ),
+    );
+    // ignore: use_build_context_synchronously
+    bd.encrypt(c, seedOffset);
   }
 
   void _viewSeed(BuildContext c) async {
