@@ -149,6 +149,10 @@ class URQrProgress {
 Process? proc;
 
 Future<void> runEmbeddedTor() async {
+  if (!Platform.isAndroid) {
+    print("Not starting embedded Tor - we are not on android");
+    return;
+  }
   final docs = await getWd();
   const port = 42142;
 
@@ -213,6 +217,10 @@ Future<bool> isSocks5ProxyListening(String host, int port) async {
 const notificationId = 777;
 
 Future<void> showServiceNotification() async {
+  if (!Platform.isAndroid) {
+    print("showServiceNotification disabled - we are not on android.");
+    return;
+  }
   final service = FlutterBackgroundService();
 
   /// OPTIONAL, using custom notification channel id

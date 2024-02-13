@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:xmruw/legacy.dart';
 import 'package:xmruw/pages/sync_static_progress.dart';
 import 'package:xmruw/pages/wallet/settings_page.dart';
@@ -68,6 +70,13 @@ class _ProxySettingsState extends State<ProxySettings> {
             hintText: "4447",
             ctrl: i2pPortCtrl,
           ),
+          if (!Platform.isAndroid)
+            SelectableText("""
+It looks like you are running on unsupported platform, for development purposes
+you may want to disable tor/i2p proxy.
+Go to Debug -> Boot Flag -> Create Disable Proxy Flag
+"""
+                .replaceAll("\n", " ")),
           const Spacer(),
           LongOutlinedButton(
             text: "SET",
