@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:anonero/tools/dirs.dart';
+import 'package:xmruw/tools/dirs.dart';
 import 'package:flutter/material.dart';
 
 class MoneroLogDebug extends StatefulWidget {

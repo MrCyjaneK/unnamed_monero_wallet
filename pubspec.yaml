@@ -1,4 +1,4 @@
-name: anonero
+name: xmruw
 description: "monero wallet for android."
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 0.0.1+16
@@ -16,26 +16,21 @@ dependencies:
   ffi: ^2.1.0
   monero:
     hosted: https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
-    version: 0.018003001.031
-    # path: ../monero.dart
-    # version: 0.0.0
+    version: 0.018003001.036
   path_provider: ^2.1.1
   mutex: ^3.1.0
   monero_libs:
-    # path: ../flutter-monero_libs
-    # version: 0.0.1
     hosted: https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
-    version: 0.018003001.045
+    version: 0.018003001.048
   cr_file_saver: ^0.0.2
   file_picker: ^6.1.1
   mobile_scanner: 3.5.5
   bytewords:
     hosted: https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
-    version: 0.0.19
+    version: 0.0.23
   anonero_backup:
     hosted: https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
-    version: 0.0.2
-    # path: ../anonero_backup
+    version: 0.0.14
   flutter_svg: ^2.0.9
   archive: ^3.4.10
   tor_binary:
@@ -46,8 +41,6 @@ dependencies:
   flutter_background_service_android: 6.0.1
   flutter_local_notifications: 16.1.0
   permission_handler: ^11.1.0
-    # path: ../bytewords
-    # version: 1.0.0
 
 
 dev_dependencies:
@@ -63,13 +56,13 @@ dev_dependencies:
   flutter_launcher_icons: "^0.13.1"
 
 flutter_launcher_icons:
-  android: false
+  android: true
   ios: false
-  image_path: "assets/anon_logo.png"
+  image_path: "assets/logo.png"
   remove_alpha_ios: true
   windows:
     generate: true
-    image_path: "assets/anon_logo.png"
+    image_path: "assets/logo.png"
     icon_size: 256 # min:48, max:256, default: 48
   # macos:
   #   generate: true
@@ -87,9 +80,10 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/anon_logo.png
+    - assets/logo.png
     - assets/fonts/RobotoMono.ttf
     - assets/scanner_frame.svg
+    - assets/nodes.txt
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

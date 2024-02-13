@@ -1,8 +1,8 @@
-import 'package:anonero/pages/wallet/subaddress_details.dart';
-import 'package:anonero/tools/format_monero.dart';
-import 'package:anonero/tools/monero/subaddress_label.dart';
-import 'package:anonero/tools/show_alert.dart';
-import 'package:anonero/tools/wallet_ptr.dart';
+import 'package:xmruw/pages/wallet/subaddress_details.dart';
+import 'package:xmruw/tools/format_monero.dart';
+import 'package:xmruw/tools/monero/subaddress_label.dart';
+import 'package:xmruw/tools/show_alert.dart';
+import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
 

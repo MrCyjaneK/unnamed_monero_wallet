@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:anonero/pages/scanner/base_scan.dart';
-import 'package:anonero/pages/wallet/wallet_home.dart';
-import 'package:anonero/widgets/long_outlined_button.dart';
-import 'package:anonero/widgets/primary_label.dart';
-import 'package:anonero/widgets/urqr.dart';
+import 'package:xmruw/pages/scanner/base_scan.dart';
+import 'package:xmruw/pages/wallet/wallet_home.dart';
+import 'package:xmruw/widgets/long_outlined_button.dart';
+import 'package:xmruw/widgets/primary_label.dart';
+import 'package:xmruw/widgets/urqr.dart';
 import 'package:bytewords/bytewords.dart';
 import 'package:cr_file_saver/file_saver.dart';
 import 'package:flutter/material.dart';

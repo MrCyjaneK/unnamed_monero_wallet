@@ -1,4 +1,4 @@
-import 'package:anonero/tools/node.dart';
+import 'package:xmruw/tools/node.dart';
 
 late bool isOffline;
 

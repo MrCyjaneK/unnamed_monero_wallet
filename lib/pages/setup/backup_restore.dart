@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:anonero/pages/pin_screen.dart';
-import 'package:anonero/pages/sync_static_progress.dart';
-import 'package:anonero/tools/backup_class.dart';
-import 'package:anonero/tools/dirs.dart';
-import 'package:anonero/tools/format_monero.dart';
-import 'package:anonero/tools/node.dart' as n;
-import 'package:anonero/widgets/long_outlined_button.dart';
+import 'package:xmruw/pages/pin_screen.dart';
+import 'package:xmruw/pages/sync_static_progress.dart';
+import 'package:xmruw/tools/backup_class.dart';
+import 'package:xmruw/tools/dirs.dart';
+import 'package:xmruw/tools/format_monero.dart';
+import 'package:xmruw/tools/node.dart' as n;
+import 'package:xmruw/widgets/long_outlined_button.dart';
 import 'package:flutter/material.dart';
 
 class BackupRestorePage extends StatefulWidget {

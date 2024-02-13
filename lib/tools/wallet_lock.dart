@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:anonero/pages/pin_screen.dart';
-import 'package:anonero/tools/show_alert.dart';
-import 'package:anonero/tools/wallet_ptr.dart';
+import 'package:xmruw/pages/pin_screen.dart';
+import 'package:xmruw/tools/show_alert.dart';
+import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
 

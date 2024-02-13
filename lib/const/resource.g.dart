@@ -4,13 +4,16 @@
 class R {
   const R._();
 
-  /// ![preview](file:///home/user/go/src/git.mrcyjanek.net/mrcyjanek/anonero/assets/anon_logo.png)
-  static const String ASSETS_ANON_LOGO_PNG = 'assets/anon_logo.png';
-
-  /// ![preview](file:///home/user/go/src/git.mrcyjanek.net/mrcyjanek/anonero/assets/fonts/RobotoMono.ttf)
+  /// ![preview](file:///home/user/go/src/git.mrcyjanek.net/mrcyjanek/unnamed_monero_wallet/assets/fonts/RobotoMono.ttf)
   static const String ASSETS_FONTS_ROBOTOMONO_TTF =
       'assets/fonts/RobotoMono.ttf';
 
-  /// ![preview](file:///home/user/go/src/git.mrcyjanek.net/mrcyjanek/anonero/assets/scanner_frame.svg)
+  /// ![preview](file:///home/user/go/src/git.mrcyjanek.net/mrcyjanek/unnamed_monero_wallet/assets/logo.png)
+  static const String ASSETS_LOGO_PNG = 'assets/logo.png';
+
+  /// ![preview](file:///home/user/go/src/git.mrcyjanek.net/mrcyjanek/unnamed_monero_wallet/assets/nodes.txt)
+  static const String ASSETS_NODES_TXT = 'assets/nodes.txt';
+
+  /// ![preview](file:///home/user/go/src/git.mrcyjanek.net/mrcyjanek/unnamed_monero_wallet/assets/scanner_frame.svg)
   static const String ASSETS_SCANNER_FRAME_SVG = 'assets/scanner_frame.svg';
 }

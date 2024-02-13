@@ -1,4 +1,4 @@
-import 'package:anonero/widgets/long_outlined_button.dart';
+import 'package:xmruw/widgets/long_outlined_button.dart';
 import 'package:flutter/material.dart';
 
 int logLevel = 1;

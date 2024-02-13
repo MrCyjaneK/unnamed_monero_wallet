@@ -1,21 +1,21 @@
 import 'dart:io';
 
-import 'package:anonero/legacy.dart';
-import 'package:anonero/pages/debug.dart';
-import 'package:anonero/pages/pin_screen.dart';
-import 'package:anonero/pages/setup/proxy_settings.dart';
-import 'package:anonero/pages/settings/nodes_screen.dart';
-import 'package:anonero/pages/settings/view_seed_page.dart';
-import 'package:anonero/tools/backup_class.dart' as b;
-import 'package:anonero/tools/can_backup.dart';
-import 'package:anonero/tools/dirs.dart';
-import 'package:anonero/tools/node.dart';
-import 'package:anonero/tools/proxy.dart';
-import 'package:anonero/tools/show_alert.dart';
-import 'package:anonero/tools/wallet_ptr.dart';
-import 'package:anonero/widgets/labeled_text_input.dart';
-import 'package:anonero/widgets/primary_label.dart';
-import 'package:anonero/widgets/settings_list_tile.dart';
+import 'package:xmruw/legacy.dart';
+import 'package:xmruw/pages/debug.dart';
+import 'package:xmruw/pages/pin_screen.dart';
+import 'package:xmruw/pages/setup/proxy_settings.dart';
+import 'package:xmruw/pages/settings/nodes_screen.dart';
+import 'package:xmruw/pages/settings/view_seed_page.dart';
+import 'package:xmruw/tools/backup_class.dart' as b;
+import 'package:xmruw/tools/can_backup.dart';
+import 'package:xmruw/tools/dirs.dart';
+import 'package:xmruw/tools/node.dart';
+import 'package:xmruw/tools/proxy.dart';
+import 'package:xmruw/tools/show_alert.dart';
+import 'package:xmruw/tools/wallet_ptr.dart';
+import 'package:xmruw/widgets/labeled_text_input.dart';
+import 'package:xmruw/widgets/primary_label.dart';
+import 'package:xmruw/widgets/settings_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
 
@@ -55,6 +55,14 @@ Future<void> setNode(BuildContext c) async {
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
+
+  static void push(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return const SettingsPage();
+      },
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {

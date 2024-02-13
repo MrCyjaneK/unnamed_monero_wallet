@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:anonero/widgets/qr_code.dart';
+import 'package:xmruw/widgets/qr_code.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable

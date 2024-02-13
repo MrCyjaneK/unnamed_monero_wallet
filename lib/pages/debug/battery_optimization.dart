@@ -1,7 +1,6 @@
-
-import 'package:anonero/tools/backup_class.dart';
-import 'package:anonero/tools/show_alert.dart';
-import 'package:anonero/widgets/long_outlined_button.dart';
+import 'package:xmruw/tools/backup_class.dart';
+import 'package:xmruw/tools/show_alert.dart';
+import 'package:xmruw/widgets/long_outlined_button.dart';
 import 'package:disable_battery_optimization/disable_battery_optimization.dart';
 import 'package:flutter/material.dart';
 

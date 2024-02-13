@@ -1,7 +1,7 @@
-import 'package:anonero/pages/wallet/wallet_home.dart';
-import 'package:anonero/tools/wallet_ptr.dart';
-import 'package:anonero/widgets/long_outlined_button.dart';
-import 'package:anonero/widgets/setup_logo.dart';
+import 'package:xmruw/pages/wallet/wallet_home.dart';
+import 'package:xmruw/tools/wallet_ptr.dart';
+import 'package:xmruw/widgets/long_outlined_button.dart';
+import 'package:xmruw/widgets/setup_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
 

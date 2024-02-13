@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:anonero/tools/dirs.dart';
+import 'package:xmruw/tools/dirs.dart';
 import 'package:monero/monero.dart';
 
 void runBackgroundTaskWallet(MONERO_wallet wPtr) async {

@@ -4,23 +4,24 @@ import 'dart:ffi';
 import 'dart:io';
 import 'dart:isolate';
 
-import 'package:anonero/legacy.dart';
-import 'package:anonero/main.dart';
-import 'package:anonero/pages/debug.dart';
-import 'package:anonero/pages/debug/monero_log_level.dart';
-import 'package:anonero/pages/setup/passphrase_encryption.dart';
-import 'package:anonero/pages/wallet/wallet_home.dart';
-import 'package:anonero/tools/dirs.dart';
-import 'package:anonero/tools/is_offline.dart';
-import 'package:anonero/tools/monero/background_task.dart';
-import 'package:anonero/tools/node.dart';
-import 'package:anonero/tools/proxy.dart';
-import 'package:anonero/tools/show_alert.dart';
-import 'package:anonero/tools/wallet_lock.dart';
-import 'package:anonero/tools/wallet_ptr.dart';
-import 'package:anonero/widgets/normal_keyboard.dart';
-import 'package:anonero/widgets/numerical_keyboard.dart';
-import 'package:anonero/widgets/setup_logo.dart';
+import 'package:xmruw/legacy.dart';
+import 'package:xmruw/main.dart';
+import 'package:xmruw/pages/debug.dart';
+import 'package:xmruw/pages/debug/monero_log_level.dart';
+import 'package:xmruw/pages/setup/passphrase_encryption.dart';
+import 'package:xmruw/pages/wallet/wallet_home.dart';
+import 'package:xmruw/tools/dirs.dart';
+import 'package:xmruw/tools/is_offline.dart';
+import 'package:xmruw/tools/monero/background_task.dart';
+import 'package:xmruw/tools/node.dart';
+import 'package:xmruw/tools/proxy.dart';
+import 'package:xmruw/tools/show_alert.dart';
+import 'package:xmruw/tools/wallet_lock.dart';
+import 'package:xmruw/tools/wallet_manager.dart';
+import 'package:xmruw/tools/wallet_ptr.dart';
+import 'package:xmruw/widgets/normal_keyboard.dart';
+import 'package:xmruw/widgets/numerical_keyboard.dart';
+import 'package:xmruw/widgets/setup_logo.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
@@ -170,6 +171,7 @@ class _PinScreenState extends State<PinScreen> {
   Future<bool> _createWallet() async {
     final polyseed = MONERO_Wallet_createPolyseed();
     walletPtr = MONERO_WalletManager_createWalletFromPolyseed(
+      wmPtr,
       path: await getMainWalletPath(),
       password: pin.value,
       mnemonic: polyseed,
@@ -240,7 +242,7 @@ class _PinScreenState extends State<PinScreen> {
       restoreWalletSeedConfirmText = "RESTORING";
     });
 
-    walletPtr = MONERO_WalletManager_createWalletFromKeys(
+    walletPtr = MONERO_WalletManager_createWalletFromKeys(wmPtr,
         path: await getMainWalletPath(),
         password: pin.value,
         restoreHeight: widget.restoreData!.restoreHeight!,
@@ -311,6 +313,7 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
     });
     if (widget.restoreData!.restoreHeight == null) {
       walletPtr = MONERO_WalletManager_createWalletFromPolyseed(
+        wmPtr,
         path: await getMainWalletPath(),
         password: pin.value,
         mnemonic: widget.restoreData!.seed,
@@ -321,6 +324,7 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
       );
     } else {
       walletPtr = MONERO_WalletManager_recoveryWallet(
+        wmPtr,
         path: await getMainWalletPath(),
         password: pin.value,
         mnemonic: widget.restoreData!.seed,
@@ -417,7 +421,7 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
       openMainWalletUnlockText = "UNLOCKING...";
     });
     MONERO_WalletManagerFactory_setLogLevel(logLevel);
-    walletPtr = MONERO_WalletManager_openWallet(
+    walletPtr = MONERO_WalletManager_openWallet(wmPtr,
         path: await getMainWalletPath(), password: pin.value);
     if (!mounted) return;
     final status = MONERO_Wallet_status(walletPtr!);

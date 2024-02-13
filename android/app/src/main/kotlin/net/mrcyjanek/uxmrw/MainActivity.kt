@@ -1,4 +1,4 @@
-package io.anonero.anonero
+package net.mrcyjanek.xmruw
 
 import io.flutter.embedding.android.FlutterActivity
 

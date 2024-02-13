@@ -1,10 +1,10 @@
-import 'package:anonero/legacy.dart';
-import 'package:anonero/pages/sync_static_progress.dart';
-import 'package:anonero/pages/wallet/settings_page.dart';
-import 'package:anonero/tools/proxy.dart';
-import 'package:anonero/tools/show_alert.dart';
-import 'package:anonero/widgets/labeled_text_input.dart';
-import 'package:anonero/widgets/long_outlined_button.dart';
+import 'package:xmruw/legacy.dart';
+import 'package:xmruw/pages/sync_static_progress.dart';
+import 'package:xmruw/pages/wallet/settings_page.dart';
+import 'package:xmruw/tools/proxy.dart';
+import 'package:xmruw/tools/show_alert.dart';
+import 'package:xmruw/widgets/labeled_text_input.dart';
+import 'package:xmruw/widgets/long_outlined_button.dart';
 import 'package:flutter/material.dart';
 
 class ProxySettings extends StatefulWidget {

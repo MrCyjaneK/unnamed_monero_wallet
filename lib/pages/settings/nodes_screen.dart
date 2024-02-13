@@ -1,9 +1,9 @@
-import 'package:anonero/pages/pin_screen.dart';
-import 'package:anonero/pages/settings/add_node_screen.dart';
-import 'package:anonero/pages/wallet/settings_page.dart';
-import 'package:anonero/tools/node.dart';
-import 'package:anonero/tools/show_alert.dart';
-import 'package:anonero/tools/wallet_ptr.dart';
+import 'package:xmruw/pages/pin_screen.dart';
+import 'package:xmruw/pages/settings/add_node_screen.dart';
+import 'package:xmruw/pages/wallet/settings_page.dart';
+import 'package:xmruw/tools/node.dart';
+import 'package:xmruw/tools/show_alert.dart';
+import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
 
@@ -64,32 +64,34 @@ class _NodesScreenState extends State<NodesScreen> {
           )
         ],
       ),
-      body: Column(
-        children: [
-          (currentNode == null)
-              ? const Text("no current node")
-              : NodeStatusCard(
-                  node: currentNode!,
-                ),
-          const Divider(),
-          const SizedBox(
-            width: double.maxFinite,
-            child: Padding(
-              padding: EdgeInsets.only(left: 16.0, top: 8, bottom: 8),
-              child: Text("Available Nodes"),
-            ),
-          ),
-          const Divider(),
-          if (ns != null)
-            ...List.generate(
-              ns!.nodes.length,
-              (index) => SingleNodeWidget(
-                node: ns!.nodes[index],
-                disabled: ns!.nodes[index].id == ns!.currentNode,
-                rebuildParent: reload,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            (currentNode == null)
+                ? const Text("no current node")
+                : NodeStatusCard(
+                    node: currentNode!,
+                  ),
+            const Divider(),
+            const SizedBox(
+              width: double.maxFinite,
+              child: Padding(
+                padding: EdgeInsets.only(left: 16.0, top: 8, bottom: 8),
+                child: Text("Available Nodes"),
               ),
             ),
-        ],
+            const Divider(),
+            if (ns != null)
+              ...List.generate(
+                ns!.nodes.length,
+                (index) => SingleNodeWidget(
+                  node: ns!.nodes[index],
+                  disabled: ns!.nodes[index].id == ns!.currentNode,
+                  rebuildParent: reload,
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

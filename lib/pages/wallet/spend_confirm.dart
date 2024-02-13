@@ -2,21 +2,21 @@
 
 import 'dart:io';
 
-import 'package:anonero/pages/ur_broadcast.dart';
-import 'package:anonero/pages/wallet/spend_success.dart';
-import 'package:anonero/tools/dirs.dart';
-import 'package:anonero/tools/format_monero.dart';
-import 'package:anonero/tools/is_offline.dart';
-import 'package:anonero/tools/is_view_only.dart';
-import 'package:anonero/tools/show_alert.dart';
-import 'package:anonero/tools/wallet_ptr.dart';
-import 'package:anonero/widgets/long_outlined_button.dart';
-import 'package:anonero/widgets/padded_element.dart';
-import 'package:anonero/widgets/primary_label.dart';
-import 'package:anonero/widgets/setup_logo.dart';
+import 'package:xmruw/pages/ur_broadcast.dart';
+import 'package:xmruw/pages/wallet/spend_success.dart';
+import 'package:xmruw/tools/dirs.dart';
+import 'package:xmruw/tools/format_monero.dart';
+import 'package:xmruw/tools/is_offline.dart';
+import 'package:xmruw/tools/is_view_only.dart';
+import 'package:xmruw/tools/show_alert.dart';
+import 'package:xmruw/tools/wallet_ptr.dart';
+import 'package:xmruw/widgets/long_outlined_button.dart';
+import 'package:xmruw/widgets/padded_element.dart';
+import 'package:xmruw/widgets/primary_label.dart';
+import 'package:xmruw/widgets/setup_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
-import 'package:anonero/widgets/transaction_list/popup_menu.dart';
+import 'package:xmruw/widgets/transaction_list/popup_menu.dart';
 
 class TxRequest {
   final String address;

@@ -1,5 +1,5 @@
-import 'package:anonero/main.dart';
-import 'package:anonero/pages/setup/proxy_settings.dart';
+import 'package:xmruw/main.dart';
+import 'package:xmruw/pages/setup/proxy_settings.dart';
 import 'package:flutter/material.dart';
 
 class ProxyButton extends StatelessWidget {

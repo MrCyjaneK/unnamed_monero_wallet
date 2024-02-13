@@ -1,4 +1,4 @@
-import 'package:anonero/tools/wallet_ptr.dart';
+import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:monero/monero.dart';
 
 String subaddressLabel(int addressIndex) {

@@ -9,7 +9,6 @@ class Qr extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return QrImageView(
-      backgroundColor: Colors.black,
       gapless: true,
       dataModuleStyle: const QrDataModuleStyle(
           dataModuleShape: QrDataModuleShape.square, color: Colors.white),

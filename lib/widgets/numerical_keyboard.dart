@@ -1,6 +1,6 @@
-import 'package:anonero/const/keyboard.dart';
-import 'package:anonero/pages/pin_screen.dart';
-import 'package:anonero/widgets/numpad_single_key.dart';
+import 'package:xmruw/const/keyboard.dart';
+import 'package:xmruw/pages/pin_screen.dart';
+import 'package:xmruw/widgets/numpad_single_key.dart';
 import 'package:flutter/material.dart';
 
 class NumericalKeyboard extends StatelessWidget {

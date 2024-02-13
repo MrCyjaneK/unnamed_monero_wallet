@@ -1,11 +1,11 @@
-import 'package:anonero/legacy.dart';
-import 'package:anonero/pages/wallet/transaction_list.dart';
-import 'package:anonero/tools/format_monero.dart';
-import 'package:anonero/tools/show_alert.dart';
-import 'package:anonero/tools/wallet_ptr.dart';
-import 'package:anonero/widgets/labeled_text_input.dart';
-import 'package:anonero/widgets/primary_label.dart';
-import 'package:anonero/widgets/transaction_list/transaction_item.dart';
+import 'package:xmruw/legacy.dart';
+import 'package:xmruw/pages/wallet/transaction_list.dart';
+import 'package:xmruw/tools/format_monero.dart';
+import 'package:xmruw/tools/show_alert.dart';
+import 'package:xmruw/tools/wallet_ptr.dart';
+import 'package:xmruw/widgets/labeled_text_input.dart';
+import 'package:xmruw/widgets/primary_label.dart';
+import 'package:xmruw/widgets/transaction_list/transaction_item.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
 

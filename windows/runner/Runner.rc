@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "io.anonero" "\0"
-            VALUE "FileDescription", "anonero" "\0"
+            VALUE "CompanyName", "net.mrcyjanek" "\0"
+            VALUE "FileDescription", "xmruw" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "anonero" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2023 io.anonero. All rights reserved." "\0"
-            VALUE "OriginalFilename", "anonero.exe" "\0"
-            VALUE "ProductName", "anonero" "\0"
+            VALUE "InternalName", "xmruw" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2023 net.mrcyjanek. All rights reserved." "\0"
+            VALUE "OriginalFilename", "xmruw.exe" "\0"
+            VALUE "ProductName", "xmruw" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

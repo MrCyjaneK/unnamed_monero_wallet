@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:anonero/tools/dirs.dart';
-import 'package:anonero/tools/show_alert.dart';
-import 'package:anonero/widgets/labeled_text_input.dart';
+import 'package:xmruw/tools/dirs.dart';
+import 'package:xmruw/tools/show_alert.dart';
+import 'package:xmruw/widgets/labeled_text_input.dart';
 import 'package:anonero_backup/anonero_backup.dart';
 import 'package:archive/archive_io.dart';
 import 'package:cr_file_saver/file_saver.dart';

@@ -1,4 +1,4 @@
-import 'package:anonero/const/resource.g.dart';
+import 'package:xmruw/const/resource.g.dart';
 import 'package:flutter/material.dart';
 
 class SetupLogo extends StatelessWidget {
@@ -15,7 +15,7 @@ class SetupLogo extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Image.asset(
-            R.ASSETS_ANON_LOGO_PNG,
+            R.ASSETS_LOGO_PNG,
             width: width,
           ),
           if (title != null)

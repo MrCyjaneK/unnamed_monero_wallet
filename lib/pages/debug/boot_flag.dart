@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:anonero/main.dart';
-import 'package:anonero/tools/dirs.dart';
-import 'package:anonero/widgets/long_outlined_button.dart';
+import 'package:xmruw/main.dart';
+import 'package:xmruw/tools/dirs.dart';
+import 'package:xmruw/widgets/long_outlined_button.dart';
 import 'package:flutter/material.dart';
 
 class BootFlagDebug extends StatefulWidget {
@@ -54,23 +54,6 @@ class _BootFlagDebugState extends State<BootFlagDebug> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SelectableText("useMaterial3"),
-            if (material3Flag!.existsSync())
-              LongOutlinedButton(
-                text: "Destroy flag",
-                onPressed: () {
-                  material3Flag!.deleteSync();
-                  setState(() {});
-                },
-              ),
-            if (!material3Flag!.existsSync())
-              LongOutlinedButton(
-                text: "Create flag",
-                onPressed: () {
-                  material3Flag!.createSync();
-                  setState(() {});
-                },
-              ),
             const SelectableText("showPerformanceOverlay"),
             if (poFlag!.existsSync())
               LongOutlinedButton(
@@ -105,8 +88,6 @@ class _BootFlagDebugState extends State<BootFlagDebug> {
                   setState(() {});
                 },
               ),
-            if (material3Flag!.existsSync() != useMaterial3)
-              const SelectableText("restart needed (material3)"),
             if (poFlag!.existsSync() != showPerformanceOverlay)
               const SelectableText("restart needed (showPerformanceOverlay)"),
             if (disableProxyFlag!.existsSync() != disableProxy)

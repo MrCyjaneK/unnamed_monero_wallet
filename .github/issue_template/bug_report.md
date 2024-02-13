@@ -49,12 +49,12 @@ Which app version did you use?
 Flavor
 - ANON <- main wallet
 - NERO <- view-only flavor
-- anonero <- flavor with both wallets inside, used mostly for debugging and desktop platforms. In general if either ANON or NERO is affected anonero is also affected.
+- xmruw <- flavor with both wallets inside, used mostly for debugging and desktop platforms. In general if either ANON or NERO is affected xmruw is also affected.
 -->
 - Affected versions
   - [x] ANON
   - [ ] NERO
-  - [x] anonero
+  - [x] xmruw
 
 # Wallet creation/restore method
 

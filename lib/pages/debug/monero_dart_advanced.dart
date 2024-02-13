@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:anonero/tools/show_alert.dart';
-import 'package:anonero/tools/wallet_ptr.dart';
-import 'package:anonero/widgets/advanced_expansion_tile.dart';
-import 'package:anonero/widgets/long_outlined_button.dart';
+import 'package:xmruw/tools/show_alert.dart';
+import 'package:xmruw/tools/wallet_ptr.dart';
+import 'package:xmruw/widgets/advanced_expansion_tile.dart';
+import 'package:xmruw/widgets/long_outlined_button.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
 

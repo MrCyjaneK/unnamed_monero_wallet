@@ -1,16 +1,15 @@
 import 'dart:io';
 
-import 'package:anonero/pages/wallet/receive_screen.dart';
-import 'package:anonero/pages/wallet/settings_page.dart';
-import 'package:anonero/pages/wallet/spend_screen.dart';
-import 'package:anonero/pages/wallet/transaction_list.dart';
-import 'package:anonero/tools/show_alert.dart';
-import 'package:anonero/tools/wallet_ptr.dart';
-import 'package:anonero/widgets/bottom_bar.dart';
+import 'package:xmruw/pages/wallet/receive_screen.dart';
+import 'package:xmruw/pages/wallet/spend_screen.dart';
+import 'package:xmruw/pages/wallet/transaction_list.dart';
+import 'package:xmruw/tools/show_alert.dart';
+import 'package:xmruw/tools/wallet_ptr.dart';
+import 'package:xmruw/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
 
-enum Page { home, receive, send, settings }
+enum Page { receive, home, send }
 
 class WalletHome extends StatefulWidget {
   const WalletHome({super.key});
@@ -59,10 +58,9 @@ class WalletHomeState extends State<WalletHome> {
         body: PageView(
           controller: _pageController,
           children: const [
-            TransactionList(),
             ReceiveScreen(),
+            TransactionList(),
             SpendScreen(),
-            SettingsPage(),
           ],
           onPageChanged: (value) {
             setState(() {
@@ -79,23 +77,18 @@ class WalletHomeState extends State<WalletHome> {
           },
           items: <BottomBarItem>[
             BottomBarItem(
-              icon: const Icon(Icons.home),
-              title: const Text('Home'),
-              activeColor: Theme.of(context).colorScheme.primary,
-            ),
-            BottomBarItem(
               icon: const Icon(Icons.qr_code),
               title: const Text('Receive'),
               activeColor: Theme.of(context).colorScheme.primary,
             ),
             BottomBarItem(
-              icon: const Icon(Icons.send_outlined),
-              title: const Text('Send'),
+              icon: const Icon(Icons.home),
+              title: const Text('Home'),
               activeColor: Theme.of(context).colorScheme.primary,
             ),
             BottomBarItem(
-              icon: const Icon(Icons.settings),
-              title: const Text('Settings'),
+              icon: const Icon(Icons.send_outlined),
+              title: const Text('Send'),
               activeColor: Theme.of(context).colorScheme.primary,
             ),
           ],

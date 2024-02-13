@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:anonero/pages/wallet/subaddress_page.dart';
-import 'package:anonero/tools/monero/subaddress_label.dart';
-import 'package:anonero/tools/wallet_ptr.dart';
-import 'package:anonero/widgets/qr_code.dart';
+import 'package:xmruw/pages/wallet/subaddress_page.dart';
+import 'package:xmruw/tools/monero/subaddress_label.dart';
+import 'package:xmruw/tools/wallet_ptr.dart';
+import 'package:xmruw/widgets/qr_code.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
 

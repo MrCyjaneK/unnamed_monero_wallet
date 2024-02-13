@@ -1,13 +1,13 @@
 flutter_app: 
-  command: anonero
+  command: xmruw
   arch: x64
   parent: /usr/local/lib
   nonInteractive: true
 
 control:
-  Package: anonero
+  Package: xmruw
   Version: 0.0.0
   Architecture: amd64
   Priority: optional
   Maintainer: cyjan@mrcyjanek.net
-  Description: anonero wallet for linux
+  Description: xmruw wallet for linux

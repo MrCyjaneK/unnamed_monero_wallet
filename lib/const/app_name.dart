@@ -1,3 +1,3 @@
-const anon = "[ΛИ0И]";
-const nero = "[ИΞR0]";
-const anonero = "[ΛИ0ИΞR0]";
+const anon = "xmruw";
+const nero = "wuxmr";
+const xmruw = "xmruw";

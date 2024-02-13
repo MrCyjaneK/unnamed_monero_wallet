@@ -1,11 +1,12 @@
 import 'dart:io';
 
-import 'package:anonero/pages/sync_static_progress.dart';
-import 'package:anonero/pages/ur_broadcast.dart';
-import 'package:anonero/tools/dirs.dart';
-import 'package:anonero/tools/show_alert.dart';
-import 'package:anonero/tools/wallet_ptr.dart';
-import 'package:anonero/widgets/urqr.dart';
+import 'package:xmruw/pages/sync_static_progress.dart';
+import 'package:xmruw/pages/ur_broadcast.dart';
+import 'package:xmruw/pages/wallet/settings_page.dart';
+import 'package:xmruw/tools/dirs.dart';
+import 'package:xmruw/tools/show_alert.dart';
+import 'package:xmruw/tools/wallet_ptr.dart';
+import 'package:xmruw/widgets/urqr.dart';
 import 'package:bytewords/bytewords.dart';
 import 'package:cr_file_saver/file_saver.dart';
 import 'package:file_picker/file_picker.dart';
@@ -160,9 +161,15 @@ class TxListPopupMenu extends StatelessWidget {
         _importOutputs(c);
       case TxListPopupAction.signTx:
         _signTx(c);
+      case TxListPopupAction.settings:
+        _openSettings(c);
       default:
         Alert(title: "$action").show(c);
     }
+  }
+
+  void _openSettings(c) {
+    SettingsPage.push(c);
   }
 
   void _broadcastTx(BuildContext c) async {
@@ -205,6 +212,7 @@ class TxListPopupMenu extends StatelessWidget {
     TxListPopupAction.signTx,
     TxListPopupAction.importOutputs,
     TxListPopupAction.coinControl,
+    TxListPopupAction.settings
   ];
 
   List<PopupMenuItem<TxListPopupAction>> _getWidgets() {
@@ -246,6 +254,8 @@ class TxListPopupMenu extends StatelessWidget {
           value: TxListPopupAction.coinControl,
           child: Text('Coin Control'),
         ),
+      TxListPopupAction.settings => const PopupMenuItem<TxListPopupAction>(
+          value: TxListPopupAction.settings, child: Text("Settings")),
     };
   }
 }
@@ -258,4 +268,5 @@ enum TxListPopupAction {
   signTx,
   importOutputs,
   coinControl,
+  settings,
 }

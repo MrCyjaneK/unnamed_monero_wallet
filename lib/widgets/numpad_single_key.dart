@@ -1,5 +1,5 @@
-import 'package:anonero/const/keyboard.dart';
-import 'package:anonero/pages/pin_screen.dart';
+import 'package:xmruw/const/keyboard.dart';
+import 'package:xmruw/pages/pin_screen.dart';
 import 'package:flutter/material.dart';
 
 class SingleKey extends StatelessWidget {

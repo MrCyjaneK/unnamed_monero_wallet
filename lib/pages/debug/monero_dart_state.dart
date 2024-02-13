@@ -1,8 +1,9 @@
-import 'package:anonero/pages/wallet/transaction_list.dart';
-import 'package:anonero/tools/dirs.dart';
-import 'package:anonero/tools/monero/subaddress_label.dart';
-import 'package:anonero/tools/wallet_ptr.dart';
-import 'package:anonero/widgets/simple_expansion_tile.dart';
+import 'package:xmruw/pages/wallet/transaction_list.dart';
+import 'package:xmruw/tools/dirs.dart';
+import 'package:xmruw/tools/monero/subaddress_label.dart';
+import 'package:xmruw/tools/wallet_manager.dart';
+import 'package:xmruw/tools/wallet_ptr.dart';
+import 'package:xmruw/widgets/simple_expansion_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
 
@@ -198,13 +199,13 @@ class _MoneroDartStateState extends State<MoneroDartState> {
 // MONERO_WalletManager_createWallet({required String path, required String password, String language = "English", int networkType = 0}) → MONERO_wallet
 // MONERO_WalletManager_errorString() → String
             SET('MONERO_WalletManager_errorString',
-                MONERO_WalletManager_errorString()),
+                MONERO_WalletManager_errorString(wmPtr)),
 // MONERO_WalletManager_openWallet({required String path, required String password, int networkType = 0}) → MONERO_wallet
 // MONERO_WalletManager_recoveryWallet({required String path, required String password, required String mnemonic, int networkType = 0, required int restoreHeight, int kdfRounds = 0, required String seedOffset}) → MONERO_wallet
 // MONERO_WalletManager_setDaemonAddress(String address) → void
 // MONERO_WalletManager_walletExists(String path) → bool
             SET('MONERO_WalletManager_walletExists(await getMainWalletPath())',
-                MONERO_WalletManager_walletExists(mainWalletPath)),
+                MONERO_WalletManager_walletExists(wmPtr, mainWalletPath)),
           ],
         ),
       ),

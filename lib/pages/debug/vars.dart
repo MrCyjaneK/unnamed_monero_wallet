@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:anonero/tools/node.dart';
-import 'package:anonero/tools/proxy.dart';
+import 'package:xmruw/tools/node.dart';
+import 'package:xmruw/tools/proxy.dart';
 import 'package:flutter/material.dart';
 
 class VarsDebug extends StatefulWidget {

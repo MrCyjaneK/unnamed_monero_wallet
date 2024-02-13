@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:anonero/tools/show_alert.dart';
+import 'package:xmruw/tools/show_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 

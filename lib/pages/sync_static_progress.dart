@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:anonero/widgets/setup_logo.dart';
+import 'package:xmruw/widgets/setup_logo.dart';
 import 'package:flutter/material.dart';
 
 class SyncStaticProgress extends StatefulWidget {

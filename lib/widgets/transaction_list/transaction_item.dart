@@ -1,5 +1,5 @@
-import 'package:anonero/legacy.dart';
-import 'package:anonero/pages/wallet/transaction_details.dart';
+import 'package:xmruw/legacy.dart';
+import 'package:xmruw/pages/wallet/transaction_details.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:anonero/legacy.dart';
-import 'package:anonero/tools/dirs.dart';
-import 'package:anonero/tools/node.dart';
+import 'package:xmruw/legacy.dart';
+import 'package:xmruw/tools/dirs.dart';
+import 'package:xmruw/tools/node.dart';
 import 'package:mutex/mutex.dart';
 
 final _proxyStoreMutex = Mutex();

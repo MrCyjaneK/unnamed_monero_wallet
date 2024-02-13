@@ -1,6 +1,7 @@
-import 'package:anonero/tools/wallet_ptr.dart';
-import 'package:anonero/widgets/labeled_text_input.dart';
-import 'package:anonero/widgets/long_outlined_button.dart';
+import 'package:xmruw/tools/wallet_manager.dart';
+import 'package:xmruw/tools/wallet_ptr.dart';
+import 'package:xmruw/widgets/labeled_text_input.dart';
+import 'package:xmruw/widgets/long_outlined_button.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
 
@@ -21,7 +22,7 @@ class MoneroDartCore extends StatefulWidget {
 
 class _MoneroDartCoreState extends State<MoneroDartCore> {
   final pathCtrl = TextEditingController(
-    text: '/data/data/io.anonero.anonero/files/wallet',
+    text: '/data/data/net.mrcyjanek.xmruw/files/wallet',
   );
   final passwordCtrl = TextEditingController(text: 'test');
   final networkTypeCtrl = TextEditingController(text: '0');
@@ -32,6 +33,7 @@ class _MoneroDartCoreState extends State<MoneroDartCore> {
   void _call() {
     try {
       final p = MONERO_WalletManager_createWallet(
+        wmPtr,
         path: pathCtrl.text,
         password: passwordCtrl.text,
       );

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:anonero/tools/dirs.dart';
+import 'package:xmruw/tools/dirs.dart';
 import 'package:mutex/mutex.dart';
 
 enum NodeNetwork { clearnet, onion, i2p }

@@ -1,11 +1,11 @@
-import 'package:anonero/pages/setup/backup_restore.dart';
-import 'package:anonero/pages/setup/node_connection.dart';
-import 'package:anonero/tools/backup_class.dart';
-import 'package:anonero/tools/can_backup.dart';
-import 'package:anonero/tools/is_view_only.dart';
-import 'package:anonero/tools/show_alert.dart';
-import 'package:anonero/widgets/debug_icon_first_run.dart';
-import 'package:anonero/widgets/setup_logo.dart';
+import 'package:xmruw/pages/setup/backup_restore.dart';
+import 'package:xmruw/pages/setup/node_connection.dart';
+import 'package:xmruw/tools/backup_class.dart';
+import 'package:xmruw/tools/can_backup.dart';
+import 'package:xmruw/tools/is_view_only.dart';
+import 'package:xmruw/tools/show_alert.dart';
+import 'package:xmruw/widgets/debug_icon_first_run.dart';
+import 'package:xmruw/widgets/setup_logo.dart';
 import 'package:flutter/material.dart';
 
 // _restoreWallet -> BuildContext
@@ -36,7 +36,7 @@ class AnonFirstRun extends StatelessWidget {
             ),
           if (isNero)
             SetupOutlinedButton(
-              text: "RESTORE WALLET",
+              text: "ViewOnly",
               onPressed: () => _restoreWalletNero(context),
             ),
           const Spacer(flex: 3),

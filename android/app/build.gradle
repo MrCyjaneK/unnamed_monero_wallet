@@ -23,25 +23,31 @@ if (flutterVersionName == null) {
 }
 
 
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 android {
-    namespace "io.anonero.anonero"
+    namespace "net.mrcyjanek.xmruw"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
     flavorDimensions "default"
 
-    productFlavors {
-        anon {
-            dimension "default"
-            resValue "string", "app_name", "ANON"
-            applicationId "io.anonero.anon"
-        }
-        nero {
-            dimension "default"
-            resValue "string", "app_name", "NERO"
-            applicationId "io.anonero.nero"
-        }
-    }
+    // productFlavors {
+    //     anon {
+    //         dimension "default"
+    //         resValue "string", "app_name", "ANON"
+    //         applicationId "net.mrcyjanek.anon"
+    //     }
+    //     nero {
+    //         dimension "default"
+    //         resValue "string", "app_name", "NERO"
+    //         applicationId "net.mrcyjanek.nero"
+    //     }
+    // }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -58,7 +64,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "io.anonero.anonero"
+        applicationId "net.mrcyjanek.xmruw"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 21 // flutter.minSdkVersion
@@ -66,12 +72,20 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
-
+   signingConfigs {
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword keystoreProperties['storePassword']
+        }
+    }
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.release
         }
     }
 }

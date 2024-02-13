@@ -1,5 +1,5 @@
 name: Android Release
-run-name: Building Anonero for android
+run-name: Building xmruw for android
 on: 
   push:
     tags:
@@ -48,11 +48,12 @@ jobs:
             This is a **preview** release to be used by testers.
             It was build from **${{ gitea.ref }}** commit `${{ gitea.sha }}`
 
+            Please note that this app is being signed by a public private key in the release tab. Use f-droid repository for a secure download.
+
             ### Release info
             ${{ github.event.head_commit.message }}
           #name: "${{ gitea.reg_name }}-${{ gitea.sha }}"
           #tagname: "${{ gitea.reg_name }}-${{ gitea.sha }}"
           files: |-
-            ${{ gitea.workspace }}/build/app/outputs/flutter-apk/app-anon-release.apk
-            ${{ gitea.workspace }}/build/app/outputs/flutter-apk/app-nero-release.apk
-            ${{ gitea.workspace }}/build/linux/x64/release/anonero-linux-amd64.tar.xz
+            ${{ gitea.workspace }}/build/app/outputs/flutter-apk/app-release.apk
+            ${{ gitea.workspace }}/build/linux/x64/release/xmruw-linux-amd64.tar.xz

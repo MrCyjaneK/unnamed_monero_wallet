@@ -4,7 +4,7 @@ import 'package:path_provider/path_provider.dart';
 
 Future<Directory> getWd() async {
   if (Platform.isLinux) {
-    return Directory("${Platform.environment['HOME']}/.config/anonero");
+    return Directory("${Platform.environment['HOME']}/.config/xmruw");
   }
   return await getApplicationDocumentsDirectory();
 }

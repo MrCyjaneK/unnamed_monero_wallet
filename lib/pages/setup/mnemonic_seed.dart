@@ -1,7 +1,7 @@
-import 'package:anonero/pages/setup/passphrase_encryption.dart';
-import 'package:anonero/widgets/labeled_text_input.dart';
-import 'package:anonero/widgets/long_outlined_button.dart';
-import 'package:anonero/widgets/setup_logo.dart';
+import 'package:xmruw/pages/setup/passphrase_encryption.dart';
+import 'package:xmruw/widgets/labeled_text_input.dart';
+import 'package:xmruw/widgets/long_outlined_button.dart';
+import 'package:xmruw/widgets/setup_logo.dart';
 import 'package:flutter/material.dart';
 
 class MnemonicSeed extends StatefulWidget {

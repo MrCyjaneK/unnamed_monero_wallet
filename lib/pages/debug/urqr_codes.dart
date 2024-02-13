@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:anonero/widgets/labeled_text_input.dart';
-import 'package:anonero/widgets/long_outlined_button.dart';
-import 'package:anonero/widgets/urqr.dart';
+import 'package:xmruw/widgets/labeled_text_input.dart';
+import 'package:xmruw/widgets/long_outlined_button.dart';
+import 'package:xmruw/widgets/urqr.dart';
 import 'package:bytewords/bytewords.dart';
 import 'package:flutter/material.dart';
 
