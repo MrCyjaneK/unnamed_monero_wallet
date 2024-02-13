@@ -35,7 +35,7 @@ class _TransactionListState extends State<TransactionList> {
   Timer? refresh;
   @override
   void initState() {
-    refresh = Timer.periodic(const Duration(seconds: 1), _timerCallback);
+    refresh = Timer.periodic(const Duration(seconds: 15), _timerCallback);
     _timerCallback(refresh!);
     super.initState();
   }
@@ -169,7 +169,7 @@ class _SyncProgressState extends State<SyncProgress> {
   @override
   void initState() {
     _refreshState();
-    refreshTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    refreshTimer = Timer.periodic(const Duration(seconds: 15), (timer) {
       if (!mounted) return;
       _refreshState();
     });

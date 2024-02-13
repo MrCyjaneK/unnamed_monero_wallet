@@ -25,7 +25,7 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
   );
 
   void _refreshAddr() {
-    Timer.periodic(const Duration(seconds: 1), (timer) {
+    Timer.periodic(const Duration(seconds: 15), (timer) {
       if (!mounted) return;
       final ns = MONERO_Wallet_numSubaddresses(walletPtr!, accountIndex: 0);
       if (ns == currentAddressIndex) return;
