@@ -10,6 +10,7 @@ import 'package:xmruw/tools/format_monero.dart';
 import 'package:xmruw/tools/is_offline.dart';
 import 'package:xmruw/tools/is_view_only.dart';
 import 'package:xmruw/tools/show_alert.dart';
+import 'package:xmruw/tools/wallet_lock.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/transaction_list/popup_menu.dart';
 import 'package:xmruw/widgets/transaction_list/transaction_item.dart';
@@ -35,13 +36,14 @@ class _TransactionListState extends State<TransactionList> {
   Timer? refresh;
   @override
   void initState() {
-    refresh = Timer.periodic(const Duration(seconds: 15), _timerCallback);
+    refresh = Timer.periodic(const Duration(seconds: 1), _timerCallback);
     _timerCallback(refresh!);
     super.initState();
   }
 
   void _timerCallback(Timer timer) {
     _synchronized();
+    if (!synchronized) return;
     if (!mounted) return;
     final newElms = _buildTxList();
     if (newElms.length != transactionCount) {
@@ -116,9 +118,18 @@ class _TransactionListState extends State<TransactionList> {
         automaticallyImplyLeading: false,
         title: SelectableText(isViewOnly ? nero : anon),
         actions: [
-          IconButton(
-            onPressed: synchronized || isOffline ? _lockWallet : null,
-            icon: const Icon(Icons.lock),
+          Stack(
+            children: [
+              CircularProgressIndicator(
+                value:
+                    DateTime.now().difference(lastClick).inSeconds / lockAfter,
+                strokeWidth: 0.25,
+              ),
+              IconButton(
+                onPressed: _lockWallet,
+                icon: const Icon(Icons.lock),
+              ),
+            ],
           ),
           IconButton(
               onPressed: () => BaseScannerPage.push(context),
@@ -127,10 +138,14 @@ class _TransactionListState extends State<TransactionList> {
         ],
       ),
       body: ListView.builder(
-        itemCount: txList.length + 2,
+        itemCount: !synchronized ? 3 : txList.length + 2,
         itemBuilder: (context, index) {
           if (index == 0) return const LargeBalanceWidget();
           if (index == 1) return const SyncProgress();
+          if (index == 2 && !synchronized) {
+            return const SelectableText(
+                "BUGFIX: Due to reasons unknown to me wallet sometimes crash during sync if it loads tx history, so tx history will be shown once wallet is fully loaded.\nNOTE: This also speeds up sync times.");
+          }
           return TransactionItem(transaction: txList[index - 2]);
         },
       ),
@@ -169,7 +184,7 @@ class _SyncProgressState extends State<SyncProgress> {
   @override
   void initState() {
     _refreshState();
-    refreshTimer = Timer.periodic(const Duration(seconds: 15), (timer) {
+    refreshTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (!mounted) return;
       _refreshState();
     });

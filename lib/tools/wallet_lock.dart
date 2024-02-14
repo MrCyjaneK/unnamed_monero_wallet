@@ -8,9 +8,9 @@ import 'package:monero/monero.dart';
 
 DateTime lastClick = DateTime.now();
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
+const lockAfter = 5 * 60;
 void lockIfShould() {
-  if (DateTime.now().difference(lastClick).inSeconds <= 5 * 60) {
+  if (DateTime.now().difference(lastClick).inSeconds <= lockAfter) {
     return;
   }
   if (isLocked) return;
