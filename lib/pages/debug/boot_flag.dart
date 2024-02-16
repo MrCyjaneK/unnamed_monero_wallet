@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:xmruw/main.dart';
+import 'package:xmruw/main_clean.dart';
 import 'package:xmruw/tools/dirs.dart';
 import 'package:xmruw/widgets/long_outlined_button.dart';
 import 'package:flutter/material.dart';

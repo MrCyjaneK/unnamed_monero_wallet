@@ -50,10 +50,13 @@ jobs:
 
             Please note that this app is being signed by a public private key in the release tab. Use f-droid repository for a secure download.
 
+            - `app-calc-release.apk` is the stealth mode version of the app [Wiki](https://git.mrcyjanek.net/mrcyjanek/unnamed_monero_wallet/wiki/Stealth-Mode-%28calculator%29)
+            - `app-clean-release.apk` is the normal, clean xmruw
+
             ### Release info
             ${{ github.event.head_commit.message }}
           #name: "${{ gitea.reg_name }}-${{ gitea.sha }}"
           #tagname: "${{ gitea.reg_name }}-${{ gitea.sha }}"
           files: |-
-            ${{ gitea.workspace }}/build/app/outputs/flutter-apk/app-release.apk
+            ${{ gitea.workspace }}/build/app/outputs/flutter-apk/app-calc-release.apk
             ${{ gitea.workspace }}/build/linux/x64/release/xmruw-linux-amd64.tar.xz

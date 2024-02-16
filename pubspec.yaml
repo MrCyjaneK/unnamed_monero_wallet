@@ -41,6 +41,9 @@ dependencies:
   flutter_background_service_android: 6.0.1
   flutter_local_notifications: 16.1.0
   permission_handler: ^11.1.0
+  libstealth_calculator:
+    hosted: https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
+    version: 0.0.2
 
 
 dev_dependencies:
@@ -81,6 +84,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/logo.png
+    - assets/logo_calc.png
     - assets/fonts/RobotoMono.ttf
     - assets/scanner_frame.svg
     - assets/nodes.txt

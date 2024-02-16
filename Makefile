@@ -1,6 +1,7 @@
 .PHONY: apk
 apk:
-	flutter build apk
+	flutter build apk --flavor calc  --dart-define=libstealth_calculator=true
+	flutter build apk --flavor clean --dart-define=libstealth_calculator=false
 
 .PHONY: linux
 linux: 

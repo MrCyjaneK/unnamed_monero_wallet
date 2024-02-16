@@ -36,18 +36,24 @@ android {
 
     flavorDimensions "default"
 
-    // productFlavors {
-    //     anon {
-    //         dimension "default"
-    //         resValue "string", "app_name", "ANON"
-    //         applicationId "net.mrcyjanek.anon"
-    //     }
-    //     nero {
-    //         dimension "default"
-    //         resValue "string", "app_name", "NERO"
-    //         applicationId "net.mrcyjanek.nero"
-    //     }
-    // }
+    productFlavors {
+        clean {
+            dimension "default"
+            resValue "string", "app_name", "xmruw"
+            applicationId "net.mrcyjanek.xmruw"
+            manifestPlaceholders = [
+                appIcon: "@mipmap/ic_launcher"
+            ]
+        }
+        calc {
+            dimension "default"
+            resValue "string", "app_name", "Calculator"
+            applicationId "net.mrcyjanek.calculator"
+            manifestPlaceholders = [
+                appIcon: "@mipmap/ic_launcher_calc"
+            ]
+        }
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

@@ -138,14 +138,14 @@ class _TransactionListState extends State<TransactionList> {
         ],
       ),
       body: ListView.builder(
-        itemCount: !synchronized ? 3 : txList.length + 2,
+        itemCount: /* !synchronized ? 3 : */ txList.length + 2,
         itemBuilder: (context, index) {
           if (index == 0) return const LargeBalanceWidget();
           if (index == 1) return const SyncProgress();
-          if (index == 2 && !synchronized) {
-            return const SelectableText(
-                "BUGFIX: Due to reasons unknown to me wallet sometimes crash during sync if it loads tx history, so tx history will be shown once wallet is fully loaded.\nNOTE: This also speeds up sync times.");
-          }
+          // if (index == 2 && !synchronized) {
+          //   return const SelectableText(
+          //       "BUGFIX: Due to reasons unknown to me wallet sometimes crash during sync if it loads tx history, so tx history will be shown once wallet is fully loaded.\nNOTE: This also speeds up sync times.");
+          // }
           return TransactionItem(transaction: txList[index - 2]);
         },
       ),

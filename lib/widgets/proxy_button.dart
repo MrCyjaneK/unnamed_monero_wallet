@@ -1,4 +1,4 @@
-import 'package:xmruw/main.dart';
+import 'package:xmruw/main_clean.dart';
 import 'package:xmruw/pages/setup/proxy_settings.dart';
 import 'package:flutter/material.dart';
 

@@ -5,7 +5,7 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:xmruw/legacy.dart';
-import 'package:xmruw/main.dart';
+import 'package:xmruw/main_clean.dart';
 import 'package:xmruw/pages/debug.dart';
 import 'package:xmruw/pages/debug/monero_log_level.dart';
 import 'package:xmruw/pages/setup/passphrase_encryption.dart';
