@@ -59,4 +59,5 @@ jobs:
           #tagname: "${{ gitea.reg_name }}-${{ gitea.sha }}"
           files: |-
             ${{ gitea.workspace }}/build/app/outputs/flutter-apk/app-calc-release.apk
+            ${{ gitea.workspace }}/build/app/outputs/flutter-apk/app-clean-release.apk
             ${{ gitea.workspace }}/build/linux/x64/release/xmruw-linux-amd64.tar.xz
