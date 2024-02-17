@@ -3,6 +3,7 @@ import 'package:xmruw/pages/wallet/spend_confirm.dart';
 import 'package:xmruw/tools/format_monero.dart';
 import 'package:xmruw/tools/is_offline.dart';
 import 'package:xmruw/tools/show_alert.dart';
+import 'package:xmruw/tools/wallet_manager.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/labeled_text_input.dart';
 import 'package:xmruw/widgets/long_outlined_button.dart';
@@ -153,11 +154,27 @@ class _SpendScreenState extends State<SpendScreen> {
       Alert(title: "Invalid amount", cancelable: true).show(context);
       return;
     }
+    String address = addressCtrl.text;
+    final addrUri = Uri.tryParse(address);
+    if (addrUri != null) {
+      address = MONERO_WalletManager_resolveOpenAlias(
+        wmPtr,
+        address: address,
+        dnssecValid: false,
+      );
+      final errstr = MONERO_WalletManager_errorString(wmPtr);
+      if (address.isEmpty) {
+        Alert(title: 'Unresolvable OpenAlias\n$errstr', cancelable: true)
+            .show(context);
+        return;
+      }
+    }
+
     final amtInt = (amtNum * 1e12) ~/ 1;
     SpendConfirm.push(
       context,
       TxRequest(
-        address: addressCtrl.text,
+        address: address,
         amount: amtInt,
         notes: notesCtrl.text,
         isSweep: sweepAll,

@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "clean",
+        "request": "launch",
+        "type": "dart",
+        "program": "lib/main.dart",
+        "args": ["--flavor", "clean", "--dart-define=libstealth_calculator=false" ]
+      },
+      {
+        "name": "calc",
+        "request": "launch",
+        "type": "dart",
+        "program": "lib/main.dart",
+        "args": ["--flavor", "calc", "--dart-define=libstealth_calculator=true" ]
+      },
+    ],
+    "compounds": []
+  }

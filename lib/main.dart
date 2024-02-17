@@ -19,7 +19,7 @@ void main() async {
     runApp(StealthHomeScreenCalculator(
       onSecretGiven: (String secret) async {
         if (!walletExists && secret.endsWith("123")) {
-          main_clean();
+          mainClean();
           return;
         } else {
           if (!walletExists) return;
@@ -31,13 +31,13 @@ void main() async {
             kdfRounds: 1,
           );
           if (!pwd) return;
-          main_clean();
+          mainClean();
         }
 
         return;
       },
     ));
   } else {
-    main_clean();
+    mainClean();
   }
 }
