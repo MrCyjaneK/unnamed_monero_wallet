@@ -18,7 +18,7 @@ class LongOutlinedButton extends StatelessWidget {
         children: [
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.only(top: 8, left: 16, right: 24),
               child: OutlinedButton(
                 style: OutlinedButton.styleFrom(
                   side: const BorderSide(width: 1.0, color: Colors.white),

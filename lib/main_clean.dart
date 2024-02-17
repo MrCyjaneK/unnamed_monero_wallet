@@ -5,7 +5,6 @@ import 'package:xmruw/const/resource.g.dart';
 import 'package:xmruw/pages/anon/firstrun.dart';
 import 'package:xmruw/pages/pin_screen.dart';
 import 'package:xmruw/tools/dirs.dart';
-import 'package:xmruw/tools/load_perf_data.dart';
 import 'package:xmruw/tools/node.dart';
 import 'package:xmruw/tools/wallet_lock.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +19,6 @@ void mainClean() async {
   WidgetsFlutterBinding.ensureInitialized();
   final wd = await getWd();
   if (!wd.existsSync()) wd.createSync();
-  await loadPerfData();
   initLocalNodes();
   // printStarts = true;
   _walletExists =

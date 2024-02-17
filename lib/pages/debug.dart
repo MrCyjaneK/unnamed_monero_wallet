@@ -27,78 +27,81 @@ class DebugPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("D38UG"),
       ),
-      body: Column(
-        children: [
-          LongOutlinedButton(
-            text: "LOButton x LTextField",
-            onPressed: () => ButtonTextFieldDebug.push(context),
-          ),
-          LongOutlinedButton(
-            text: "monero.dart core",
-            onPressed:
-                walletPtr == null ? () => MoneroDartCore.push(context) : null,
-          ),
-          LongOutlinedButton(
-            text: "monero.dart state",
-            onPressed:
-                walletPtr == null ? null : () => MoneroDartState.push(context),
-          ),
-          LongOutlinedButton(
-            text: "monero.dart advanced",
-            onPressed: walletPtr == null
-                ? null
-                : () => MoneroDartAdvancedDebug.push(context),
-          ),
-          LongOutlinedButton(
-            text: "monero logs",
-            onPressed: () => MoneroLogDebug.push(context),
-          ),
-          LongOutlinedButton(
-            text: "monero loglevel",
-            onPressed: walletPtr == null
-                ? () => MoneroLogLevelDebug.push(context)
-                : null,
-          ),
-          LongOutlinedButton(
-            text: "Boot flags",
-            onPressed: () => BootFlagDebug.push(context),
-          ),
-          LongOutlinedButton(
-            text: "Performance",
-            onPressed: () => PerformanceDebug.push(context),
-          ),
-          LongOutlinedButton(
-            text: "Mobile_scanner",
-            onPressed: (!Platform.isAndroid)
-                ? null
-                : () => MobileScannerDebug.push(context),
-          ),
-          LongOutlinedButton(
-            text: "URQR",
-            onPressed: (!Platform.isAndroid)
-                ? null
-                : () => URQRCodeDebug.push(context),
-          ),
-          LongOutlinedButton(
-            text: "Backup",
-            onPressed: (!Platform.isAndroid)
-                ? null
-                : () => BackupTestDebug.push(context),
-          ),
-          if (kDebugMode)
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
             LongOutlinedButton(
-              text: "Tor test debug",
+              text: "LOButton x LTextField",
+              onPressed: () => ButtonTextFieldDebug.push(context),
+            ),
+            LongOutlinedButton(
+              text: "monero.dart core",
+              onPressed:
+                  walletPtr == null ? () => MoneroDartCore.push(context) : null,
+            ),
+            LongOutlinedButton(
+              text: "monero.dart state",
+              onPressed: walletPtr == null
+                  ? null
+                  : () => MoneroDartState.push(context),
+            ),
+            LongOutlinedButton(
+              text: "monero.dart advanced",
+              onPressed: walletPtr == null
+                  ? null
+                  : () => MoneroDartAdvancedDebug.push(context),
+            ),
+            LongOutlinedButton(
+              text: "monero logs",
+              onPressed: () => MoneroLogDebug.push(context),
+            ),
+            LongOutlinedButton(
+              text: "monero loglevel",
+              onPressed: walletPtr == null
+                  ? () => MoneroLogLevelDebug.push(context)
+                  : null,
+            ),
+            LongOutlinedButton(
+              text: "Boot flags",
+              onPressed: () => BootFlagDebug.push(context),
+            ),
+            LongOutlinedButton(
+              text: "Performance",
+              onPressed: () => PerformanceDebug.push(context),
+            ),
+            LongOutlinedButton(
+              text: "Mobile_scanner",
               onPressed: (!Platform.isAndroid)
                   ? null
-                  : () => TorTestDebug.push(context),
+                  : () => MobileScannerDebug.push(context),
             ),
-          LongOutlinedButton(
-            text: "Battery Optimization",
-            onPressed: (!Platform.isAndroid)
-                ? null
-                : () => BatteryOptimizationDebug.push(context),
-          ),
-        ],
+            LongOutlinedButton(
+              text: "URQR",
+              onPressed: (!Platform.isAndroid)
+                  ? null
+                  : () => URQRCodeDebug.push(context),
+            ),
+            LongOutlinedButton(
+              text: "Backup",
+              onPressed: (!Platform.isAndroid)
+                  ? null
+                  : () => BackupTestDebug.push(context),
+            ),
+            if (kDebugMode)
+              LongOutlinedButton(
+                text: "Tor test debug",
+                onPressed: (!Platform.isAndroid)
+                    ? null
+                    : () => TorTestDebug.push(context),
+              ),
+            LongOutlinedButton(
+              text: "Battery Optimization",
+              onPressed: (!Platform.isAndroid)
+                  ? null
+                  : () => BatteryOptimizationDebug.push(context),
+            ),
+          ],
+        ),
       ),
     );
   }

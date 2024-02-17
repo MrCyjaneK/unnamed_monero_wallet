@@ -25,10 +25,6 @@ Future<String> getMaterial3FlagFile() async {
   return "${(await getWd()).path}/material3-flag";
 }
 
-Future<String> getPerformanceStoreFile() async {
-  return "${(await getWd()).path}/perfmon.json";
-}
-
 Future<String> getShowPerformanceOverlayFlagFile() async {
   return "${(await getWd()).path}/performance-overlay-flag";
 }
@@ -71,4 +67,8 @@ Future<String> getTempBackupPath() async {
 
 Future<String> getWalletPointerAddrPath() async {
   return "${(await getWd()).path}/ptr_addr";
+}
+
+Future<String> getConfigFile() async {
+  return "${(await getWd()).path}/config.json";
 }

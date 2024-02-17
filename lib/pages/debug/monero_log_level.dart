@@ -1,7 +1,7 @@
 import 'package:xmruw/widgets/long_outlined_button.dart';
 import 'package:flutter/material.dart';
 
-int logLevel = 1;
+int logLevel = 0;
 
 class MoneroLogLevelDebug extends StatefulWidget {
   const MoneroLogLevelDebug({super.key});

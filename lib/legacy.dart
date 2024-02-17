@@ -6,6 +6,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:xmruw/const/app_name.dart';
+import 'package:xmruw/main_clean.dart';
 import 'package:xmruw/pages/pin_screen.dart';
 import 'package:xmruw/tools/dirs.dart';
 import 'package:xmruw/tools/node.dart';
@@ -153,12 +154,17 @@ Future<void> runEmbeddedTor() async {
     print("Not starting embedded Tor - we are not on android");
     return;
   }
+
   final docs = await getWd();
   const port = 42142;
 
   final node = await NodeStore.getCurrentNode();
-  if ((node?.address.contains('.i2p:') == true)) {
+  if ((node?.address.contains('.i2p:') == true) || node == null) {
     print("We are connected to i2p (or not at all), ignoring tor config.");
+    return;
+  }
+  if (disableProxy) {
+    print("disableProxy flag found, not starting tor");
     return;
   }
   // final torBinPath = p.join(

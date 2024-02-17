@@ -1,9 +1,12 @@
 import 'dart:io';
 
+import 'package:xmruw/pages/crypto/crypto.dart';
 import 'package:xmruw/pages/sync_static_progress.dart';
 import 'package:xmruw/pages/ur_broadcast.dart';
 import 'package:xmruw/pages/wallet/settings_page.dart';
 import 'package:xmruw/tools/dirs.dart';
+import 'package:xmruw/tools/is_offline.dart';
+import 'package:xmruw/tools/is_view_only.dart';
 import 'package:xmruw/tools/show_alert.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/urqr.dart';
@@ -163,13 +166,19 @@ class TxListPopupMenu extends StatelessWidget {
         _signTx(c);
       case TxListPopupAction.settings:
         _openSettings(c);
+      case TxListPopupAction.crypto:
+        _openCrypto(c);
       default:
         Alert(title: "$action").show(c);
     }
   }
 
-  void _openSettings(c) {
+  void _openSettings(BuildContext c) {
     SettingsPage.push(c);
+  }
+
+  void _openCrypto(BuildContext c) {
+    CryptoStuff.push(c);
   }
 
   void _broadcastTx(BuildContext c) async {
@@ -206,12 +215,12 @@ class TxListPopupMenu extends StatelessWidget {
 
   final enabledActions = [
     TxListPopupAction.resync,
-    TxListPopupAction.exportKeyImages,
-    TxListPopupAction.exportOutputs,
-    TxListPopupAction.broadcastTx,
-    TxListPopupAction.signTx,
-    TxListPopupAction.importOutputs,
-    TxListPopupAction.coinControl,
+    if (isOffline) TxListPopupAction.exportKeyImages,
+    if (isViewOnly) TxListPopupAction.exportOutputs,
+    if (isViewOnly) TxListPopupAction.broadcastTx,
+    if (isOffline) TxListPopupAction.signTx,
+    if (isOffline) TxListPopupAction.importOutputs,
+    TxListPopupAction.crypto,
     TxListPopupAction.settings
   ];
 
@@ -255,7 +264,13 @@ class TxListPopupMenu extends StatelessWidget {
           child: Text('Coin Control'),
         ),
       TxListPopupAction.settings => const PopupMenuItem<TxListPopupAction>(
-          value: TxListPopupAction.settings, child: Text("Settings")),
+          value: TxListPopupAction.settings,
+          child: Text("Settings"),
+        ),
+      TxListPopupAction.crypto => const PopupMenuItem<TxListPopupAction>(
+          value: TxListPopupAction.crypto,
+          child: Text("Sign/Verify"),
+        ),
     };
   }
 }
@@ -269,4 +284,5 @@ enum TxListPopupAction {
   importOutputs,
   coinControl,
   settings,
+  crypto
 }

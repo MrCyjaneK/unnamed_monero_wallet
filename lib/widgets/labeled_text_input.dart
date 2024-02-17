@@ -46,7 +46,7 @@ class LabeledTextInput extends StatelessWidget {
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(8),
             borderSide: const BorderSide(color: Colors.white, width: 1),
           ),
           helperText: helperText,

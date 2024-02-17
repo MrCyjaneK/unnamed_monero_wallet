@@ -17,10 +17,7 @@ class ButtonTextFieldDebug extends StatelessWidget {
         children: [
           const Divider(),
           const SelectableText("Exhibit 1. LongOutlinedButton"),
-          const Padding(
-            padding: EdgeInsets.only(top: 4),
-            child: LongOutlinedButton(text: "THIS IS A BUTTON"),
-          ),
+          const LongOutlinedButton(text: "THIS IS A BUTTON"),
           const Divider(),
           const SelectableText("Exhibit 2. LabeledTextInput"),
           LabeledTextInput(label: null, ctrl: teCtrl),
@@ -28,10 +25,7 @@ class ButtonTextFieldDebug extends StatelessWidget {
           const SelectableText("Exhibit 3. Stack(LOB, LTI)"),
           Stack(
             children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 4),
-                child: LongOutlinedButton(text: "THIS IS A BUTTON"),
-              ),
+              const LongOutlinedButton(text: "THIS IS A BUTTON"),
               LabeledTextInput(label: null, ctrl: teCtrl),
             ],
           ),
@@ -40,16 +34,9 @@ class ButtonTextFieldDebug extends StatelessWidget {
           Stack(
             children: [
               LabeledTextInput(label: null, ctrl: teCtrl),
-              const Padding(
-                padding: EdgeInsets.only(top: 4),
-                child: LongOutlinedButton(text: "THIS IS A BUTTON"),
-              ),
+              const LongOutlinedButton(text: "THIS IS A BUTTON"),
             ],
           ),
-          const SelectableText(
-            'NOTE: A little padding is applied to make the top of '
-            'LTI be the same level as LOB (4px)',
-          )
         ],
       ),
     );

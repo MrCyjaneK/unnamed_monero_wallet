@@ -368,16 +368,16 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
     final Node? node = (await NodeStore.getCurrentNode());
     final ProxyStore proxy = (await ProxyStore.getProxy());
     MONERO_WalletManagerFactory_setLogLevel(logLevel);
+    final proxyAddress = proc == null
+        ? ((node == null || disableProxy) ? "" : proxy.getAddress(node.network))
+        : "127.0.0.1:42142";
+    print("proxyAddress: $proxyAddress");
     MONERO_Wallet_init(
       walletPtr!,
       daemonAddress: node?.address ?? "",
       daemonUsername: node?.username ?? "",
       daemonPassword: node?.password ?? "",
-      proxyAddress: proc == null
-          ? ((node == null || disableProxy)
-              ? ""
-              : proxy.getAddress(node.network))
-          : "127.0.0.1:42142",
+      proxyAddress: proxyAddress,
     );
     File(await getWalletPointerAddrPath()).writeAsString(
       walletPtr!.address.toString(),
@@ -386,11 +386,7 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
       "daemonAddress": node?.address ?? "",
       "daemonUsername": node?.username ?? "",
       "daemonPassword": node?.password ?? "",
-      "proxyAddress": proc == null
-          ? ((node == null || disableProxy)
-              ? ""
-              : proxy.getAddress(node.network))
-          : "127.0.0.1:42142"
+      "proxyAddress": proxyAddress
     }));
     MONERO_WalletManagerFactory_setLogLevel(logLevel);
     MONERO_Wallet_init3(walletPtr!,
