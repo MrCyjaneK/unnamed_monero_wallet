@@ -10,6 +10,7 @@ import 'package:xmruw/pages/wallet/configuration_page.dart';
 import 'package:xmruw/tools/backup_class.dart' as b;
 import 'package:xmruw/tools/can_backup.dart';
 import 'package:xmruw/tools/dirs.dart';
+import 'package:xmruw/tools/monero/account_index.dart';
 import 'package:xmruw/tools/node.dart';
 import 'package:xmruw/tools/proxy.dart';
 import 'package:xmruw/tools/show_alert.dart';
@@ -154,10 +155,11 @@ class SettingsPage extends StatelessWidget {
             address: MONERO_Wallet_address(walletPtr!),
             seed: MONERO_Wallet_seed(walletPtr!, seedOffset: seedOffset),
             restoreHeight: MONERO_Wallet_getRefreshFromBlockHeight(walletPtr!),
-            balanceAll: MONERO_Wallet_balance(walletPtr!, accountIndex: 0),
+            balanceAll: MONERO_Wallet_balance(walletPtr!,
+                accountIndex: globalAccountIndex),
             numAccounts: MONERO_Wallet_numSubaddressAccounts(walletPtr!),
-            numSubaddresses:
-                MONERO_Wallet_numSubaddresses(walletPtr!, accountIndex: 0),
+            numSubaddresses: MONERO_Wallet_numSubaddresses(walletPtr!,
+                accountIndex: globalAccountIndex),
             isWatchOnly: false, // v1 doesn't care. We can work both ways.
             isSynchronized: false, // this file was literally kept offline?
           ),

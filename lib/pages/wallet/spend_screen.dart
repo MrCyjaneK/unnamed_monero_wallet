@@ -2,6 +2,7 @@ import 'package:xmruw/pages/scanner/base_scan.dart';
 import 'package:xmruw/pages/wallet/spend_confirm.dart';
 import 'package:xmruw/tools/format_monero.dart';
 import 'package:xmruw/tools/is_offline.dart';
+import 'package:xmruw/tools/monero/account_index.dart';
 import 'package:xmruw/tools/show_alert.dart';
 import 'package:xmruw/tools/wallet_manager.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
@@ -54,8 +55,8 @@ class _SpendScreenState extends State<SpendScreen> {
   void _loadBalance() {
     if (widget.outputs.isEmpty) {
       setState(() {
-        availableBalance =
-            MONERO_Wallet_unlockedBalance(walletPtr!, accountIndex: 0);
+        availableBalance = MONERO_Wallet_unlockedBalance(walletPtr!,
+            accountIndex: globalAccountIndex);
       });
       return;
     }
@@ -82,8 +83,8 @@ class _SpendScreenState extends State<SpendScreen> {
     }
   }
 
-  final viewOnlyBalance =
-      MONERO_Wallet_viewOnlyBalance(walletPtr!, accountIndex: 0);
+  final viewOnlyBalance = MONERO_Wallet_viewOnlyBalance(walletPtr!,
+      accountIndex: globalAccountIndex);
 
   final hasUnknownKeyImages = MONERO_Wallet_hasUnknownKeyImages(walletPtr!);
 

@@ -1,4 +1,5 @@
 import 'package:xmruw/pages/wallet/subaddress_page.dart';
+import 'package:xmruw/tools/monero/account_index.dart';
 import 'package:xmruw/tools/monero/subaddress_label.dart';
 import 'package:xmruw/tools/show_alert.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
@@ -63,7 +64,7 @@ class _SubaddressDetailsPageState extends State<SubaddressDetailsPage> {
       callback: () {
         MONERO_Wallet_setSubaddressLabel(
           walletPtr!,
-          accountIndex: 0,
+          accountIndex: globalAccountIndex,
           addressIndex: widget.subaddressId,
           label: renameCtrl.text,
         );

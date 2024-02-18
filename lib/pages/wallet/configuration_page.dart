@@ -108,6 +108,16 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
               },
               value: config.showPerformanceOverlay,
             ),
+            ConfigElement(
+              text: "experimentalAccounts",
+              description: "",
+              onClick: () {
+                config.experimentalAccounts = !config.experimentalAccounts;
+                config.save();
+                setState(() {});
+              },
+              value: config.experimentalAccounts,
+            ),
           ],
         ),
       ),

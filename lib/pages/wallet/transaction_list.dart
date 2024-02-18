@@ -10,9 +10,11 @@ import 'package:xmruw/pages/wallet/outputs_page.dart';
 import 'package:xmruw/tools/format_monero.dart';
 import 'package:xmruw/tools/is_offline.dart';
 import 'package:xmruw/tools/is_view_only.dart';
+import 'package:xmruw/tools/monero/account_index.dart';
 import 'package:xmruw/tools/show_alert.dart';
 import 'package:xmruw/tools/wallet_lock.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
+import 'package:xmruw/widgets/long_outlined_button.dart';
 import 'package:xmruw/widgets/transaction_list/popup_menu.dart';
 import 'package:xmruw/widgets/transaction_list/transaction_item.dart';
 import 'package:flutter/foundation.dart';
@@ -116,13 +118,51 @@ class _TransactionListState extends State<TransactionList> {
 
   bool synchronized = MONERO_Wallet_synchronized(walletPtr!);
 
+  Widget? _drawer() {
+    if (config.experimentalAccounts == false) return null;
+    // if (MONERO_Wallet_numSubaddressAccounts(walletPtr!) == 1) return null;
+    final count = MONERO_Wallet_numSubaddressAccounts(walletPtr!);
+    return Drawer(
+      child: SafeArea(
+        child: ListView.builder(
+          itemCount: count + 1,
+          itemBuilder: (context, index) {
+            final balance = MONERO_Wallet_balance(
+              walletPtr!,
+              accountIndex: index,
+            );
+            if (index == count) {
+              return LongOutlinedButton(
+                text: "Add another",
+                onPressed: () {
+                  setState(() {});
+                  MONERO_Wallet_addSubaddressAccount(walletPtr!);
+                },
+              );
+            }
+            return LongOutlinedButton(
+              text: "#$index. ${formatMonero(balance)}",
+              textAlign: TextAlign.start,
+              onPressed: () {
+                globalAccountIndex = index;
+                setState(() {
+                  txList = _buildTxList();
+                });
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: LinearProgressIndicator(
             value: DateTime.now().difference(lastClick).inSeconds / lockAfter),
-        automaticallyImplyLeading: false,
+        // automaticallyImplyLeading: false,
         title: SelectableText(isViewOnly ? nero : anon),
         actions: [
           IconButton(
@@ -135,15 +175,13 @@ class _TransactionListState extends State<TransactionList> {
           TxListPopupMenu()
         ],
       ),
+      drawer: _drawer(),
       body: ListView.builder(
         itemCount: /* !synchronized ? 3 : */ txList.length + 2,
         itemBuilder: (context, index) {
           if (index == 0) return const LargeBalanceWidget();
           if (index == 1) return const SyncProgress();
-          // if (index == 2 && !synchronized) {
-          //   return const SelectableText(
-          //       "BUGFIX: Due to reasons unknown to me wallet sometimes crash during sync if it loads tx history, so tx history will be shown once wallet is fully loaded.\nNOTE: This also speeds up sync times.");
-          // }
+          // if (txList[index -2 ])
           return TransactionItem(transaction: txList[index - 2]);
         },
       ),
@@ -152,6 +190,7 @@ class _TransactionListState extends State<TransactionList> {
 
   List<Transaction> _buildTxList() {
     MONERO_TransactionHistory_refresh(txHistoryPtr);
+    transactionCount = MONERO_TransactionHistory_count(txHistoryPtr);
     final txList = List.generate(
       transactionCount,
       (index) => Transaction(
@@ -161,6 +200,7 @@ class _TransactionListState extends State<TransactionList> {
     );
     txList
         .sort((tx1, tx2) => tx2.timeStamp.difference(tx1.timeStamp).inSeconds);
+    txList.removeWhere((element) => element.accountIndex != globalAccountIndex);
     return txList.toList();
   }
 }
@@ -281,7 +321,8 @@ class LargeBalanceWidget extends StatefulWidget {
 }
 
 class _LargeBalanceWidgetState extends State<LargeBalanceWidget> {
-  int balance = MONERO_Wallet_unlockedBalance(walletPtr!, accountIndex: 0);
+  int balance = MONERO_Wallet_unlockedBalance(walletPtr!,
+      accountIndex: globalAccountIndex);
 
   @override
   void initState() {
@@ -300,7 +341,8 @@ class _LargeBalanceWidgetState extends State<LargeBalanceWidget> {
     //   bal += MONERO_Wallet_balance(walletPtr!, accountIndex: 0);
     // }
     setState(() {
-      balance = MONERO_Wallet_unlockedBalance(walletPtr!, accountIndex: 0);
+      balance = MONERO_Wallet_unlockedBalance(walletPtr!,
+          accountIndex: globalAccountIndex);
     });
   }
 

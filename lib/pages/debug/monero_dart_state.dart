@@ -1,5 +1,6 @@
 import 'package:xmruw/pages/wallet/transaction_list.dart';
 import 'package:xmruw/tools/dirs.dart';
+import 'package:xmruw/tools/monero/account_index.dart';
 import 'package:xmruw/tools/monero/subaddress_label.dart';
 import 'package:xmruw/tools/wallet_manager.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
@@ -72,31 +73,31 @@ class _MoneroDartStateState extends State<MoneroDartState> {
 // MONERO_TransactionInfo_timestamp(MONERO_TransactionInfo pendingTx_ptr) → int
 // MONERO_TransactionInfo_unlockTime(MONERO_TransactionInfo pendingTx_ptr) → int
             SET(
-                'MONERO_Wallet_address(0,0)',
+                'MONERO_Wallet_address($globalAccountIndex,0)',
                 MONERO_Wallet_address(walletPtr!,
-                    accountIndex: 0, addressIndex: 0)),
+                    accountIndex: globalAccountIndex, addressIndex: 0)),
             SET(
-                'MONERO_Wallet_address(0,1)',
+                'MONERO_Wallet_address($globalAccountIndex,1)',
                 MONERO_Wallet_address(walletPtr!,
-                    accountIndex: 0, addressIndex: 1)),
+                    accountIndex: globalAccountIndex, addressIndex: 1)),
             SET(
-                'MONERO_Wallet_address(0,2)',
+                'MONERO_Wallet_address($globalAccountIndex,2)',
                 MONERO_Wallet_address(walletPtr!,
-                    accountIndex: 0, addressIndex: 2)),
+                    accountIndex: globalAccountIndex, addressIndex: 2)),
 // MONERO_Wallet_addressValid(String address) → bool
             SET('MONERO_Wallet_addressValid(\'asd\')',
                 MONERO_Wallet_addressValid('asd', 0)),
             SET(
-                'MONERO_Wallet_addressValid(MONERO_Wallet_address(0,0))',
+                'MONERO_Wallet_addressValid(MONERO_Wallet_address($globalAccountIndex,0))',
                 MONERO_Wallet_addressValid(
                     MONERO_Wallet_address(walletPtr!,
-                        accountIndex: 0, addressIndex: 0),
+                        accountIndex: globalAccountIndex, addressIndex: 0),
                     0)),
             SET(
-                'MONERO_Wallet_addressValid(MONERO_Wallet_address(0,1))',
+                'MONERO_Wallet_addressValid(MONERO_Wallet_address($globalAccountIndex,1))',
                 MONERO_Wallet_addressValid(
                     MONERO_Wallet_address(walletPtr!,
-                        accountIndex: 0, addressIndex: 1),
+                        accountIndex: globalAccountIndex, addressIndex: 1),
                     0)),
 // MONERO_Wallet_approximateBlockChainHeight(MONERO_wallet wallet_ptr) → int
             SET('MONERO_Wallet_approximateBlockChainHeight',
@@ -105,8 +106,10 @@ class _MoneroDartStateState extends State<MoneroDartState> {
             SET('MONERO_Wallet_autoRefreshInterval',
                 MONERO_Wallet_autoRefreshInterval(walletPtr!)),
 // MONERO_Wallet_balance(MONERO_wallet wallet_ptr, {required int accountIndex}) → int
-            SET('MONERO_Wallet_balance(0)',
-                MONERO_Wallet_balance(walletPtr!, accountIndex: 0)),
+            SET(
+                'MONERO_Wallet_balance($globalAccountIndex)',
+                MONERO_Wallet_balance(walletPtr!,
+                    accountIndex: globalAccountIndex)),
 // MONERO_Wallet_blockChainHeight(MONERO_wallet wallet_ptr) → int
             SET('MONERO_Wallet_blockChainHeight',
                 MONERO_Wallet_blockChainHeight(walletPtr!)),
@@ -134,13 +137,13 @@ class _MoneroDartStateState extends State<MoneroDartState> {
                 'MONERO_Wallet_getBytesSent(walletPtr!)'),
 // MONERO_Wallet_getSubaddressLabel(MONERO_wallet wallet_ptr, {required int accountIndex, required int addressIndex}) → String
             SET(
-                'MONERO_Wallet_getSubaddressLabel(0, 0)',
+                'MONERO_Wallet_getSubaddressLabel($globalAccountIndex, 0)',
                 MONERO_Wallet_getSubaddressLabel(walletPtr!,
-                    accountIndex: 0, addressIndex: 0)),
+                    accountIndex: globalAccountIndex, addressIndex: 0)),
             SET(
-                'MONERO_Wallet_getSubaddressLabel(0, 1)',
+                'MONERO_Wallet_getSubaddressLabel($globalAccountIndex, 1)',
                 MONERO_Wallet_getSubaddressLabel(walletPtr!,
-                    accountIndex: 0, addressIndex: 0)),
+                    accountIndex: globalAccountIndex, addressIndex: 0)),
             SET('subaddressLabel(0)', subaddressLabel(0)),
             SET('subaddressLabel(1)', subaddressLabel(1)),
 // MONERO_Wallet_history(MONERO_wallet wallet_ptr) → MONERO_TransactionHistory
@@ -155,8 +158,10 @@ class _MoneroDartStateState extends State<MoneroDartState> {
             SET('MONERO_Wallet_numSubaddressAccounts',
                 MONERO_Wallet_numSubaddressAccounts(walletPtr!)),
 // MONERO_Wallet_numSubaddresses(MONERO_wallet wallet_ptr, {required int accountIndex}) → int
-            SET('MONERO_Wallet_numSubaddresses(0)',
-                MONERO_Wallet_numSubaddresses(walletPtr!, accountIndex: 0)),
+            SET(
+                'MONERO_Wallet_numSubaddresses($globalAccountIndex)',
+                MONERO_Wallet_numSubaddresses(walletPtr!,
+                    accountIndex: globalAccountIndex)),
 // MONERO_Wallet_pauseRefresh(MONERO_wallet wallet_ptr) → void
 // MONERO_Wallet_publicSpendKey(MONERO_wallet wallet_ptr) → String1
             SET('MONERO_Wallet_publicSpendKey',
@@ -191,8 +196,10 @@ class _MoneroDartStateState extends State<MoneroDartState> {
             SET('MONERO_Wallet_synchronized',
                 MONERO_Wallet_synchronized(walletPtr!)),
 // MONERO_Wallet_unlockedBalance(MONERO_wallet wallet_ptr, {required int accountIndex}) → int
-            SET('MONERO_Wallet_unlockedBalance(0)',
-                MONERO_Wallet_unlockedBalance(walletPtr!, accountIndex: 0)),
+            SET(
+                'MONERO_Wallet_unlockedBalance($globalAccountIndex)',
+                MONERO_Wallet_unlockedBalance(walletPtr!,
+                    accountIndex: globalAccountIndex)),
 // MONERO_Wallet_watchOnly(MONERO_wallet wallet_ptr) → bool
             SET('MONERO_Wallet_watchOnly', MONERO_Wallet_watchOnly(walletPtr!)),
 // MONERO_WalletManager_closeWallet(MONERO_wallet wallet_ptr, bool store) → bool

@@ -1,0 +1,1 @@
+int globalAccountIndex = 0;

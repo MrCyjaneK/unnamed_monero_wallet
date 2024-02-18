@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:xmruw/pages/wallet/subaddress_page.dart';
+import 'package:xmruw/tools/monero/account_index.dart';
 import 'package:xmruw/tools/monero/subaddress_label.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/qr_code.dart';
@@ -15,25 +16,26 @@ class ReceiveScreen extends StatefulWidget {
 }
 
 class _ReceiveScreenState extends State<ReceiveScreen> {
-  late int currentAddressIndex =
-      MONERO_Wallet_numSubaddresses(walletPtr!, accountIndex: 0);
+  late int currentAddressIndex = MONERO_Wallet_numSubaddresses(walletPtr!,
+      accountIndex: globalAccountIndex);
 
   late String address = MONERO_Wallet_address(
     walletPtr!,
-    accountIndex: 0,
+    accountIndex: globalAccountIndex,
     addressIndex: currentAddressIndex,
   );
 
   void _refreshAddr() {
     Timer.periodic(const Duration(seconds: 15), (timer) {
       if (!mounted) return;
-      final ns = MONERO_Wallet_numSubaddresses(walletPtr!, accountIndex: 0);
+      final ns = MONERO_Wallet_numSubaddresses(walletPtr!,
+          accountIndex: globalAccountIndex);
       if (ns == currentAddressIndex) return;
       setState(() {
         currentAddressIndex = ns;
         address = MONERO_Wallet_address(
           walletPtr!,
-          accountIndex: 0,
+          accountIndex: globalAccountIndex,
           addressIndex: currentAddressIndex,
         );
       });

@@ -9,6 +9,7 @@ import 'package:xmruw/const/app_name.dart';
 import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/pin_screen.dart';
 import 'package:xmruw/tools/dirs.dart';
+import 'package:xmruw/tools/monero/account_index.dart';
 import 'package:xmruw/tools/node.dart';
 import 'package:xmruw/tools/proxy.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
@@ -24,11 +25,11 @@ import 'package:flutter_background_service_android/flutter_background_service_an
 
 class Transaction {
   late final String displayLabel = MONERO_TransactionInfo_label(txInfo);
-  late String subaddressLabel = sl.subaddressLabel(accountIndex);
+  late String subaddressLabel = sl.subaddressLabel(0); //TODO: fixme
   late final String address = MONERO_Wallet_address(
     walletPtr!,
-    accountIndex: 0,
-    addressIndex: accountIndex,
+    accountIndex: globalAccountIndex,
+    addressIndex: 0,
   );
   final String description;
   final int fee;
@@ -40,9 +41,29 @@ class Transaction {
   final int amount;
   final bool isSpend;
   late DateTime timeStamp;
-  // late int addressIndex = MONERO_TransactionInfo_subaddrAccount(_tx);
   late final bool isConfirmed = !isPending;
   final String hash;
+
+  Map<String, dynamic> toJson() {
+    return {
+      "displayLabel": displayLabel,
+      "subaddressLabel": subaddressLabel,
+      "address": address,
+      "description": description,
+      "fee": fee,
+      "confirmations": confirmations,
+      "isPending": isPending,
+      "blockheight": blockheight,
+      "accountIndex": accountIndex,
+      "paymentId": paymentId,
+      "amount": amount,
+      "isSpend": isSpend,
+      "timeStamp": timeStamp.toIso8601String(),
+      "isConfirmed": isConfirmed,
+      "hash": hash,
+    };
+  }
+
   // S finalubAddress? subAddress;
   // List<Transfer> transfers = [];
   // final int txIndex;

@@ -30,6 +30,7 @@ class Config {
     this.routeClearnetThruTor = false,
     this.printStarts = false,
     this.showPerformanceOverlay = false,
+    this.experimentalAccounts = false,
   });
 
   final String confPath;
@@ -44,6 +45,7 @@ class Config {
   bool routeClearnetThruTor;
   bool printStarts;
   bool showPerformanceOverlay;
+  bool experimentalAccounts;
   void save() {
     file.writeAsString(json.encode(toJson()));
   }
@@ -73,6 +75,9 @@ class Config {
     }
     if (json['showPerformanceOverlay'] is bool) {
       c.showPerformanceOverlay = json["showPerformanceOverlay"];
+    }
+    if (json['experimentalAccounts'] is bool) {
+      c.experimentalAccounts = json["experimentalAccounts"];
     }
     return c;
   }

@@ -8,6 +8,7 @@ import 'package:xmruw/tools/dirs.dart';
 import 'package:xmruw/tools/format_monero.dart';
 import 'package:xmruw/tools/is_offline.dart';
 import 'package:xmruw/tools/is_view_only.dart';
+import 'package:xmruw/tools/monero/account_index.dart';
 import 'package:xmruw/tools/show_alert.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/long_outlined_button.dart';
@@ -83,7 +84,7 @@ class _SpendConfirmState extends State<SpendConfirm> {
         amount: widget.tx.isSweep ? 0 : widget.tx.amount,
         mixin_count: 0,
         pendingTransactionPriority: 0,
-        subaddr_account: 0,
+        subaddr_account: globalAccountIndex,
         preferredInputs: widget.tx.outputs,
       );
       final status = MONERO_PendingTransaction_status(tx);
@@ -163,7 +164,8 @@ class _SpendConfirmState extends State<SpendConfirm> {
   bool _needExportOutputs() {
     if (isOffline) return false;
     return MONERO_Wallet_hasUnknownKeyImages(walletPtr!) |
-        (MONERO_Wallet_viewOnlyBalance(walletPtr!, accountIndex: 0) <
+        (MONERO_Wallet_viewOnlyBalance(walletPtr!,
+                accountIndex: globalAccountIndex) <
             (_getAmount() ?? 0x7FFFFFFFFFFFFFFF));
   }
 

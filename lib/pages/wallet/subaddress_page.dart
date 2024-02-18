@@ -1,5 +1,6 @@
 import 'package:xmruw/pages/wallet/subaddress_details.dart';
 import 'package:xmruw/tools/format_monero.dart';
+import 'package:xmruw/tools/monero/account_index.dart';
 import 'package:xmruw/tools/monero/subaddress_label.dart';
 import 'package:xmruw/tools/show_alert.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
@@ -22,13 +23,15 @@ class SubAddressPage extends StatefulWidget {
 }
 
 class _SubAddressPageState extends State<SubAddressPage> {
-  int addrCount = MONERO_Wallet_numSubaddresses(walletPtr!, accountIndex: 0);
+  int addrCount = MONERO_Wallet_numSubaddresses(walletPtr!,
+      accountIndex: globalAccountIndex);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Subaddresses"),
+        title: Text(
+            "Subaddresses ${MONERO_Wallet_numSubaddresses(walletPtr!, accountIndex: globalAccountIndex)}"),
         actions: [
           IconButton(onPressed: _addSubaddress, icon: const Icon(Icons.add))
         ],
@@ -51,7 +54,7 @@ class _SubAddressPageState extends State<SubAddressPage> {
             label: subaddressLabel(i),
             squashedAddress: MONERO_Wallet_address(
               walletPtr!,
-              accountIndex: 0,
+              accountIndex: globalAccountIndex,
               addressIndex: i,
             ),
             rebuildParent: () {
@@ -63,9 +66,10 @@ class _SubAddressPageState extends State<SubAddressPage> {
   }
 
   void _addSubaddress() {
-    MONERO_Wallet_addSubaddress(walletPtr!, accountIndex: 0);
+    MONERO_Wallet_addSubaddress(walletPtr!, accountIndex: globalAccountIndex);
     setState(() {
-      addrCount = MONERO_Wallet_numSubaddresses(walletPtr!, accountIndex: 0);
+      addrCount = MONERO_Wallet_numSubaddresses(walletPtr!,
+          accountIndex: globalAccountIndex);
     });
     final status = MONERO_Wallet_status(walletPtr!);
     if (status != 0) {

@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 class LongOutlinedButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
-
+  final TextAlign? textAlign;
   const LongOutlinedButton({
     super.key,
     required this.text,
     this.onPressed,
+    this.textAlign,
   });
 
   @override
@@ -32,6 +33,7 @@ class LongOutlinedButton extends StatelessWidget {
                 onPressed: onPressed,
                 child: Text(
                   text.toUpperCase(),
+                  textAlign: textAlign,
                   style: Theme.of(context)
                       .textTheme
                       .labelLarge

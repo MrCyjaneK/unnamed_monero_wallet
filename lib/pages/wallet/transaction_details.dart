@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:xmruw/legacy.dart';
 import 'package:xmruw/pages/wallet/transaction_list.dart';
 import 'package:xmruw/tools/format_monero.dart';
@@ -98,6 +101,10 @@ class _TransactionDetailsState extends State<TransactionDetails> {
             _simpleDetail(
                 "TIMESTAMP", widget.transaction.timeStamp.toIso8601String()),
             const SizedBox(height: 24),
+            if (kDebugMode) const Divider(),
+            if (kDebugMode)
+              SelectableText(const JsonEncoder.withIndent('    ')
+                  .convert(widget.transaction.toJson()))
           ],
         ),
       ),
