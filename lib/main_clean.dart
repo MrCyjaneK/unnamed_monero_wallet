@@ -20,7 +20,7 @@ void mainClean() async {
   final wd = await getWd();
   if (!wd.existsSync()) wd.createSync();
   initLocalNodes();
-  // printStarts = true;
+  printStarts = true;
   _walletExists =
       MONERO_WalletManager_walletExists(wmPtr, await getMainWalletPath());
   disableProxy = File(await getDisableProxyFlagFile()).existsSync();

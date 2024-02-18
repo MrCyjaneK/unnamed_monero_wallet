@@ -12,7 +12,6 @@ import 'package:xmruw/pages/setup/passphrase_encryption.dart';
 import 'package:xmruw/pages/wallet/wallet_home.dart';
 import 'package:xmruw/tools/dirs.dart';
 import 'package:xmruw/tools/is_offline.dart';
-import 'package:xmruw/tools/monero/background_task.dart';
 import 'package:xmruw/tools/node.dart';
 import 'package:xmruw/tools/proxy.dart';
 import 'package:xmruw/tools/show_alert.dart';
@@ -405,7 +404,6 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
       MONERO_Wallet_daemonBlockChainHeight_runThread(
           Pointer.fromAddress(addr), 1);
     });
-    runBackgroundTaskWallet(walletPtr!);
     if (Platform.isAndroid) await Permission.notification.request();
     unawaited(isOfflineRefresh());
     unawaited(showServiceNotification());

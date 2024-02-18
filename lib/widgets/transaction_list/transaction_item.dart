@@ -35,25 +35,36 @@ class TransactionItem extends StatelessWidget {
             vertical: 12,
             horizontal: 24,
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              getStats(context, transaction.isSpend),
-              Text(
-                (((transaction.amount / 1e12 * 1e4)).floor() / 1e4)
-                    .toStringAsFixed(4),
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              Column(
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  getStats(context, transaction.isSpend),
                   Text(
-                    formatTime(transaction.timeStamp),
-                    style: Theme.of(context).textTheme.bodySmall,
+                    (((transaction.amount / 1e12 * 1e4)).floor() / 1e4)
+                        .toStringAsFixed(4),
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        formatTime(transaction.timeStamp),
+                        style: Theme.of(context).textTheme.bodySmall,
+                      )
+                    ],
                   )
                 ],
-              )
+              ),
+              if (transaction.description.isNotEmpty)
+                Text(
+                  transaction.description,
+                  maxLines: 1,
+                ),
             ],
           ),
         ),

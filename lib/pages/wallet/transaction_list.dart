@@ -115,21 +115,14 @@ class _TransactionListState extends State<TransactionList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        flexibleSpace: LinearProgressIndicator(
+            value: DateTime.now().difference(lastClick).inSeconds / lockAfter),
         automaticallyImplyLeading: false,
         title: SelectableText(isViewOnly ? nero : anon),
         actions: [
-          Stack(
-            children: [
-              CircularProgressIndicator(
-                value:
-                    DateTime.now().difference(lastClick).inSeconds / lockAfter,
-                strokeWidth: 0.25,
-              ),
-              IconButton(
-                onPressed: _lockWallet,
-                icon: const Icon(Icons.lock),
-              ),
-            ],
+          IconButton(
+            onPressed: _lockWallet,
+            icon: const Icon(Icons.lock),
           ),
           IconButton(
               onPressed: () => BaseScannerPage.push(context),
