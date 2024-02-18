@@ -6,7 +6,7 @@ Downloads can be obtained from [git.mrcyjanek.net](https://git.mrcyjanek.net/mrc
 
 If you want to test the wallet you can join any of these rooms, messages are bridged.
 
-- [Telegram @xmruw](https://t.mr/xmruw)
+- [Telegram @xmruw](https://t.me/xmruw)
 - [Discord](https://discord.gg/YdM5yTVqed)
 - Other? If you want to moderate another platform I'll be happy to bridge them with rooms above.
 
