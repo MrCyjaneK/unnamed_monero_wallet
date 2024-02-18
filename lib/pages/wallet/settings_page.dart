@@ -6,6 +6,7 @@ import 'package:xmruw/pages/pin_screen.dart';
 import 'package:xmruw/pages/setup/proxy_settings.dart';
 import 'package:xmruw/pages/settings/nodes_screen.dart';
 import 'package:xmruw/pages/settings/view_seed_page.dart';
+import 'package:xmruw/pages/wallet/configuration_page.dart';
 import 'package:xmruw/tools/backup_class.dart' as b;
 import 'package:xmruw/tools/can_backup.dart';
 import 'package:xmruw/tools/dirs.dart';
@@ -73,7 +74,6 @@ class SettingsPage extends StatelessWidget {
       body: Column(
         children: [
           const PrimaryLabel(title: "Connection"),
-          const Divider(),
           SettingsListTile(
             title: "Nodes",
             subtitle: "Manage nodes",
@@ -81,15 +81,16 @@ class SettingsPage extends StatelessWidget {
           ),
           SettingsListTile(
             title: "Proxy",
-            subtitle: "Enabled",
-            trailing: const Circle(
-              color: Colors.green,
+            subtitle: (proc != null)
+                ? 'status: embedded tor running'
+                : 'status: unknown',
+            trailing: Circle(
+              color: (proc != null) ? Colors.green : Colors.yellow,
             ),
             onClick: () => ProxySettings.push(context),
           ),
           const Divider(),
           const PrimaryLabel(title: "Security"),
-          const Divider(),
           const SettingsListTile(
             title: "Change Pin",
           ),
@@ -104,6 +105,11 @@ class SettingsPage extends StatelessWidget {
           const SettingsListTile(
             title: "Secure Wipe",
           ),
+          SettingsListTile(
+            title: "Configuration",
+            onClick: () => ConfigurationPage.push(context),
+          ),
+          const Divider(),
           const PrimaryLabel(title: "D38UG"),
           SettingsListTile(
             title: "Top secret menu",

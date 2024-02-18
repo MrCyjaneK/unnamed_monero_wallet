@@ -5,7 +5,7 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:xmruw/legacy.dart';
-import 'package:xmruw/main_clean.dart';
+import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/debug.dart';
 import 'package:xmruw/pages/debug/monero_log_level.dart';
 import 'package:xmruw/pages/setup/passphrase_encryption.dart';
@@ -367,9 +367,9 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
     final Node? node = (await NodeStore.getCurrentNode());
     final ProxyStore proxy = (await ProxyStore.getProxy());
     MONERO_WalletManagerFactory_setLogLevel(logLevel);
-    final proxyAddress = proc == null
-        ? ((node == null || disableProxy) ? "" : proxy.getAddress(node.network))
-        : "127.0.0.1:42142";
+    final proxyAddress = ((node == null || config.disableProxy)
+        ? ""
+        : proxy.getAddress(node.network));
     print("proxyAddress: $proxyAddress");
     MONERO_Wallet_init(
       walletPtr!,

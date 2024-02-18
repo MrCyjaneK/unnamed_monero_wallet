@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:xmruw/legacy.dart';
+import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/tools/dirs.dart';
 import 'package:xmruw/tools/node.dart';
 import 'package:mutex/mutex.dart';
@@ -63,7 +64,9 @@ class ProxyStore {
   String getAddress(NodeNetwork nnet) {
     if (proc != null) return "127.0.0.1:42142";
     return switch (nnet) {
-      NodeNetwork.clearnet || NodeNetwork.onion => "$address:$torPort",
+      NodeNetwork.clearnet =>
+        (config.routeClearnetThruTor) ? "$address:$torPort" : "",
+      NodeNetwork.onion => "$address:$torPort",
       NodeNetwork.i2p => "$address:$i2pPort",
     };
   }

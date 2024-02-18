@@ -6,7 +6,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:xmruw/const/app_name.dart';
-import 'package:xmruw/main_clean.dart';
+import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/pin_screen.dart';
 import 'package:xmruw/tools/dirs.dart';
 import 'package:xmruw/tools/node.dart';
@@ -163,7 +163,13 @@ Future<void> runEmbeddedTor() async {
     print("We are connected to i2p (or not at all), ignoring tor config.");
     return;
   }
-  if (disableProxy) {
+  if (!config.routeClearnetThruTor &&
+      node.address.contains('.onion') == false) {
+    print("!config.routeClearnetThruTor and we are not .onioning");
+    return;
+  }
+
+  if (config.disableProxy) {
     print("disableProxy flag found, not starting tor");
     return;
   }

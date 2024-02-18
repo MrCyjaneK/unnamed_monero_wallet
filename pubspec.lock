@@ -324,10 +324,10 @@ packages:
     dependency: "direct main"
     description:
       name: libstealth_calculator
-      sha256: "9f0999ef567f5461abf0ce014e450b0d0c4cd975a14e83c7ff5a8a8e8ee25e64"
+      sha256: "16fb567bdea7576572b6d1e8af25f527549b2f8b76b2b0d485ef9190029df4cd"
       url: "https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/"
     source: hosted
-    version: "0.0.2"
+    version: "0.0.4"
   lints:
     dependency: transitive
     description:
@@ -401,7 +401,7 @@ packages:
     source: hosted
     version: "3.1.0"
   path:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path
       sha256: "087ce49c3f0dc39180befefc60fdb4acd8f8620e5682fe2476afd0b3688bb4af"

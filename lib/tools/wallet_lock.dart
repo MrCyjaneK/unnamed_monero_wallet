@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/pin_screen.dart';
 import 'package:xmruw/tools/show_alert.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
@@ -10,6 +11,10 @@ DateTime lastClick = DateTime.now();
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 const lockAfter = 5 * 60;
 void lockIfShould() {
+  if (!config.enableAutoLock) {
+    lastClick = DateTime.now();
+    return;
+  }
   if (DateTime.now().difference(lastClick).inSeconds <= lockAfter) {
     return;
   }

@@ -17,7 +17,11 @@ class Node {
   final String username;
   final String password;
   final int id;
-  NodeNetwork get network => NodeNetwork.clearnet;
+  NodeNetwork get network {
+    if (address.contains(".onion")) return NodeNetwork.onion;
+    if (address.contains(".i2p")) return NodeNetwork.i2p;
+    return NodeNetwork.clearnet;
+  }
 
   Map<String, dynamic> toJson() {
     return {

@@ -33,7 +33,6 @@ void main() async {
           if (!pwd) return;
           mainClean();
         }
-
         return;
       },
     ));

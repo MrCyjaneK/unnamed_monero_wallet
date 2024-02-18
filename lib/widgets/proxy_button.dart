@@ -1,4 +1,3 @@
-import 'package:xmruw/main_clean.dart';
 import 'package:xmruw/pages/setup/proxy_settings.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +13,7 @@ class ProxyButton extends StatelessWidget {
         context,
       ),
       label: Text(
-        disableProxy ? "DISABLED IN DEBUG" : "PROXY",
+        "PROXY",
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               fontWeight: FontWeight.bold,
               color: Theme.of(context).colorScheme.primary,

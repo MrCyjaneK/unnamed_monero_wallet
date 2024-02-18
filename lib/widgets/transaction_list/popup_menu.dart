@@ -168,9 +168,18 @@ class TxListPopupMenu extends StatelessWidget {
         _openSettings(c);
       case TxListPopupAction.crypto:
         _openCrypto(c);
+      case TxListPopupAction.saveexit:
+        _saveExit(c);
       default:
         Alert(title: "$action").show(c);
     }
+  }
+
+  void _saveExit(BuildContext c) async {
+    Alert(title: "Saving and closing...").show(c);
+    MONERO_Wallet_store(walletPtr!);
+    await Future.delayed(const Duration(seconds: 1));
+    exit(0);
   }
 
   void _openSettings(BuildContext c) {
@@ -221,7 +230,8 @@ class TxListPopupMenu extends StatelessWidget {
     if (isOffline) TxListPopupAction.signTx,
     if (isOffline) TxListPopupAction.importOutputs,
     TxListPopupAction.crypto,
-    TxListPopupAction.settings
+    TxListPopupAction.settings,
+    TxListPopupAction.saveexit,
   ];
 
   List<PopupMenuItem<TxListPopupAction>> _getWidgets() {
@@ -271,6 +281,10 @@ class TxListPopupMenu extends StatelessWidget {
           value: TxListPopupAction.crypto,
           child: Text("Sign/Verify"),
         ),
+      TxListPopupAction.saveexit => const PopupMenuItem<TxListPopupAction>(
+          value: TxListPopupAction.saveexit,
+          child: Text("Save & Exit"),
+        ),
     };
   }
 }
@@ -284,5 +298,6 @@ enum TxListPopupAction {
   importOutputs,
   coinControl,
   settings,
-  crypto
+  crypto,
+  saveexit,
 }

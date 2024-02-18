@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:xmruw/const/app_name.dart';
 import 'package:xmruw/legacy.dart';
+import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/debug/performance.dart';
 import 'package:xmruw/pages/pin_screen.dart';
 import 'package:xmruw/pages/scanner/base_scan.dart';
@@ -78,6 +79,10 @@ class _TransactionListState extends State<TransactionList> {
   late var txList = _buildTxList();
 
   void _lockWallet() {
+    if (!config.enableBackgroundSync) {
+      print("enableBackgroundSync == false - refusing to _lockWallet");
+      return;
+    }
     if (tempWalletPassword != "") {
       final stat = MONERO_Wallet_setupBackgroundSync(
         walletPtr!,
@@ -289,13 +294,13 @@ class _LargeBalanceWidgetState extends State<LargeBalanceWidget> {
   }
 
   void _refresh() {
-    int bal = 0;
-    final count = MONERO_Wallet_numSubaddressAccounts(walletPtr!);
-    for (int i = 0; i < count; i++) {
-      bal += MONERO_Wallet_balance(walletPtr!, accountIndex: 0);
-    }
+    // int bal = 0;
+    // final count = MONERO_Wallet_numSubaddressAccounts(walletPtr!);
+    // for (int i = 0; i < count; i++) {
+    //   bal += MONERO_Wallet_balance(walletPtr!, accountIndex: 0);
+    // }
     setState(() {
-      balance = bal;
+      balance = MONERO_Wallet_unlockedBalance(walletPtr!, accountIndex: 0);
     });
   }
 

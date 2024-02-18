@@ -1,8 +1,8 @@
-import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:xmruw/const/resource.g.dart';
 import 'package:xmruw/pages/anon/firstrun.dart';
+import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/pin_screen.dart';
 import 'package:xmruw/tools/dirs.dart';
 import 'package:xmruw/tools/node.dart';
@@ -12,20 +12,16 @@ import 'package:monero/monero.dart';
 import 'package:xmruw/tools/wallet_manager.dart';
 
 bool _walletExists = false;
-bool showPerformanceOverlay = false;
-bool disableProxy = false;
 
 void mainClean() async {
   WidgetsFlutterBinding.ensureInitialized();
   final wd = await getWd();
   if (!wd.existsSync()) wd.createSync();
-  initLocalNodes();
-  printStarts = true;
+  await loadConfig();
+  await initLocalNodes();
+  printStarts = config.printStarts;
   _walletExists =
       MONERO_WalletManager_walletExists(wmPtr, await getMainWalletPath());
-  disableProxy = File(await getDisableProxyFlagFile()).existsSync();
-  showPerformanceOverlay =
-      File(await getShowPerformanceOverlayFlagFile()).existsSync();
   runApp(
     Listener(
       onPointerDown: (_) => _uh(),
@@ -34,7 +30,7 @@ void mainClean() async {
   );
 }
 
-void initLocalNodes() async {
+Future<void> initLocalNodes() async {
   final nodes = await NodeStore.getNodes();
   if (nodes.nodes.isNotEmpty) return;
 
@@ -55,6 +51,10 @@ void initLocalNodes() async {
   }
 }
 
+Future<void> loadConfig() async {
+  config = Config.load(await getConfigFile());
+}
+
 void _uh() {
   lastClick = DateTime.now();
 }
@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: navigatorKey,
-      showPerformanceOverlay: showPerformanceOverlay,
+      showPerformanceOverlay: config.showPerformanceOverlay,
       title: 'xmruw',
       theme: ThemeData(
         fontFamily: 'RobotoMono',

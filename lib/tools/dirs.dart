@@ -21,16 +21,8 @@ Future<String> getProxyStore() async {
   return "${(await getWd()).path}/proxy.json";
 }
 
-Future<String> getMaterial3FlagFile() async {
-  return "${(await getWd()).path}/material3-flag";
-}
-
 Future<String> getShowPerformanceOverlayFlagFile() async {
   return "${(await getWd()).path}/performance-overlay-flag";
-}
-
-Future<String> getDisableProxyFlagFile() async {
-  return "${(await getWd()).path}/disable-proxy-flag";
 }
 
 Future<String> getMoneroLogPath() async {

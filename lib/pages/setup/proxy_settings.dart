@@ -1,7 +1,8 @@
-import 'dart:io';
 
 import 'package:xmruw/legacy.dart';
+import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/sync_static_progress.dart';
+import 'package:xmruw/pages/wallet/configuration_page.dart';
 import 'package:xmruw/pages/wallet/settings_page.dart';
 import 'package:xmruw/tools/proxy.dart';
 import 'package:xmruw/tools/show_alert.dart';
@@ -47,42 +48,46 @@ class _ProxySettingsState extends State<ProxySettings> {
       appBar: AppBar(
         title: const Text("Proxy Settings"),
       ),
-      body: Column(
-        children: [
-          LabeledTextInput(
-            label: "SERVER",
-            hintText: "127.0.0.1",
-            ctrl: serverCtrl,
-          ),
-          LabeledTextInput(
-            label: "TOR PORT",
-            hintText: "9050",
-            ctrl: torPortCtrl,
-          ),
-          if (proc != null)
-            const Padding(
-              padding: EdgeInsets.only(left: 16.0, right: 16, top: 16),
-              child: SelectableText(
-                  "NOTE: Embedded tor is running, if you don't want it to run provide a proper port."),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            LabeledTextInput(
+              label: "SERVER",
+              hintText: "127.0.0.1",
+              ctrl: serverCtrl,
             ),
-          LabeledTextInput(
-            label: "I2P PORT",
-            hintText: "4447",
-            ctrl: i2pPortCtrl,
-          ),
-          if (!Platform.isAndroid)
-            SelectableText("""
-It looks like you are running on unsupported platform, for development purposes
-you may want to disable tor/i2p proxy.
-Go to Debug -> Boot Flag -> Create Disable Proxy Flag
-"""
-                .replaceAll("\n", " ")),
-          const Spacer(),
-          LongOutlinedButton(
-            text: "SET",
-            onPressed: _set,
-          )
-        ],
+            LabeledTextInput(
+              label: "TOR PORT",
+              hintText: "9050",
+              ctrl: torPortCtrl,
+            ),
+            if (proc != null)
+              const Padding(
+                padding: EdgeInsets.only(left: 16.0, right: 16, top: 16),
+                child: SelectableText(
+                    "NOTE: Embedded tor is running, if you don't want it to run provide a proper port."),
+              ),
+            LabeledTextInput(
+              label: "I2P PORT",
+              hintText: "4447",
+              ctrl: i2pPortCtrl,
+            ),
+            ConfigElement(
+              text: "Force proxy",
+              description: "Forces routing clearnet trafic thru tor",
+              onClick: () {
+                config.routeClearnetThruTor = !config.routeClearnetThruTor;
+                config.save();
+                setState(() {});
+              },
+              value: config.routeClearnetThruTor,
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: LongOutlinedButton(
+        text: "SET",
+        onPressed: _set,
       ),
     );
   }

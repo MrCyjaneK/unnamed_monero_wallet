@@ -10,9 +10,9 @@ import 'package:xmruw/pages/debug/monero_dart_state.dart';
 import 'package:xmruw/pages/debug/monero_log.dart';
 import 'package:xmruw/pages/debug/monero_log_level.dart';
 import 'package:xmruw/pages/debug/performance.dart';
-import 'package:xmruw/pages/debug/boot_flag.dart';
 import 'package:xmruw/pages/debug/tor_test.dart';
 import 'package:xmruw/pages/debug/urqr_codes.dart';
+import 'package:xmruw/pages/wallet/configuration_page.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/long_outlined_button.dart';
 import 'package:flutter/foundation.dart';
@@ -62,8 +62,8 @@ class DebugPage extends StatelessWidget {
                   : null,
             ),
             LongOutlinedButton(
-              text: "Boot flags",
-              onPressed: () => BootFlagDebug.push(context),
+              text: "Configuration",
+              onPressed: () => ConfigurationPage.push(context),
             ),
             LongOutlinedButton(
               text: "Performance",
