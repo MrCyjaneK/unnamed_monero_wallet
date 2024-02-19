@@ -1,3 +1,4 @@
+import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/scanner/base_scan.dart';
 import 'package:xmruw/pages/wallet/spend_confirm.dart';
 import 'package:xmruw/tools/format_monero.dart';
@@ -157,7 +158,7 @@ class _SpendScreenState extends State<SpendScreen> {
     }
     String address = addressCtrl.text;
     final addrUri = Uri.tryParse(address);
-    if (addrUri != null) {
+    if (addrUri != null && config.enableOpenAlias && address.contains(".")) {
       address = MONERO_WalletManager_resolveOpenAlias(
         wmPtr,
         address: address,
