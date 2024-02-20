@@ -156,7 +156,7 @@ class _OutputsPageState extends State<OutputsPage> {
               accountIndex: globalAccountIndex),
         ),
         amount: 0,
-        notes: "Chruning self-spend transaction",
+        notes: "Churning self-spend transaction",
         isSweep: true,
         outputs: [],
       ),
