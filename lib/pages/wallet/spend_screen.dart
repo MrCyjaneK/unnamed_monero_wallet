@@ -109,7 +109,11 @@ class _SpendScreenState extends State<SpendScreen> {
               onEdit: _amtEdited,
               enabled: !isOffline,
             ),
-            // LabeledTextInput(label: "NOTES", ctrl: notesCtrl, enabled: enabled),
+            LabeledTextInput(
+              label: "NOTES",
+              ctrl: notesCtrl,
+              enabled: !isOffline,
+            ),
             InkWell(
               onTap: _toggleSweep,
               child: SizedBox(

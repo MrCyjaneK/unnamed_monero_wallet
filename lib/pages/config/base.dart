@@ -21,7 +21,7 @@ class Config {
 
   Config(
     this.confPath, {
-    this.disableProxy = true,
+    this.disableProxy = false,
     this.primaryColor = Colors.cyan,
     this.enableOpenAlias = true,
     this.enableAutoLock = false,
@@ -92,6 +92,7 @@ class Config {
       "routeClearnetThruTor": routeClearnetThruTor,
       "printStarts": printStarts,
       "showPerformanceOverlay": showPerformanceOverlay,
+      "experimentalAccounts": experimentalAccounts,
     };
   }
 }

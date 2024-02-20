@@ -1,0 +1,35 @@
+name: Does it even compile
+run-name: Building xmruw for android/linux
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  compat-check:
+    runs-on: androidsdk-flutter
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Flutter pub get
+        run: |
+          cd ${{ gitea.workspace }} \
+          && flutter pub get
+      - name: make version
+        run: |
+          cd ${{ gitea.workspace }} \
+          && make version
+      - name: Build apk
+        continue-on-error: false
+        run: |
+          cd ${{ gitea.workspace }} \
+          && make apk
+      - name: Build linux (debian)
+        continue-on-error: false
+        run: |
+          cd ${{ gitea.workspace }} \
+          && make deb
+      - name: Build linux (tarball)
+        continue-on-error: false
+        run: |
+          cd ${{ gitea.workspace }} \
+          && make linux

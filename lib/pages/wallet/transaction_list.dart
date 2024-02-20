@@ -162,7 +162,7 @@ class _TransactionListState extends State<TransactionList> {
       appBar: AppBar(
         flexibleSpace: LinearProgressIndicator(
             value: DateTime.now().difference(lastClick).inSeconds / lockAfter),
-        // automaticallyImplyLeading: false,
+        leading: const DrawerButton(),
         title: SelectableText(isViewOnly ? nero : anon),
         actions: [
           IconButton(

@@ -48,8 +48,8 @@ class SpendConfirm extends StatefulWidget {
   @override
   State<SpendConfirm> createState() => _SpendConfirmState();
 
-  static void push(BuildContext context, TxRequest tx) {
-    Navigator.of(context).push(MaterialPageRoute(
+  static Future<void> push(BuildContext context, TxRequest tx) async {
+    await Navigator.of(context).push(MaterialPageRoute(
       builder: (context) {
         return SpendConfirm(tx: tx);
       },
@@ -163,7 +163,7 @@ class _SpendConfirmState extends State<SpendConfirm> {
 
   bool _needExportOutputs() {
     if (isOffline) return false;
-    return MONERO_Wallet_hasUnknownKeyImages(walletPtr!) |
+    return MONERO_Wallet_hasUnknownKeyImages(walletPtr!) ||
         (MONERO_Wallet_viewOnlyBalance(walletPtr!,
                 accountIndex: globalAccountIndex) <
             (_getAmount() ?? 0x7FFFFFFFFFFFFFFF));
@@ -263,18 +263,27 @@ class StatusRow extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Expanded(child: PrimaryLabel(title: title)),
-        SizedBox(
-          height: 16,
-          child: (amount == null)
-              ? const SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(strokeWidth: 1),
-                )
-              : SelectableText(
-                  formatMonero(amount),
-                ),
-        ),
+        (amount == null)
+            ? const Stack(
+                children: [
+                  SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 1),
+                  ),
+                  // SelectableText is here to ensure that the size of the
+                  // widget is proper.
+                  // SizedBox didn't work out as some people have larger fonts
+                  // set in settings.
+                  SelectableText(
+                    "0.0",
+                    style: TextStyle(color: Colors.transparent),
+                  ),
+                ],
+              )
+            : SelectableText(
+                formatMonero(amount),
+              ),
         const SizedBox(width: 16)
       ],
     );
