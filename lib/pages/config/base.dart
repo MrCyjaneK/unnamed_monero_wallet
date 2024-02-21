@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:xmruw/pages/config/themes.dart';
 
 late Config config;
 
@@ -22,7 +22,7 @@ class Config {
   Config(
     this.confPath, {
     this.disableProxy = false,
-    this.primaryColor = Colors.cyan,
+    this.theme = AppThemeEnum.orange,
     this.enableOpenAlias = true,
     this.enableAutoLock = false,
     this.enableBackgroundSync = false,
@@ -31,13 +31,16 @@ class Config {
     this.printStarts = false,
     this.showPerformanceOverlay = false,
     this.experimentalAccounts = false,
+    this.fiatCurrency = "USD",
+    this.enableExperiments = false,
+    this.lastChangelogVersion = -1,
   });
 
   final String confPath;
   File get file => File(confPath);
 
   bool disableProxy;
-  Color primaryColor;
+  AppThemeEnum theme;
   bool enableOpenAlias;
   bool enableAutoLock;
   bool enableBackgroundSync;
@@ -46,6 +49,9 @@ class Config {
   bool printStarts;
   bool showPerformanceOverlay;
   bool experimentalAccounts;
+  String fiatCurrency;
+  bool enableExperiments;
+  int lastChangelogVersion;
   void save() {
     file.writeAsString(json.encode(toJson()));
   }
@@ -79,6 +85,18 @@ class Config {
     if (json['experimentalAccounts'] is bool) {
       c.experimentalAccounts = json["experimentalAccounts"];
     }
+    if (json['fiatCurrency'] is bool) {
+      c.fiatCurrency = json["fiatCurrency"];
+    }
+    if (json['enableExperiments'] is bool) {
+      c.enableExperiments = json["enableExperiments"];
+    }
+    if (json['theme'] is bool) {
+      c.theme = AppThemeEnum.values[(json["theme"] as int)];
+    }
+    if (json['lastChangelogVersion'] is bool) {
+      c.lastChangelogVersion = json["lastChangelogVersion"];
+    }
     return c;
   }
 
@@ -93,6 +111,10 @@ class Config {
       "printStarts": printStarts,
       "showPerformanceOverlay": showPerformanceOverlay,
       "experimentalAccounts": experimentalAccounts,
+      "fiatCurrency": fiatCurrency,
+      "enableExperiments": enableExperiments,
+      "theme": theme.index,
+      "lastChangelogVersion": lastChangelogVersion,
     };
   }
 }

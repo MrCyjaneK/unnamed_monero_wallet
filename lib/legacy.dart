@@ -25,7 +25,7 @@ import 'package:flutter_background_service_android/flutter_background_service_an
 
 class Transaction {
   late final String displayLabel = MONERO_TransactionInfo_label(txInfo);
-  late String subaddressLabel = sl.subaddressLabel(0); //TODO: fixme
+  late String subaddressLabel = sl.subaddressLabel(0); // TODO: fixme
   late final String address = MONERO_Wallet_address(
     walletPtr!,
     accountIndex: globalAccountIndex,

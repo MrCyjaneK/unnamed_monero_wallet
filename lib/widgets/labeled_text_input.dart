@@ -9,6 +9,7 @@ class LabeledTextInput extends StatelessWidget {
   final int? minLines;
   final int? maxLines;
   final bool? enabled;
+  final Widget? suffixIcon;
   const LabeledTextInput({
     super.key,
     required this.label,
@@ -19,6 +20,7 @@ class LabeledTextInput extends StatelessWidget {
     this.minLines,
     this.maxLines,
     this.enabled,
+    this.suffixIcon,
   });
 
   @override
@@ -55,6 +57,7 @@ class LabeledTextInput extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
           hintText: hintText,
+          suffixIcon: suffixIcon,
         ),
       ),
     );

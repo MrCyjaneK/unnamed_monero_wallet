@@ -1,0 +1,2 @@
+#!/bin/bash
+LANG=C TZ=UTC git log --pretty=format:'{^^^^date^^^^:^^^^%ci^^^^,^^^^hash^^^^:^^^^%H^^^^,^^^^body^^^^:^^^^%B^^^^, ^^^^name^^^^: ^^^^%an <%ae>^^^^}&&&&' | awk '{printf "%s\\n", $0}' | sed 's/&&&&\\n/\n/g' | sed 's/"/\\"/g' | sed 's/\^^^^/"/g' > assets/changelog.jsonp

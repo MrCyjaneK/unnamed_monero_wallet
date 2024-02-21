@@ -1,7 +1,10 @@
 import 'dart:async';
 
+import 'package:flutter/services.dart';
 import 'package:xmruw/const/app_name.dart';
+import 'package:xmruw/const/resource.g.dart';
 import 'package:xmruw/legacy.dart';
+import 'package:xmruw/pages/changelog.dart';
 import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/debug/performance.dart';
 import 'package:xmruw/pages/pin_screen.dart';
@@ -39,9 +42,17 @@ class _TransactionListState extends State<TransactionList> {
   Timer? refresh;
   @override
   void initState() {
+    _loadChangelogLength();
     refresh = Timer.periodic(const Duration(seconds: 1), _timerCallback);
     _timerCallback(refresh!);
     super.initState();
+  }
+
+  void _loadChangelogLength() async {
+    final str = await rootBundle.loadString(R.ASSETS_CHANGELOG_JSONP);
+    setState(() {
+      changelogLength = str.split("\n").length;
+    });
   }
 
   void _timerCallback(Timer timer) {
@@ -162,7 +173,7 @@ class _TransactionListState extends State<TransactionList> {
       appBar: AppBar(
         flexibleSpace: LinearProgressIndicator(
             value: DateTime.now().difference(lastClick).inSeconds / lockAfter),
-        leading: const DrawerButton(),
+        leading: config.experimentalAccounts ? const DrawerButton() : null,
         title: SelectableText(isViewOnly ? nero : anon),
         actions: [
           IconButton(
@@ -185,7 +196,26 @@ class _TransactionListState extends State<TransactionList> {
           return TransactionItem(transaction: txList[index - 2]);
         },
       ),
+      floatingActionButton: _fab(),
     );
+  }
+
+  int? changelogLength;
+
+  Widget? _fab() {
+    if (changelogLength == null) return null;
+    if (changelogLength == config.lastChangelogVersion) return null;
+    return FloatingActionButton.extended(
+      onPressed: _openChangelog,
+      label: const Text("Changelog"),
+      icon: const Icon(Icons.edit),
+    );
+  }
+
+  void _openChangelog() {
+    config.lastChangelogVersion = changelogLength ?? -1;
+    config.save();
+    ChangelogPage.push(context);
   }
 
   List<Transaction> _buildTxList() {
@@ -346,15 +376,22 @@ class _LargeBalanceWidgetState extends State<LargeBalanceWidget> {
     });
   }
 
+  bool isFiat = false;
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onTap: () {
+        setState(() {
+          isFiat = !isFiat;
+        });
+      },
       onLongPress: () => OutputsPage.push(context),
       child: Center(
         child: Padding(
           padding: const EdgeInsets.only(top: 40.0, bottom: 10),
           child: Text(
-            formatMonero(balance),
+            isFiat ? formatMoneroFiat(balance, null) : formatMonero(balance),
             style: Theme.of(context).textTheme.headlineMedium,
           ),
         ),

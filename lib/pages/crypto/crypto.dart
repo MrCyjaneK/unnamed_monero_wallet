@@ -104,17 +104,19 @@ class _CryptoSignState extends State<CryptoSign> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        LabeledTextInput(
-          label: "Message",
-          ctrl: messageCtrl,
-          minLines: 2,
-        ),
-        LabeledTextInput(label: "Address", ctrl: addressCtrl),
-        LongOutlinedButton(text: "Sign", onPressed: sign),
-        SelectableText(result),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          LabeledTextInput(
+            label: "Message",
+            ctrl: messageCtrl,
+            minLines: 2,
+          ),
+          LabeledTextInput(label: "Address", ctrl: addressCtrl),
+          LongOutlinedButton(text: "Sign", onPressed: sign),
+          SelectableText(result),
+        ],
+      ),
     );
   }
 }

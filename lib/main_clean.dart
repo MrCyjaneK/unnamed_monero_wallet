@@ -1,8 +1,8 @@
-
 import 'package:flutter/services.dart';
 import 'package:xmruw/const/resource.g.dart';
 import 'package:xmruw/pages/anon/firstrun.dart';
 import 'package:xmruw/pages/config/base.dart';
+import 'package:xmruw/pages/config/themes.dart';
 import 'package:xmruw/pages/pin_screen.dart';
 import 'package:xmruw/tools/dirs.dart';
 import 'package:xmruw/tools/node.dart';
@@ -19,6 +19,7 @@ void mainClean() async {
   if (!wd.existsSync()) wd.createSync();
   await loadConfig();
   await initLocalNodes();
+
   printStarts = config.printStarts;
   _walletExists =
       MONERO_WalletManager_walletExists(wmPtr, await getMainWalletPath());
@@ -59,29 +60,34 @@ void _uh() {
   lastClick = DateTime.now();
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => MyAppState();
+}
+
+class MyAppState extends State<MyApp> {
+  var themeData = getTheme(AppThemeEnum.orange);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: navigatorKey,
       showPerformanceOverlay: config.showPerformanceOverlay,
       title: 'xmruw',
-      theme: ThemeData(
-        fontFamily: 'RobotoMono',
-        colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: Colors.cyan, brightness: Brightness.dark),
-        dividerTheme: const DividerThemeData(
-          thickness: 3,
-        ),
-        useMaterial3: true,
-      ),
+      theme: themeData,
       home: _walletExists
           ? const PinScreen(
               flag: PinScreenFlag.openMainWallet,
             )
           : const AnonFirstRun(),
     );
+  }
+
+  static void setTheme(BuildContext context, ThemeData theme) {
+    MyAppState state = context.findAncestorStateOfType<MyAppState>()!;
+    state.setState(() {
+      state.themeData = theme;
+    });
   }
 }

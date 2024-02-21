@@ -1,8 +1,11 @@
 import 'dart:io';
 
 import 'package:xmruw/legacy.dart';
+import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/debug.dart';
 import 'package:xmruw/pages/pin_screen.dart';
+import 'package:xmruw/pages/settings/currency_settings.dart';
+import 'package:xmruw/pages/settings/theme_settings.dart';
 import 'package:xmruw/pages/setup/proxy_settings.dart';
 import 'package:xmruw/pages/settings/nodes_screen.dart';
 import 'package:xmruw/pages/settings/view_seed_page.dart';
@@ -72,52 +75,65 @@ class SettingsPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Settings"),
       ),
-      body: Column(
-        children: [
-          const PrimaryLabel(title: "Connection"),
-          SettingsListTile(
-            title: "Nodes",
-            subtitle: "Manage nodes",
-            onClick: () => NodesScreen.push(context),
-          ),
-          SettingsListTile(
-            title: "Proxy",
-            subtitle: (proc != null)
-                ? 'status: embedded tor running'
-                : 'status: unknown',
-            trailing: Circle(
-              color: (proc != null) ? Colors.green : Colors.yellow,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const PrimaryLabel(title: "Connection"),
+            SettingsListTile(
+              title: "Nodes",
+              subtitle: "Manage nodes",
+              onClick: () => NodesScreen.push(context),
             ),
-            onClick: () => ProxySettings.push(context),
-          ),
-          const Divider(),
-          const PrimaryLabel(title: "Security"),
-          const SettingsListTile(
-            title: "Change Pin",
-          ),
-          SettingsListTile(
-            title: "View Seed",
-            onClick: () => _viewSeed(context),
-          ),
-          SettingsListTile(
-            title: "Export Backup",
-            onClick: !canBackup() ? null : () => _exportBackup(context),
-          ),
-          const SettingsListTile(
-            title: "Secure Wipe",
-          ),
-          SettingsListTile(
-            title: "Configuration",
-            onClick: () => ConfigurationPage.push(context),
-          ),
-          const Divider(),
-          const PrimaryLabel(title: "D38UG"),
-          SettingsListTile(
-            title: "Top secret menu",
-            subtitle: "Click for free puppies 🐶🐶🐶",
-            onClick: () => DebugPage.push(context),
-          ),
-        ],
+            SettingsListTile(
+              title: "Proxy",
+              subtitle: (proc != null)
+                  ? 'status: embedded tor running'
+                  : 'status: unknown',
+              trailing: Circle(
+                color: (proc != null) ? Colors.green : Colors.yellow,
+              ),
+              onClick: () => ProxySettings.push(context),
+            ),
+            const PrimaryLabel(title: "Look and feel"),
+            SettingsListTile(
+              title: "Theme",
+              subtitle: "Change app theme",
+              onClick: () => ThemeSettingsPage.push(context),
+            ),
+            SettingsListTile(
+              title: "Currency",
+              subtitle: "Change fiat currency",
+              onClick: () => CurrencySettingsPage.push(context),
+            ),
+            const PrimaryLabel(title: "Security"),
+            const SettingsListTile(
+              title: "Change Pin",
+            ),
+            SettingsListTile(
+              title: "View Seed",
+              onClick: () => _viewSeed(context),
+            ),
+            SettingsListTile(
+              title: "Export Backup",
+              onClick: !canBackup() ? null : () => _exportBackup(context),
+            ),
+            const SettingsListTile(
+              title: "Secure Wipe",
+            ),
+            const PrimaryLabel(title: "Advanced"),
+            SettingsListTile(
+              title: "Configuration",
+              subtitle: "Change app behaviour, enable experimental features",
+              onClick: () => ConfigurationPage.push(context),
+            ),
+            if (config.enableExperiments)
+              SettingsListTile(
+                title: "Experiments",
+                subtitle: "Do fancy stuff",
+                onClick: () => DebugPage.push(context),
+              ),
+          ],
+        ),
       ),
     );
   }

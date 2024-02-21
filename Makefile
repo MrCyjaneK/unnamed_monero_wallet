@@ -1,10 +1,12 @@
 .PHONY: apk
 apk:
+	./build_changelog.sh
 	flutter build apk --flavor calc  --dart-define=libstealth_calculator=true
 	flutter build apk --flavor clean --dart-define=libstealth_calculator=false
 
 .PHONY: linux
 linux: 
+	./build_changelog.sh
 	flutter build linux
 	echo https://git.mrcyjanek.net/mrcyjanek/monero_c/releases/download/${shell ./get_current_build.sh}/x86_64-linux-gnu_libwallet2_api_c.so.xz
 	wget https://git.mrcyjanek.net/mrcyjanek/monero_c/releases/download/v0.18.3.1-RC50/x86_64-linux-gnu_libwallet2_api_c.so.xz \
@@ -22,9 +24,10 @@ linux_debug_lib:
 	-rm build/linux/x64/debug/bundle/lib/libwallet2_api_c.so
 	unxz build/linux/x64/debug/bundle/lib/libwallet2_api_c.so.xz
 
-deb: linux
-	dart pub global activate --source git https://github.com/tomekit/flutter_to_debian.git
-	${HOME}/.pub-cache/bin/flutter_to_debian
+# deb: linux
+# 	./build_changelog.sh
+# 	dart pub global activate --source git https://github.com/tomekit/flutter_to_debian.git
+# 	${HOME}/.pub-cache/bin/flutter_to_debian
 
 .PHONY: dev
 dev: libs

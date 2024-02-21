@@ -53,6 +53,7 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        title: const Text("Receive"),
         actions: [
           IconButton(
             onPressed: () => SubAddressPage.push(context),

@@ -372,10 +372,10 @@ packages:
     dependency: "direct main"
     description:
       name: mobile_scanner
-      sha256: c3e5bba1cb626b6ab4fc46610f72a136803f6854267967e19f4a4a6a31ff9b74
+      sha256: "619ed5fd43ca9007a151f00c3dc43feedeaf235fe5647735d0237c38849d49dc"
       url: "https://pub.dev"
     source: hosted
-    version: "3.5.5"
+    version: "4.0.0"
   monero:
     dependency: "direct main"
     description:
@@ -400,6 +400,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.0"
+  offline_market_data:
+    dependency: "direct main"
+    description:
+      name: offline_market_data
+      sha256: f087abee6581368636955433afa20604b1469d6f41a38977164b692c063ed27d
+      url: "https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/"
+    source: hosted
+    version: "2024.02.21+15"
   path:
     dependency: "direct main"
     description:
@@ -710,5 +718,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.3.0-279.1.beta <4.0.0"
+  dart: ">=3.3.0 <4.0.0"
   flutter: ">=3.16.0"

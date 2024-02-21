@@ -3,6 +3,7 @@ import 'package:xmruw/pages/wallet/transaction_details.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:xmruw/tools/format_monero.dart';
 
 class TransactionItem extends StatelessWidget {
   final Transaction transaction;
@@ -60,11 +61,10 @@ class TransactionItem extends StatelessWidget {
                   )
                 ],
               ),
-              if (transaction.description.isNotEmpty)
-                Text(
-                  transaction.description,
-                  maxLines: 1,
-                ),
+              Text(
+                "${formatMoneroFiat(transaction.amount, transaction.timeStamp)} ${transaction.description}",
+                maxLines: 1,
+              )
             ],
           ),
         ),

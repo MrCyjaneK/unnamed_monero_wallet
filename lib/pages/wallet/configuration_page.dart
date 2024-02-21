@@ -118,6 +118,16 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
               },
               value: config.experimentalAccounts,
             ),
+            ConfigElement(
+              text: "enableExperiments",
+              description: "",
+              onClick: () {
+                config.enableExperiments = !config.enableExperiments;
+                config.save();
+                setState(() {});
+              },
+              value: config.enableExperiments,
+            ),
           ],
         ),
       ),

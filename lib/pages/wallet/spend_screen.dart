@@ -1,3 +1,4 @@
+import 'package:offline_market_data/offline_market_data.dart';
 import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/scanner/base_scan.dart';
 import 'package:xmruw/pages/wallet/spend_confirm.dart';
@@ -33,6 +34,7 @@ class SpendScreen extends StatefulWidget {
 class _SpendScreenState extends State<SpendScreen> {
   late final addressCtrl = TextEditingController(text: widget.address);
   final amountCtrl = TextEditingController();
+  final amountFiatCtrl = TextEditingController();
   final notesCtrl = TextEditingController();
 
   bool sweepAllVar = false;
@@ -77,6 +79,36 @@ class _SpendScreenState extends State<SpendScreen> {
   }
 
   void _amtEdited() {
+    final amt = double.tryParse(amountCtrl.text);
+    if (amt != null) {
+      final str = formatMoneroFiat(amt * 1e12, null).split(" ")[0];
+      setState(() {
+        amountFiatCtrl.text = str;
+      });
+    }
+    if (sweepAllVar) {
+      setState(() {
+        sweepAllVar = false;
+      });
+    }
+  }
+
+  void _amtFiatEdited() {
+    final amt = double.tryParse(amountFiatCtrl.text);
+    if (amt != null) {
+      var price = CurrencyDataXMRxUSD().getPrice(null) ?? -1;
+
+      if (config.fiatCurrency != "USD") {
+        final p = usdPairs[config.fiatCurrency]?.getPrice(null);
+        if (p != null) {
+          price *= p;
+        }
+      }
+
+      setState(() {
+        amountCtrl.text = (amt / price).toStringAsFixed(12);
+      });
+    }
     if (sweepAllVar) {
       setState(() {
         sweepAllVar = false;
@@ -89,11 +121,20 @@ class _SpendScreenState extends State<SpendScreen> {
 
   final hasUnknownKeyImages = MONERO_Wallet_hasUnknownKeyImages(walletPtr!);
 
+  bool amountInputXMR = true;
+
+  void _switchAmountTF() {
+    setState(() {
+      amountInputXMR = !amountInputXMR;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        title: const Text("Send"),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -103,12 +144,34 @@ class _SpendScreenState extends State<SpendScreen> {
               ctrl: addressCtrl,
               enabled: !isOffline,
             ),
-            LabeledTextInput(
-              label: "AMOUNT",
-              ctrl: amountCtrl,
-              onEdit: _amtEdited,
-              enabled: !isOffline,
-            ),
+            if (!amountInputXMR)
+              LabeledTextInput(
+                label: "AMOUNT",
+                ctrl: amountFiatCtrl,
+                onEdit: _amtFiatEdited,
+                enabled: !isOffline,
+                suffixIcon: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(config.fiatCurrency),
+                    IconButton(
+                      onPressed: isOffline ? null : _switchAmountTF,
+                      icon: const Icon(Icons.currency_exchange),
+                    ),
+                  ],
+                ),
+              ),
+            if (amountInputXMR)
+              LabeledTextInput(
+                label: "AMOUNT",
+                ctrl: amountCtrl,
+                onEdit: _amtEdited,
+                enabled: !isOffline,
+                suffixIcon: IconButton(
+                  onPressed: isOffline ? null : _switchAmountTF,
+                  icon: const Icon(Icons.currency_exchange),
+                ),
+              ),
             LabeledTextInput(
               label: "NOTES",
               ctrl: notesCtrl,
@@ -165,7 +228,7 @@ class _SpendScreenState extends State<SpendScreen> {
     if (addrUri != null && config.enableOpenAlias && address.contains(".")) {
       address = MONERO_WalletManager_resolveOpenAlias(
         wmPtr,
-        address: address,
+        address: address.replaceAll("@", "."),
         dnssecValid: false,
       );
       final errstr = MONERO_WalletManager_errorString(wmPtr);

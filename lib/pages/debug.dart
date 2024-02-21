@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:xmruw/pages/changelog.dart';
 import 'package:xmruw/pages/debug/backup_test.dart';
 import 'package:xmruw/pages/debug/battery_optimization.dart';
 import 'package:xmruw/pages/debug/button_x_textfield.dart';
@@ -99,6 +100,10 @@ class DebugPage extends StatelessWidget {
               onPressed: (!Platform.isAndroid)
                   ? null
                   : () => BatteryOptimizationDebug.push(context),
+            ),
+            LongOutlinedButton(
+              text: "Changelog",
+              onPressed: () => ChangelogPage.push(context),
             ),
           ],
         ),
