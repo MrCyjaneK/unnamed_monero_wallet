@@ -48,9 +48,13 @@ class _SpendScreenState extends State<SpendScreen> {
   }
 
   void _toggleSweep() {
+    final swp = sweepAllVar;
     setState(() {
-      sweepAllVar = !sweepAllVar;
-      amountCtrl.text = formatMonero(availableBalance);
+      amountCtrl.text = formatMonero(availableBalance).split(" ")[0];
+    });
+    _amtEdited();
+    setState(() {
+      sweepAllVar = !swp;
     });
   }
 
@@ -167,9 +171,15 @@ class _SpendScreenState extends State<SpendScreen> {
                 ctrl: amountCtrl,
                 onEdit: _amtEdited,
                 enabled: !isOffline,
-                suffixIcon: IconButton(
-                  onPressed: isOffline ? null : _switchAmountTF,
-                  icon: const Icon(Icons.currency_exchange),
+                suffixIcon: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text("XMR"),
+                    IconButton(
+                      onPressed: isOffline ? null : _switchAmountTF,
+                      icon: const Icon(Icons.currency_exchange),
+                    ),
+                  ],
                 ),
               ),
             LabeledTextInput(

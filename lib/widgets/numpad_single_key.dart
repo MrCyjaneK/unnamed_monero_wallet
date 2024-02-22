@@ -6,7 +6,7 @@ class SingleKey extends StatelessWidget {
   const SingleKey(this.keyId, this.pin, this.callback, {super.key});
   final Keys keyId;
   final PinInput pin;
-  final VoidCallback callback;
+  final VoidCallback? callback;
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -36,7 +36,7 @@ class SingleKey extends StatelessWidget {
                   default:
                     pin.value = "${pin.value}${getKeysChar(keyId)}";
                 }
-                callback();
+                callback?.call();
               },
               child: Center(
                 child: getKeyWidgetPinPad(keyId),

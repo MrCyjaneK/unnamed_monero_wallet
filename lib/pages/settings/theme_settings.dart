@@ -29,6 +29,8 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
       body: ListView.builder(
         itemCount: AppThemeEnum.values.length,
         itemBuilder: (context, index) {
+          if (AppThemeEnum.values[index] == AppThemeEnum.custom &&
+              !config.customThemeEnabled) return null;
           return ListTile(
             title: Text(getThemeName(AppThemeEnum.values[index])),
             leading: Radio<AppThemeEnum>(

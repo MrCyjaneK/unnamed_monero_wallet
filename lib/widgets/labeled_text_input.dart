@@ -10,6 +10,7 @@ class LabeledTextInput extends StatelessWidget {
   final int? maxLines;
   final bool? enabled;
   final Widget? suffixIcon;
+  final Color? color;
   const LabeledTextInput({
     super.key,
     required this.label,
@@ -21,6 +22,7 @@ class LabeledTextInput extends StatelessWidget {
     this.maxLines,
     this.enabled,
     this.suffixIcon,
+    this.color,
   });
 
   @override
@@ -34,7 +36,7 @@ class LabeledTextInput extends StatelessWidget {
                 label!,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.primary,
+                      color: color ?? Theme.of(context).colorScheme.primary,
                       fontSize: 18,
                     ),
               ),

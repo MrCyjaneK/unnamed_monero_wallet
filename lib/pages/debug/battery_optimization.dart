@@ -23,13 +23,6 @@ class BatteryOptimizationDebug extends StatefulWidget {
 class BatteryOptimizationDebugState extends State<BatteryOptimizationDebug> {
   var bd = BackupDetails();
 
-  void _decrypt() async {
-    final newBd = await BackupDetails.decrypt(context);
-    setState(() {
-      bd = newBd;
-    });
-  }
-
   void _print(String str) {
     Alert(title: str, cancelable: true).show(context);
   }

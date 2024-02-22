@@ -12,7 +12,7 @@ class NormalKeyboard extends StatefulWidget {
   final PinInput pin;
   final VoidCallback rebuild;
   final bool Function() showConfirm;
-  final VoidCallback nextPage;
+  final VoidCallback? nextPage;
 
   @override
   State<NormalKeyboard> createState() => _NormalKeyboardState();
@@ -103,7 +103,7 @@ class KbKey extends StatefulWidget {
   const KbKey(this.keyId, this.pin, this.callback, {super.key, this.flex = 1});
   final Keys keyId;
   final PinInput pin;
-  final VoidCallback callback;
+  final VoidCallback? callback;
   final int flex;
 
   @override
@@ -147,7 +147,7 @@ class _KbKeyState extends State<KbKey> {
                 widget.pin.value =
                     "${widget.pin.value}${getKeysChar(widget.keyId)}";
             }
-            widget.callback();
+            widget.callback?.call();
           },
           child: Center(
             child: getKeyWidgetKeyboard(widget.keyId, color),

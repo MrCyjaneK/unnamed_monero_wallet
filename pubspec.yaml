@@ -47,7 +47,9 @@ dependencies:
   path: any
   offline_market_data:
     hosted: https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
-    version: 2024.2.21+15
+    version: 2024.2.22+21
+    # path: ../offline_market_data
+  flex_color_picker: ^3.3.1
 
 
 dev_dependencies:

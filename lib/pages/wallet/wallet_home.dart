@@ -17,8 +17,8 @@ class WalletHome extends StatefulWidget {
   @override
   State<WalletHome> createState() => WalletHomeState();
 
-  static void push(BuildContext context) {
-    Navigator.of(context).pushReplacement(MaterialPageRoute(
+  static Future<void> push(BuildContext context) {
+    return Navigator.of(context).pushReplacement(MaterialPageRoute(
       builder: (context) {
         return const WalletHome();
       },
@@ -79,7 +79,7 @@ class WalletHomeState extends State<WalletHome> {
             BottomBarItem(
               icon: const Icon(Icons.qr_code),
               title: const Text('Receive'),
-              activeColor: Theme.of(context).colorScheme.primary,
+              activeColor: Theme.of(context).colorScheme.secondary,
             ),
             BottomBarItem(
               icon: const Icon(Icons.home),
@@ -89,7 +89,7 @@ class WalletHomeState extends State<WalletHome> {
             BottomBarItem(
               icon: const Icon(Icons.send_outlined),
               title: const Text('Send'),
-              activeColor: Theme.of(context).colorScheme.primary,
+              activeColor: Theme.of(context).colorScheme.secondary,
             ),
           ],
         ),

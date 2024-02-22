@@ -66,14 +66,16 @@ class _CurrencySettingsPageState extends State<CurrencySettingsPage> {
       title: Row(children: [
         Text(key),
         const Spacer(),
-        Text((price != null)
-            ? "${price.toStringAsFixed(4)} $key/XMR"
-            : "[no data]"),
+        Text(
+          (price != null)
+              ? "${price.toStringAsFixed(4)} $key/XMR"
+              : "[no data]",
+        ),
       ]),
       leading: Radio<String>(
         value: key,
         groupValue: currency,
-        onChanged: price == null
+        onChanged: price == null && key != "USD"
             ? null
             : (String? value) {
                 setState(() {

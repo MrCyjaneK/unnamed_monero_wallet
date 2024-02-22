@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:flutter/material.dart';
 import 'package:xmruw/pages/config/themes.dart';
 
 late Config config;
@@ -11,7 +11,11 @@ class Config {
     if (config.file.existsSync()) {
       try {
         return Config.fromJson(
-            confPath, json.decode(config.file.readAsStringSync()));
+          confPath,
+          json.decode(
+            config.file.readAsStringSync(),
+          ),
+        );
       } catch (e) {
         print("Config.load: $e");
       }
@@ -34,6 +38,18 @@ class Config {
     this.fiatCurrency = "USD",
     this.enableExperiments = false,
     this.lastChangelogVersion = -1,
+    this.customThemeEnabled = false,
+    this.customThemeBrightness = false,
+    this.customThemePrimary = Colors.green,
+    this.customThemeSecondary = Colors.green,
+    this.customThemeSurface = Colors.green,
+    this.customThemeBackground = Colors.green,
+    this.customThemeError = Colors.green,
+    this.customThemeOnPrimary = Colors.green,
+    this.customThemeOnSecondary = Colors.green,
+    this.customThemeOnSurface = Colors.green,
+    this.customThemeOnBackground = Colors.green,
+    this.customThemeOnError = Colors.green,
   });
 
   final String confPath;
@@ -52,6 +68,19 @@ class Config {
   String fiatCurrency;
   bool enableExperiments;
   int lastChangelogVersion;
+  // themeConfig
+  bool customThemeEnabled;
+  Color customThemePrimary;
+  Color customThemeSecondary;
+  Color customThemeSurface;
+  Color customThemeBackground;
+  Color customThemeError;
+  Color customThemeOnPrimary;
+  Color customThemeOnSecondary;
+  Color customThemeOnSurface;
+  Color customThemeOnBackground;
+  Color customThemeOnError;
+  bool customThemeBrightness;
   void save() {
     file.writeAsString(json.encode(toJson()));
   }
@@ -85,18 +114,55 @@ class Config {
     if (json['experimentalAccounts'] is bool) {
       c.experimentalAccounts = json["experimentalAccounts"];
     }
-    if (json['fiatCurrency'] is bool) {
+    if (json['fiatCurrency'] is String) {
       c.fiatCurrency = json["fiatCurrency"];
     }
     if (json['enableExperiments'] is bool) {
       c.enableExperiments = json["enableExperiments"];
     }
-    if (json['theme'] is bool) {
+    if (json['theme'] is int) {
       c.theme = AppThemeEnum.values[(json["theme"] as int)];
     }
-    if (json['lastChangelogVersion'] is bool) {
+    if (json['lastChangelogVersion'] is int) {
       c.lastChangelogVersion = json["lastChangelogVersion"];
     }
+    if (json['customThemeEnabled'] is bool) {
+      c.customThemeEnabled = json["customThemeEnabled"];
+    }
+    if (json['customThemePrimary'] is int) {
+      c.customThemePrimary = Color(json["customThemePrimary"] as int);
+    }
+    if (json['customThemeSecondary'] is int) {
+      c.customThemeSecondary = Color(json["customThemeSecondary"] as int);
+    }
+    if (json['customThemeSurface'] is int) {
+      c.customThemeSurface = Color(json["customThemeSurface"] as int);
+    }
+    if (json['customThemeBackground'] is int) {
+      c.customThemeBackground = Color(json["customThemeBackground"] as int);
+    }
+    if (json['customThemeError'] is int) {
+      c.customThemeError = Color(json["customThemeError"] as int);
+    }
+    if (json['customThemeOnPrimary'] is int) {
+      c.customThemeOnPrimary = Color(json["customThemeOnPrimary"] as int);
+    }
+    if (json['customThemeOnSecondary'] is int) {
+      c.customThemeOnSecondary = Color(json["customThemeOnSecondary"] as int);
+    }
+    if (json['customThemeOnSurface'] is int) {
+      c.customThemeOnSurface = Color(json["customThemeOnSurface"] as int);
+    }
+    if (json['customThemeOnBackground'] is int) {
+      c.customThemeOnBackground = Color(json["customThemeOnBackground"] as int);
+    }
+    if (json['customThemeOnError'] is int) {
+      c.customThemeOnError = Color(json["customThemeOnError"] as int);
+    }
+    if (json['customThemeBrightness'] is bool) {
+      c.customThemeBrightness = json["customThemeBrightness"];
+    }
+
     return c;
   }
 
@@ -115,6 +181,18 @@ class Config {
       "enableExperiments": enableExperiments,
       "theme": theme.index,
       "lastChangelogVersion": lastChangelogVersion,
+      "customThemeEnabled": customThemeEnabled,
+      "customThemePrimary": customThemePrimary.value,
+      "customThemeSecondary": customThemeSecondary.value,
+      "customThemeSurface": customThemeSurface.value,
+      "customThemeBackground": customThemeBackground.value,
+      "customThemeError": customThemeError.value,
+      "customThemeOnPrimary": customThemeOnPrimary.value,
+      "customThemeOnSecondary": customThemeOnSecondary.value,
+      "customThemeOnSurface": customThemeOnSurface.value,
+      "customThemeOnBackground": customThemeOnBackground.value,
+      "customThemeOnError": customThemeOnError.value,
+      "customThemeBrightness": customThemeBrightness,
     };
   }
 }

@@ -13,7 +13,7 @@ class NumericalKeyboard extends StatelessWidget {
   final PinInput pin;
   final VoidCallback rebuild;
   final bool Function() showConfirm;
-  final VoidCallback nextPage;
+  final VoidCallback? nextPage;
   @override
   Widget build(BuildContext context) {
     return Column(

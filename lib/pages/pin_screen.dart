@@ -63,9 +63,9 @@ class PinScreen extends StatefulWidget {
   @override
   State<PinScreen> createState() => _PinScreenState();
 
-  static void pushConfirmCreate(BuildContext context, String pin,
+  static Future<void> pushConfirmCreate(BuildContext context, String pin,
       {required String passphrase}) {
-    Navigator.of(context).push(MaterialPageRoute(
+    return Navigator.of(context).push(MaterialPageRoute(
       builder: (context) {
         return PinScreen(
           flag: PinScreenFlag.createWalletConfirm,
@@ -76,9 +76,9 @@ class PinScreen extends StatefulWidget {
     ));
   }
 
-  static void pushConfirmRestore(BuildContext context, String pin,
+  static Future<void> pushConfirmRestore(BuildContext context, String pin,
       {required String passphrase, RestoreData? restoreData}) {
-    Navigator.of(context).push(MaterialPageRoute(
+    return Navigator.of(context).push(MaterialPageRoute(
       builder: (context) {
         return PinScreen(
           flag: PinScreenFlag.restoreWalletSeedConfirm,
@@ -90,9 +90,9 @@ class PinScreen extends StatefulWidget {
     ));
   }
 
-  static void pushConfirmRestoreNero(BuildContext context, String pin,
+  static Future<void> pushConfirmRestoreNero(BuildContext context, String pin,
       {required String passphrase, RestoreData? restoreData}) {
-    Navigator.of(context).push(MaterialPageRoute(
+    return Navigator.of(context).push(MaterialPageRoute(
       builder: (context) {
         return PinScreen(
           flag: PinScreenFlag.restoreWalletNeroConfirm,
@@ -188,47 +188,53 @@ class _PinScreenState extends State<PinScreen> {
     return false;
   }
 
-  void _nextPage() {
+  bool canNextPage = true;
+
+  Future<void> _nextPage() async {
+    setState(() {
+      canNextPage = false;
+    });
     switch (widget.flag) {
       case PinScreenFlag.createWallet:
-        PinScreen.pushConfirmCreate(context, pin.value,
+        await PinScreen.pushConfirmCreate(context, pin.value,
             passphrase: widget.passphrase!);
       case PinScreenFlag.createWalletConfirm:
         if (pin.value != widget.initialPin) {
-          Alert(
+          await Alert(
             title: "Pins doesn't match. Please try again.",
             callback: () => PinScreen.push(context, PinScreenFlag.createWallet,
                 passphrase: widget.passphrase!),
           ).show(context);
           return;
         } else {
-          _createWallet().then((createdOk) {
-            if (!mounted) return;
-            if (createdOk) {
-              _openMainWallet();
-            }
-          });
-          // ProgressScreen.push(context, ProgressScreenFlag.walletCreation,
-          //     passphrase: widget.passphrase);
+          final createdOk = await _createWallet();
+          if (!mounted) return;
+          if (createdOk) {
+            await _openMainWallet();
+          }
         }
       case PinScreenFlag.restoreWalletSeed:
-        PinScreen.pushConfirmRestore(context, pin.value,
+        await PinScreen.pushConfirmRestore(context, pin.value,
             passphrase: widget.passphrase!, restoreData: widget.restoreData);
       case PinScreenFlag.restoreWalletSeedConfirm:
-        _restoreWalletSeedConfirm();
+        await _restoreWalletSeedConfirm();
       case PinScreenFlag.openMainWallet:
-        _openMainWallet();
+        await _openMainWallet();
       case PinScreenFlag.backgroundSyncLock:
-        _backgroundSyncUnlock();
+        await _backgroundSyncUnlock();
       case PinScreenFlag.restoreWalletNero:
-        PinScreen.pushConfirmRestoreNero(context, pin.value,
+        await PinScreen.pushConfirmRestoreNero(context, pin.value,
             passphrase: widget.passphrase!, restoreData: widget.restoreData);
       case PinScreenFlag.restoreWalletNeroConfirm:
-        _restoreWalletNeroConfirm();
+        await _restoreWalletNeroConfirm();
     }
+    if (!mounted) return;
+    setState(() {
+      canNextPage = true;
+    });
   }
 
-  void _restoreWalletNeroConfirm() async {
+  Future<void> _restoreWalletNeroConfirm() async {
     if (pin.value != widget.initialPin) {
       Alert(
         title: "Pins doesn't match. Please try again.",
@@ -279,7 +285,7 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
     WalletHome.push(context);
   }
 
-  void _backgroundSyncUnlock() async {
+  Future<void> _backgroundSyncUnlock() async {
     setState(() {
       openMainWalletUnlockText = "UNLOCKING...";
     });
@@ -295,12 +301,12 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
       openMainWalletUnlockText = "UNLOCK: success";
     });
     if (!mounted) return;
-    WalletHome.push(context);
+    await WalletHome.push(context);
   }
 
-  void _restoreWalletSeedConfirm() async {
+  Future<void> _restoreWalletSeedConfirm() async {
     if (pin.value != widget.initialPin) {
-      Alert(
+      await Alert(
         title: "Pins doesn't match. Please try again.",
         callback: () => PinScreen.push(context, PinScreenFlag.restoreWalletSeed,
             passphrase: widget.passphrase!),
@@ -353,7 +359,7 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
     }
     await _initWallet();
     if (!mounted) return;
-    WalletHome.push(context);
+    await WalletHome.push(context);
   }
 
   Future<void> _initWallet() async {
@@ -410,7 +416,7 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
     initLock();
   }
 
-  void _openMainWallet() async {
+  Future<void> _openMainWallet() async {
     setState(() {
       openMainWalletUnlockText = "UNLOCKING...";
     });
@@ -504,7 +510,7 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
               pin: pin,
               rebuild: _rebuild,
               showConfirm: _showConfirm,
-              nextPage: _nextPage,
+              nextPage: canNextPage ? _nextPage : null,
             ),
         ],
       ),
@@ -513,7 +519,7 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
               pin: pin,
               rebuild: _rebuild,
               showConfirm: _showConfirm,
-              nextPage: _nextPage,
+              nextPage: canNextPage ? _nextPage : null,
             )
           : null,
     );

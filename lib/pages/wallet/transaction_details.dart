@@ -68,6 +68,7 @@ class _TransactionDetailsState extends State<TransactionDetails> {
               title: const PrimaryLabel(
                 title: "DESTINATION",
                 enablePadding: false,
+                primary: false,
               ),
               subtitle: SelectableText(
                 widget.transaction.address,
@@ -79,6 +80,7 @@ class _TransactionDetailsState extends State<TransactionDetails> {
               title: const PrimaryLabel(
                 title: "DESCRIPTION",
                 enablePadding: false,
+                primary: false,
               ),
               subtitle: SelectableText(
                 description,
@@ -116,6 +118,7 @@ class _TransactionDetailsState extends State<TransactionDetails> {
       title: PrimaryLabel(
         title: title,
         enablePadding: false,
+        primary: false,
       ),
       subtitle: Padding(
         padding: const EdgeInsets.only(top: 8.0),

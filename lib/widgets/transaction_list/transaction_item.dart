@@ -83,7 +83,7 @@ class TransactionItem extends StatelessWidget {
           alignment: Alignment.center,
           children: [
             CircularProgressIndicator(
-              color: Colors.green,
+              color: Theme.of(context).colorScheme.secondary,
               strokeWidth: 1,
               value: progress,
             ),
@@ -104,7 +104,8 @@ class TransactionItem extends StatelessWidget {
               CupertinoIcons.arrow_up_right,
               color: Theme.of(context).colorScheme.primary,
             )
-          : const Icon(CupertinoIcons.arrow_down_left);
+          : Icon(CupertinoIcons.arrow_down_left,
+              color: Theme.of(context).colorScheme.secondary);
     }
   }
 

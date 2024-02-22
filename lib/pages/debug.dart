@@ -4,6 +4,7 @@ import 'package:xmruw/pages/changelog.dart';
 import 'package:xmruw/pages/debug/backup_test.dart';
 import 'package:xmruw/pages/debug/battery_optimization.dart';
 import 'package:xmruw/pages/debug/button_x_textfield.dart';
+import 'package:xmruw/pages/debug/config_json.dart';
 import 'package:xmruw/pages/debug/mobile_scanner.dart';
 import 'package:xmruw/pages/debug/monero_dart_advanced.dart';
 import 'package:xmruw/pages/debug/monero_dart_core.dart';
@@ -11,6 +12,7 @@ import 'package:xmruw/pages/debug/monero_dart_state.dart';
 import 'package:xmruw/pages/debug/monero_log.dart';
 import 'package:xmruw/pages/debug/monero_log_level.dart';
 import 'package:xmruw/pages/debug/performance.dart';
+import 'package:xmruw/pages/debug/theme_config.dart';
 import 'package:xmruw/pages/debug/tor_test.dart';
 import 'package:xmruw/pages/debug/urqr_codes.dart';
 import 'package:xmruw/pages/wallet/configuration_page.dart';
@@ -104,6 +106,14 @@ class DebugPage extends StatelessWidget {
             LongOutlinedButton(
               text: "Changelog",
               onPressed: () => ChangelogPage.push(context),
+            ),
+            LongOutlinedButton(
+              text: "Custom theme config",
+              onPressed: () => ThemeConfigPage.push(context),
+            ),
+            LongOutlinedButton(
+              text: "Config dump",
+              onPressed: () => ConfigPage.push(context),
             ),
           ],
         ),

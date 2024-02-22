@@ -17,7 +17,6 @@ import 'package:xmruw/tools/monero/account_index.dart';
 import 'package:xmruw/tools/show_alert.dart';
 import 'package:xmruw/tools/wallet_lock.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
-import 'package:xmruw/widgets/long_outlined_button.dart';
 import 'package:xmruw/widgets/transaction_list/popup_menu.dart';
 import 'package:xmruw/widgets/transaction_list/transaction_item.dart';
 import 'package:flutter/foundation.dart';
@@ -134,34 +133,70 @@ class _TransactionListState extends State<TransactionList> {
     // if (MONERO_Wallet_numSubaddressAccounts(walletPtr!) == 1) return null;
     final count = MONERO_Wallet_numSubaddressAccounts(walletPtr!);
     return Drawer(
-      child: SafeArea(
-        child: ListView.builder(
-          itemCount: count + 1,
-          itemBuilder: (context, index) {
-            final balance = MONERO_Wallet_balance(
-              walletPtr!,
-              accountIndex: index,
-            );
-            if (index == count) {
-              return LongOutlinedButton(
-                text: "Add another",
-                onPressed: () {
-                  setState(() {});
-                  MONERO_Wallet_addSubaddressAccount(walletPtr!);
-                },
-              );
-            }
-            return LongOutlinedButton(
-              text: "#$index. ${formatMonero(balance)}",
-              textAlign: TextAlign.start,
-              onPressed: () {
-                globalAccountIndex = index;
-                setState(() {
-                  txList = _buildTxList();
-                });
+      child: ListView.builder(
+        itemCount: count + 2,
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return _getTopWidget();
+          }
+          if (index == count + 1) {
+            return InkWell(
+              onTap: () {
+                setState(() {});
+                MONERO_Wallet_addSubaddressAccount(walletPtr!);
               },
+              child: const ListTile(
+                leading: Icon(Icons.add),
+                title: Text("Add another"),
+              ),
             );
-          },
+          }
+
+          final balance = MONERO_Wallet_balance(
+            walletPtr!,
+            accountIndex: index - 1,
+          );
+
+          return Column(
+            children: [
+              InkWell(
+                onTap: () {
+                  globalAccountIndex = index - 1;
+                  setState(() {
+                    txList = _buildTxList();
+                  });
+                },
+                child: ListTile(
+                  title: Text("#${index - 1}. ${formatMonero(balance)}"),
+                  subtitle: Text(formatMoneroFiat(balance, null)),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _getTopWidget() {
+    int balTotal = 0;
+    final accounts = MONERO_Wallet_numSubaddressAccounts(walletPtr!);
+    for (var i = 0; i < accounts; i++) {
+      balTotal += MONERO_Wallet_balance(walletPtr!, accountIndex: i);
+    }
+    return Container(
+      color: Theme.of(context).cardColor,
+      height: 130,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(formatMonero(balTotal), style: const TextStyle(fontSize: 24)),
+            Text(formatMoneroFiat(balTotal, null)),
+          ],
         ),
       ),
     );
@@ -176,10 +211,11 @@ class _TransactionListState extends State<TransactionList> {
         leading: config.experimentalAccounts ? const DrawerButton() : null,
         title: SelectableText(isViewOnly ? nero : anon),
         actions: [
-          IconButton(
-            onPressed: _lockWallet,
-            icon: const Icon(Icons.lock),
-          ),
+          if (config.enableBackgroundSync)
+            IconButton(
+              onPressed: _lockWallet,
+              icon: const Icon(Icons.lock),
+            ),
           IconButton(
               onPressed: () => BaseScannerPage.push(context),
               icon: const Icon(Icons.crop_free)),

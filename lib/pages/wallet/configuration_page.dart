@@ -128,6 +128,16 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
               },
               value: config.enableExperiments,
             ),
+            ConfigElement(
+              text: "customThemeEnabled",
+              description: "",
+              onClick: () {
+                config.customThemeEnabled = !config.customThemeEnabled;
+                config.save();
+                setState(() {});
+              },
+              value: config.customThemeEnabled,
+            ),
           ],
         ),
       ),

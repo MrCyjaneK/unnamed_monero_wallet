@@ -68,7 +68,7 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
-  var themeData = getTheme(AppThemeEnum.orange);
+  var themeData = getTheme(config.theme);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

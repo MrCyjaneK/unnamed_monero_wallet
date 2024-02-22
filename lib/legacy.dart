@@ -24,8 +24,8 @@ import 'package:tor_binary/tor_binary_platform_interface.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 
 class Transaction {
-  late final String displayLabel = MONERO_TransactionInfo_label(txInfo);
-  late String subaddressLabel = sl.subaddressLabel(0); // TODO: fixme
+  final String displayLabel;
+  String subaddressLabel = sl.subaddressLabel(0); // TODO: fixme
   late final String address = MONERO_Wallet_address(
     walletPtr!,
     accountIndex: globalAccountIndex,
@@ -70,7 +70,8 @@ class Transaction {
   final MONERO_TransactionInfo txInfo;
   Transaction({
     required this.txInfo,
-  })  : hash = MONERO_TransactionInfo_hash(txInfo),
+  })  : displayLabel = MONERO_TransactionInfo_label(txInfo),
+        hash = MONERO_TransactionInfo_hash(txInfo),
         timeStamp = DateTime.fromMillisecondsSinceEpoch(
           MONERO_TransactionInfo_timestamp(txInfo) * 1000,
         ),

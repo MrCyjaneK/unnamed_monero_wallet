@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:xmruw/pages/config/base.dart';
 
 enum AppThemeEnum {
   red,
@@ -20,6 +21,8 @@ enum AppThemeEnum {
   brown,
   grey,
   blueGrey,
+
+  custom,
 }
 
 String getThemeName(AppThemeEnum theme) {
@@ -62,6 +65,8 @@ String getThemeName(AppThemeEnum theme) {
       return "Silver Mist";
     case AppThemeEnum.blueGrey:
       return "Slate Symphony";
+    case AppThemeEnum.custom:
+      return "Custom, easily-breakable theme";
   }
 }
 
@@ -104,6 +109,25 @@ ThemeData getTheme(AppThemeEnum theme) => switch (theme) {
         getMaterialColorSimpleTheme(Colors.grey, Brightness.dark),
       AppThemeEnum.blueGrey =>
         getMaterialColorSimpleTheme(Colors.blueGrey, Brightness.dark),
+      AppThemeEnum.custom => ThemeData(
+          fontFamily: 'RobotoMono',
+          colorScheme: ColorScheme(
+            primary: config.customThemePrimary,
+            secondary: config.customThemeSecondary,
+            surface: config.customThemeSurface,
+            background: config.customThemeBackground,
+            error: config.customThemeError,
+            onPrimary: config.customThemeOnPrimary,
+            onSecondary: config.customThemeOnSecondary,
+            onSurface: config.customThemeOnSurface,
+            onBackground: config.customThemeOnBackground,
+            onError: config.customThemeOnError,
+            brightness: config.customThemeBrightness
+                ? Brightness.light
+                : Brightness.dark,
+          ),
+          useMaterial3: true,
+        )
     };
 
 ThemeData getMaterialColorSimpleTheme(
@@ -112,9 +136,6 @@ ThemeData getMaterialColorSimpleTheme(
     fontFamily: 'RobotoMono',
     colorScheme:
         ColorScheme.fromSwatch(primarySwatch: color, brightness: brightness),
-    dividerTheme: const DividerThemeData(
-      thickness: 3,
-    ),
     useMaterial3: true,
   );
 }
