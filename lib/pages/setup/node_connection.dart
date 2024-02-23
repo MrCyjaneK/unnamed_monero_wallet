@@ -1,3 +1,6 @@
+
+import 'package:flutter/services.dart';
+import 'package:xmruw/const/resource.g.dart';
 import 'package:xmruw/pages/setup/mnemonic_seed.dart';
 import 'package:xmruw/pages/setup/passphrase_encryption.dart';
 import 'package:xmruw/pages/setup/view_only_keys.dart';
@@ -49,11 +52,24 @@ class _SetupNodeConnectionState extends State<SetupNodeConnection> {
         passwordCtrl.text = passwordCtrl.text;
       });
     });
+    loadEmbeddedList();
     super.initState();
+  }
+
+  List<String> embeddedNodeList = [];
+
+  void loadEmbeddedList() async {
+    final nListStr = (await rootBundle.loadString(R.ASSETS_NODES_TXT)).trim();
+    final nList = nListStr.split("\n");
+    if (!mounted) return;
+    setState(() {
+      embeddedNodeList = nList;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    bool isNodeFromEmbeddedList = embeddedNodeList.contains(nodeCtrl.text);
     return Scaffold(
       body: Column(
         children: [
@@ -72,16 +88,18 @@ class _SetupNodeConnectionState extends State<SetupNodeConnection> {
                     label: "NODE",
                     hintText: "http://address.onion:port",
                   ),
-                  LabeledTextInput(
-                    ctrl: usernameCtrl,
-                    label: "USERNAME",
-                    hintText: "(optional)",
-                  ),
-                  LabeledTextInput(
-                    ctrl: passwordCtrl,
-                    label: "PASSWORD",
-                    hintText: "(optional)",
-                  ),
+                  if (!isNodeFromEmbeddedList)
+                    LabeledTextInput(
+                      ctrl: usernameCtrl,
+                      label: "USERNAME",
+                      hintText: "(optional)",
+                    ),
+                  if (!isNodeFromEmbeddedList)
+                    LabeledTextInput(
+                      ctrl: passwordCtrl,
+                      label: "PASSWORD",
+                      hintText: "(optional)",
+                    ),
                   const SizedBox(height: 32),
                   const ProxyButton(),
                 ],
@@ -109,7 +127,13 @@ class _SetupNodeConnectionState extends State<SetupNodeConnection> {
       Alert(
         title: "Creating offline wallet",
         cancelable: true,
-        callback: _nextScreen,
+        callback: () async {
+          final nodes = await NodeStore.getNodes();
+          for (var element in nodes.nodes) {
+            await NodeStore.removeNode(element.id);
+          }
+          _nextScreen();
+        },
       ).show(context);
       return;
     }

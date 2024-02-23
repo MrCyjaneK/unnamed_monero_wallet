@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:xmruw/const/app_name.dart';
 import 'package:xmruw/const/resource.g.dart';
 import 'package:xmruw/legacy.dart';
 import 'package:xmruw/pages/changelog.dart';
@@ -12,7 +11,6 @@ import 'package:xmruw/pages/scanner/base_scan.dart';
 import 'package:xmruw/pages/wallet/outputs_page.dart';
 import 'package:xmruw/tools/format_monero.dart';
 import 'package:xmruw/tools/is_offline.dart';
-import 'package:xmruw/tools/is_view_only.dart';
 import 'package:xmruw/tools/monero/account_index.dart';
 import 'package:xmruw/tools/show_alert.dart';
 import 'package:xmruw/tools/wallet_lock.dart';
@@ -208,8 +206,9 @@ class _TransactionListState extends State<TransactionList> {
       appBar: AppBar(
         flexibleSpace: LinearProgressIndicator(
             value: DateTime.now().difference(lastClick).inSeconds / lockAfter),
+        automaticallyImplyLeading: false,
         leading: config.experimentalAccounts ? const DrawerButton() : null,
-        title: SelectableText(isViewOnly ? nero : anon),
+        title: const SelectableText("wuxmr"),
         actions: [
           if (config.enableBackgroundSync)
             IconButton(

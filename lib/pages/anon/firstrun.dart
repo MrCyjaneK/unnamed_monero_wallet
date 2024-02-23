@@ -1,3 +1,4 @@
+import 'package:xmruw/main_clean.dart';
 import 'package:xmruw/pages/setup/backup_restore.dart';
 import 'package:xmruw/pages/setup/node_connection.dart';
 import 'package:xmruw/tools/backup_class.dart';
@@ -23,10 +24,14 @@ class AnonFirstRun extends StatelessWidget {
           if (isAnon)
             SetupOutlinedButton(
               text: "CREATE WALLET",
-              onPressed: () => SetupNodeConnection.push(
-                context,
-                SetupNodeConnectionFlag.createWallet,
-              ),
+              onPressed: () async {
+                await initLocalNodes();
+                // if (!mounted) return;
+                SetupNodeConnection.push(
+                  context,
+                  SetupNodeConnectionFlag.createWallet,
+                );
+              },
             ),
           const SizedBox(height: 24),
           if (isAnon)
@@ -45,7 +50,8 @@ class AnonFirstRun extends StatelessWidget {
     );
   }
 
-  void _restoreWalletNero(BuildContext c) {
+  void _restoreWalletNero(BuildContext c) async {
+    await initLocalNodes();
     SetupNodeConnection.push(c, SetupNodeConnectionFlag.restoreWalletNero);
   }
 

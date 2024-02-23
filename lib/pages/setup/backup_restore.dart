@@ -137,11 +137,13 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
                       ),
                       Flexible(
                         child: ListTile(
-                          title: Text("Restore Height",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelLarge
-                                  ?.copyWith(fontWeight: FontWeight.w800)),
+                          title: Text(
+                            "Restore Height",
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(fontWeight: FontWeight.w800),
+                          ),
                           subtitle: Padding(
                             padding: const EdgeInsets.only(top: 6),
                             child: Text(

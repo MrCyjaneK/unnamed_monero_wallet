@@ -180,7 +180,10 @@ class _PinScreenState extends State<PinScreen> {
       kdfRounds: 1,
     );
     final status = MONERO_Wallet_status(walletPtr!);
-    if (status == 0) return true; // All went fine
+    if (status == 0) {
+      MONERO_Wallet_store(walletPtr!);
+      return true;
+    } // All went fine
     if (mounted) {
       Alert(title: MONERO_Wallet_errorString(walletPtr!), cancelable: true)
           .show(context);
@@ -281,6 +284,7 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
       );
     }
     await _initWallet();
+    await isOfflineRefresh();
     if (!mounted) return;
     WalletHome.push(context);
   }

@@ -8,7 +8,10 @@ class DebugIconFirstRun extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      child: Image.asset(R.ASSETS_LOGO_PNG),
+      child: Image.asset(
+        R.ASSETS_LOGO_PNG,
+        width: 180,
+      ),
       onDoubleTap: () {
         DebugPage.push(context);
       },

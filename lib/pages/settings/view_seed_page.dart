@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:xmruw/const/app_name.dart';
 import 'package:xmruw/tools/show_alert.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/labeled_text_input.dart';
@@ -50,14 +49,26 @@ class _ViewSeedPageState extends State<ViewSeedPage> {
     });
   }
 
-  void _showNeroKeys() {
-    final data = const JsonEncoder.withIndent('   ').convert({
+  String getData() {
+    return const JsonEncoder.withIndent('   ').convert({
       "version": 0,
       "primaryAddress":
           MONERO_Wallet_address(walletPtr!, accountIndex: 0, addressIndex: 0),
       "privateViewKey": MONERO_Wallet_secretViewKey(walletPtr!),
       "restoreHeight": MONERO_Wallet_getRefreshFromBlockHeight(walletPtr!),
     });
+  }
+
+  void _showQubesKeys() {
+    final data = getData();
+    Alert(
+      cancelable: true,
+      singleBody: SelectableText(data),
+    ).show(context);
+  }
+
+  void _showNeroKeys() {
+    final data = getData();
     Alert(
       cancelable: false,
       singleBody: SizedBox(
@@ -117,9 +128,13 @@ class _ViewSeedPageState extends State<ViewSeedPage> {
                       child: SelectableText(restoreHeight.toString()))),
               const Divider(),
               LongOutlinedButton(
-                text: "EXPORT $nero KEYS",
+                text: "EXPORT QubesOS KEYS", // [ΛИ0ИΞR0]
+                onPressed: _showQubesKeys,
+              ),
+              LongOutlinedButton(
+                text: "EXPORT [ИΞR0] KEYS", // [ΛИ0ИΞR0]
                 onPressed: _showNeroKeys,
-              )
+              ),
             ],
           ),
         ),

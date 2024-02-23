@@ -13,6 +13,7 @@ import 'package:xmruw/pages/wallet/configuration_page.dart';
 import 'package:xmruw/tools/backup_class.dart' as b;
 import 'package:xmruw/tools/can_backup.dart';
 import 'package:xmruw/tools/dirs.dart';
+import 'package:xmruw/tools/is_offline.dart';
 import 'package:xmruw/tools/monero/account_index.dart';
 import 'package:xmruw/tools/node.dart';
 import 'package:xmruw/tools/proxy.dart';
@@ -58,7 +59,7 @@ Future<void> setNode(BuildContext c) async {
       .show(c);
 }
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
   static void push(BuildContext context) {
@@ -67,6 +68,22 @@ class SettingsPage extends StatelessWidget {
         return const SettingsPage();
       },
     ));
+  }
+
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  bool localIfOffline = isOffline;
+  @override
+  void initState() {
+    isOfflineRefresh().then((_) {
+      setState(() {
+        localIfOffline = isOffline;
+      });
+    });
+    super.initState();
   }
 
   @override
@@ -82,7 +99,7 @@ class SettingsPage extends StatelessWidget {
             SettingsListTile(
               title: "Nodes",
               subtitle: "Manage nodes",
-              onClick: () => NodesScreen.push(context),
+              onClick: localIfOffline ? null : () => NodesScreen.push(context),
             ),
             SettingsListTile(
               title: "Proxy",
@@ -92,7 +109,8 @@ class SettingsPage extends StatelessWidget {
               trailing: Circle(
                 color: (proc != null) ? Colors.green : Colors.yellow,
               ),
-              onClick: () => ProxySettings.push(context),
+              onClick:
+                  localIfOffline ? null : () => ProxySettings.push(context),
             ),
             const PrimaryLabel(title: "Look and feel"),
             SettingsListTile(

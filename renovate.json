@@ -9,8 +9,7 @@
                 "monero_libs",
                 "bytewords",
                 "anonero_backup",
-                "tor_binary",
-                "offline_market_data"
+                "tor_binary"
             ],
             "registryUrls": [
                 "https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/"

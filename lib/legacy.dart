@@ -5,7 +5,6 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:xmruw/const/app_name.dart';
 import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/pin_screen.dart';
 import 'package:xmruw/tools/dirs.dart';
@@ -359,7 +358,7 @@ void onStart(ServiceInstance service) async {
       if (service is AndroidServiceInstance) {
         flutterLocalNotificationsPlugin.show(
           notificationId,
-          xmruw,
+          'xmruw',
           await getStats(),
           const NotificationDetails(
             android: AndroidNotificationDetails(

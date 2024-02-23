@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:xmruw/pages/pin_screen.dart';
 import 'package:xmruw/pages/scanner/view_only_scanner.dart';
 import 'package:xmruw/pages/setup/passphrase_encryption.dart';
+import 'package:xmruw/tools/show_alert.dart';
 import 'package:xmruw/widgets/labeled_text_input.dart';
 import 'package:xmruw/widgets/long_outlined_button.dart';
 import 'package:xmruw/widgets/setup_logo.dart';
@@ -56,23 +60,41 @@ class _ViewOnlyKeysSetupState extends State<ViewOnlyKeysSetup> {
             IconButton(
               iconSize: 48,
               onPressed: () async {
-                await ViewOnlyScannerPage.push(context);
-                if (viewOnlyKeysLastScanned['primaryAddress'] == null) return;
+                final keysCtrl = TextEditingController();
+                await Alert(
+                    singleBody: LabeledTextInput(
+                      label: "Exported QubesOS keys",
+                      ctrl: keysCtrl,
+                    ),
+                    callback: () {
+                      Navigator.of(context).pop();
+                    }).show(context);
+                final data = json.decode(keysCtrl.text);
                 setState(() {
-                  // {version: 0,
-                  //primaryAddress: 45e7NVjr8FP9z2cFrgxmiEKVXNdtz7tf359rqoLiuTC1jnkBetHWcRuH1jn77f2HFEEo4reEHDjYcGDgB64gopNyRm9WYiL,
-                  //privateViewKey: b384b8c878b6297be10ae365bce58e753004424cc8771634b112ef8465cd220f,
-                  //restoreHeight: 3033166}
-                  primaryAddressCtrl.text =
-                      viewOnlyKeysLastScanned['primaryAddress'].toString();
-                  privateViewKeyCtrl.text =
-                      viewOnlyKeysLastScanned['privateViewKey'].toString();
-                  restoreHeightCtrl.text =
-                      viewOnlyKeysLastScanned['restoreHeight'].toString();
+                  primaryAddressCtrl.text = data['primaryAddress'].toString();
+                  privateViewKeyCtrl.text = data['privateViewKey'].toString();
+                  restoreHeightCtrl.text = data['restoreHeight'].toString();
                 });
               },
-              icon: const Icon(Icons.crop_free_sharp),
+              icon: const Icon(Icons.code),
             ),
+            if (Platform.isAndroid)
+              IconButton(
+                iconSize: 48,
+                onPressed: () async {
+                  await ViewOnlyScannerPage.push(context);
+                  if (viewOnlyKeysLastScanned['primaryAddress'] == null) return;
+                  setState(() {
+                    primaryAddressCtrl.text =
+                        viewOnlyKeysLastScanned['primaryAddress'].toString();
+                    privateViewKeyCtrl.text =
+                        viewOnlyKeysLastScanned['privateViewKey'].toString();
+                    restoreHeightCtrl.text =
+                        viewOnlyKeysLastScanned['restoreHeight'].toString();
+                  });
+                },
+                icon: const Icon(Icons.crop_free_sharp),
+              ),
           ],
         ),
       ),

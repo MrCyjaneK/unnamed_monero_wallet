@@ -188,7 +188,7 @@ class _SpendScreenState extends State<SpendScreen> {
               enabled: !isOffline,
             ),
             InkWell(
-              onTap: _toggleSweep,
+              onTap: isOffline ? null : _toggleSweep,
               child: SizedBox(
                 height: 80,
                 child: Center(

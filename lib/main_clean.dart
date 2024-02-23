@@ -18,7 +18,6 @@ void mainClean() async {
   final wd = await getWd();
   if (!wd.existsSync()) wd.createSync();
   await loadConfig();
-  await initLocalNodes();
 
   printStarts = config.printStarts;
   _walletExists =

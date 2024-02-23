@@ -63,7 +63,7 @@ class NodeStore {
             .toList(),
         currentNode = json['currentNode'] as int;
 
-  static void removeNode(int delId) async {
+  static Future<void> removeNode(int delId) async {
     await _nodeMutex.acquire();
     final path = await getNodeStore();
     final file = File(path);
