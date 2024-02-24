@@ -50,6 +50,8 @@ class Config {
     this.customThemeOnSurface = Colors.green,
     this.customThemeOnBackground = Colors.green,
     this.customThemeOnError = Colors.green,
+    this.forceEnableScanner = false,
+    this.forceEnableText = false,
   });
 
   final String confPath;
@@ -81,6 +83,8 @@ class Config {
   Color customThemeOnBackground;
   Color customThemeOnError;
   bool customThemeBrightness;
+  bool forceEnableScanner;
+  bool forceEnableText;
   void save() {
     file.writeAsString(json.encode(toJson()));
   }
@@ -162,7 +166,12 @@ class Config {
     if (json['customThemeBrightness'] is bool) {
       c.customThemeBrightness = json["customThemeBrightness"];
     }
-
+    if (json['forceEnableScanner'] is bool) {
+      c.forceEnableScanner = json["forceEnableScanner"];
+    }
+    if (json['forceEnableText'] is bool) {
+      c.forceEnableText = json["forceEnableText"];
+    }
     return c;
   }
 
@@ -193,6 +202,7 @@ class Config {
       "customThemeOnBackground": customThemeOnBackground.value,
       "customThemeOnError": customThemeOnError.value,
       "customThemeBrightness": customThemeBrightness,
+      "forceEnableScanner": forceEnableScanner,
     };
   }
 }

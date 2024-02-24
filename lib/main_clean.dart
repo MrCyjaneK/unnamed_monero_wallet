@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:xmruw/const/resource.g.dart';
+import 'package:xmruw/helpers/resource.g.dart';
 import 'package:xmruw/pages/anon/firstrun.dart';
 import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/config/themes.dart';

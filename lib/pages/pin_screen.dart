@@ -164,7 +164,14 @@ class _PinScreenState extends State<PinScreen> {
       });
       DebugPage.push(context);
     }
-    setState(() {});
+
+    setState(() {
+      if (pin.value != tCtrl.text) {
+        setState(() {
+          tCtrl.text = pin.value;
+        });
+      }
+    });
   }
 
   Future<bool> _createWallet() async {
@@ -485,6 +492,8 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
     );
   }
 
+  late final tCtrl = TextEditingController(text: pin.value);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -508,7 +517,20 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
           ),
           if (kDebugMode) _debug(),
           Text(getInputText()),
-          _printInputCircles(),
+          // _printInputCircles(),
+          TextField(
+            obscureText: true,
+            style: const TextStyle(fontSize: 48),
+            controller: tCtrl,
+            decoration: null,
+            textAlign: TextAlign.center,
+            onChanged: (value) {
+              setState(() {
+                pin.value = value;
+              });
+              _rebuild();
+            },
+          ),
           if (isPin)
             NumericalKeyboard(
               pin: pin,

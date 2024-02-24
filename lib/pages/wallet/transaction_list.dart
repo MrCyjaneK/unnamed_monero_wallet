@@ -1,13 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:xmruw/const/resource.g.dart';
+import 'package:xmruw/helpers/platform_support.dart';
+import 'package:xmruw/helpers/resource.g.dart';
 import 'package:xmruw/legacy.dart';
 import 'package:xmruw/pages/changelog.dart';
 import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/debug/performance.dart';
 import 'package:xmruw/pages/pin_screen.dart';
 import 'package:xmruw/pages/scanner/base_scan.dart';
+import 'package:xmruw/pages/scanner/scanner_text_only.dart';
 import 'package:xmruw/pages/wallet/outputs_page.dart';
 import 'package:xmruw/tools/format_monero.dart';
 import 'package:xmruw/tools/is_offline.dart';
@@ -215,9 +217,16 @@ class _TransactionListState extends State<TransactionList> {
               onPressed: _lockWallet,
               icon: const Icon(Icons.lock),
             ),
-          IconButton(
+          if (canPlatformScan())
+            IconButton(
               onPressed: () => BaseScannerPage.push(context),
-              icon: const Icon(Icons.crop_free)),
+              icon: const Icon(Icons.crop_free_sharp),
+            ),
+          if (canPlatformText())
+            IconButton(
+              onPressed: () => ScannerTextOnly.push(context),
+              icon: const Icon(Icons.code),
+            ),
           TxListPopupMenu()
         ],
       ),

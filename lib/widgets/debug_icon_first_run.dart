@@ -1,4 +1,4 @@
-import 'package:xmruw/const/resource.g.dart';
+import 'package:xmruw/helpers/resource.g.dart';
 import 'package:xmruw/pages/debug.dart';
 import 'package:flutter/material.dart';
 

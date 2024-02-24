@@ -436,10 +436,10 @@ packages:
     dependency: "direct main"
     description:
       name: offline_market_data
-      sha256: "4b3ee83ccb3a964630b3037de9f63091efa7860505afe53bed1691bccb3e9c74"
+      sha256: "9a1007a1bcd2b6d26c5c098fe1b5cc738801219bcf2d82adeada1a4bfc5254a0"
       url: "https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/"
     source: hosted
-    version: "2024.02.23+28"
+    version: "2024.02.24+30"
   path:
     dependency: "direct main"
     description:

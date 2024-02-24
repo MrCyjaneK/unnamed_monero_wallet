@@ -24,10 +24,10 @@ linux_debug_lib:
 	-rm build/linux/x64/debug/bundle/lib/libwallet2_api_c.so
 	unxz build/linux/x64/debug/bundle/lib/libwallet2_api_c.so.xz
 
-# deb: linux
-# 	./build_changelog.sh
-# 	dart pub global activate --source git https://github.com/tomekit/flutter_to_debian.git
-# 	${HOME}/.pub-cache/bin/flutter_to_debian
+deb: linux
+	./build_changelog.sh
+	dart pub global activate --source git https://github.com/tomekit/flutter_to_debian.git
+	${HOME}/.pub-cache/bin/flutter_to_debian
 
 .PHONY: dev
 dev: libs

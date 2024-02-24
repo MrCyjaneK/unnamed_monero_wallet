@@ -138,6 +138,26 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
               },
               value: config.customThemeEnabled,
             ),
+            ConfigElement(
+              text: "forceEnableScanner",
+              description: "",
+              onClick: () {
+                config.forceEnableScanner = !config.forceEnableScanner;
+                config.save();
+                setState(() {});
+              },
+              value: config.forceEnableScanner,
+            ),
+            ConfigElement(
+              text: "forceEnableText",
+              description: "",
+              onClick: () {
+                config.forceEnableText = !config.forceEnableText;
+                config.save();
+                setState(() {});
+              },
+              value: config.forceEnableText,
+            ),
           ],
         ),
       ),

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:xmruw/const/resource.g.dart';
+import 'package:xmruw/helpers/resource.g.dart';
 
 class ChangelogPage extends StatefulWidget {
   const ChangelogPage({super.key});

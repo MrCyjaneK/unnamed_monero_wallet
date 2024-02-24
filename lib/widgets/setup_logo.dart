@@ -1,4 +1,4 @@
-import 'package:xmruw/const/resource.g.dart';
+import 'package:xmruw/helpers/resource.g.dart';
 import 'package:flutter/material.dart';
 
 class SetupLogo extends StatelessWidget {

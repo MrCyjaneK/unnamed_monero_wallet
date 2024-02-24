@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:flutter_svg/svg.dart';
+import 'package:xmruw/helpers/platform_support.dart';
+import 'package:xmruw/helpers/resource.g.dart';
 import 'package:xmruw/pages/scanner/base_scan.dart';
 import 'package:xmruw/pages/wallet/wallet_home.dart';
 import 'package:xmruw/widgets/long_outlined_button.dart';
@@ -43,7 +46,13 @@ String _urBroadcastPageFlagToFileName(UrBroadcastPageFlag flag) {
   };
 }
 
-class UrBroadcastPage extends StatelessWidget {
+enum OfflineMode {
+  undefined,
+  urqr,
+  text,
+}
+
+class UrBroadcastPage extends StatefulWidget {
   const UrBroadcastPage({
     super.key,
     required this.filePath,
@@ -52,11 +61,33 @@ class UrBroadcastPage extends StatelessWidget {
   final UrBroadcastPageFlag flag;
   final String filePath;
 
+  @override
+  State<UrBroadcastPage> createState() => _UrBroadcastPageState();
+
+  static Future<void> push(BuildContext context,
+      {required String filePath, required UrBroadcastPageFlag flag}) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) {
+          return UrBroadcastPage(filePath: filePath, flag: flag);
+        },
+      ),
+    );
+  }
+}
+
+class _UrBroadcastPageState extends State<UrBroadcastPage> {
+  OfflineMode om = (canPlatformScan() && canPlatformText())
+      ? OfflineMode.undefined
+      : canPlatformScan()
+          ? OfflineMode.urqr
+          : OfflineMode.text;
+
   void _save() {
     CRFileSaver.saveFileWithDialog(
       SaveFileDialogParams(
-        sourceFilePath: filePath,
-        destinationFileName: _urBroadcastPageFlagToFileName(flag),
+        sourceFilePath: widget.filePath,
+        destinationFileName: _urBroadcastPageFlagToFileName(widget.flag),
       ),
     );
   }
@@ -71,61 +102,124 @@ class UrBroadcastPage extends StatelessWidget {
           icon: const Icon(Icons.arrow_back),
         ),
       ),
-      body: Column(
-        children: [
-          const SizedBox(height: 16),
-          PrimaryLabel(
-            title: _urBroadcastPageFlagToTitle(flag),
-            fontSize: 26,
-            textAlign: TextAlign.center,
-            enablePadding: false,
-            fontWeight: FontWeight.w600,
+      body: switch (om) {
+        OfflineMode.urqr => _buildUrQrPage(),
+        OfflineMode.text => _buildTextPage(),
+        OfflineMode.undefined => _pickPage(),
+      },
+      bottomNavigationBar: (om == OfflineMode.undefined)
+          ? null
+          : LongOutlinedButton(
+              text: widget.flag == UrBroadcastPageFlag.xmrSignedTx
+                  ? "FINISH"
+                  : "CONTINUE",
+              onPressed: () => _continue(context),
+            ),
+    );
+  }
+
+  Widget _buildUrQrPage() {
+    return Column(
+      children: [
+        const SizedBox(height: 16),
+        PrimaryLabel(
+          title: _urBroadcastPageFlagToTitle(widget.flag),
+          fontSize: 26,
+          textAlign: TextAlign.center,
+          enablePadding: false,
+          fontWeight: FontWeight.w600,
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          width: double.maxFinite,
+          child: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: URQR(
+              frames: uint8ListToURQR(
+                File(widget.filePath).readAsBytesSync(),
+                _urBroadcastPageFlagToTag(widget.flag),
+                fragLength: 300,
+              ),
+            ),
           ),
-          const SizedBox(height: 16),
-          SizedBox(
-            width: double.maxFinite,
+        ),
+        TextButton.icon(
+          onPressed: _save,
+          icon: const Icon(Icons.download),
+          label: const Text("Save to file"),
+        ),
+        const Spacer(flex: 3),
+      ],
+    );
+  }
+
+  Widget _pickPage() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Expanded(
+          child: InkWell(
+            onTap: () {
+              setState(() {
+                om = OfflineMode.urqr;
+              });
+            },
             child: Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: URQR(
-                frames: uint8ListToURQR(
-                  File(filePath).readAsBytesSync(),
-                  _urBroadcastPageFlagToTag(flag),
-                  fragLength: 300,
+              padding: const EdgeInsets.all(24),
+              child: SvgPicture.asset(
+                R.ASSETS_SCANNER_FRAME_SVG,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          child: InkWell(
+            onTap: () {
+              setState(() {
+                om = OfflineMode.text;
+              });
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: SizedBox(
+                width: double.maxFinite,
+                child: Center(
+                  child: Text(
+                    "Text",
+                    style: Theme.of(context).textTheme.displayLarge,
+                  ),
                 ),
               ),
             ),
           ),
-          TextButton.icon(
-            onPressed: _save,
-            icon: const Icon(Icons.download),
-            label: const Text("Save to file"),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTextPage() {
+    final fileContent = File(widget.filePath).readAsBytesSync();
+    final bw = uint8ListToBytewordsShort(fileContent);
+    final flag = _urBroadcastPageFlagToTag(widget.flag);
+    final text = "$flag:$bw";
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SelectableText(text),
           ),
-          const Spacer(flex: 3),
         ],
-      ),
-      bottomNavigationBar: LongOutlinedButton(
-        text: flag == UrBroadcastPageFlag.xmrSignedTx ? "FINISH" : "CONTINUE",
-        onPressed: () => _continue(context),
       ),
     );
   }
 
   void _continue(BuildContext c) async {
-    if (flag == UrBroadcastPageFlag.xmrSignedTx) {
+    if (widget.flag == UrBroadcastPageFlag.xmrSignedTx) {
       Navigator.of(c).pop();
       return;
     }
     BaseScannerPage.pushReplace(c);
-  }
-
-  static Future<void> push(BuildContext context,
-      {required String filePath, required UrBroadcastPageFlag flag}) async {
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) {
-          return UrBroadcastPage(filePath: filePath, flag: flag);
-        },
-      ),
-    );
   }
 }

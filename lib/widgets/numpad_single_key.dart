@@ -1,4 +1,4 @@
-import 'package:xmruw/const/keyboard.dart';
+import 'package:xmruw/helpers/keyboard.dart';
 import 'package:xmruw/pages/pin_screen.dart';
 import 'package:flutter/material.dart';
 

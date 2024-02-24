@@ -1,6 +1,5 @@
-
 import 'package:flutter/services.dart';
-import 'package:xmruw/const/resource.g.dart';
+import 'package:xmruw/helpers/resource.g.dart';
 import 'package:xmruw/pages/setup/mnemonic_seed.dart';
 import 'package:xmruw/pages/setup/passphrase_encryption.dart';
 import 'package:xmruw/pages/setup/view_only_keys.dart';
