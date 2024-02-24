@@ -28,6 +28,11 @@ jobs:
         run: |
           cd ${{ gitea.workspace }} \
           && make apk
+      - name: Build linux (tarball)
+        continue-on-error: true
+        run: |
+          cd ${{ gitea.workspace }} \
+          && make linux
       - name: Build linux (debian)
         continue-on-error: true
         run: |
@@ -36,11 +41,6 @@ jobs:
           && curl --user mrcyjanek:${{ secrets.PAT_SECRET_PACKAGE }} \
           --upload-file build/linux/x64/release/debian/*.deb \
           https://git.mrcyjanek.net/api/packages/mrcyjanek/debian/pool/no-distro/main/upload
-      - name: Build linux (tarball)
-        continue-on-error: true
-        run: |
-          cd ${{ gitea.workspace }} \
-          && make linux
       - name: Create release
         uses: akkuman/gitea-release-action@v1
         with:
