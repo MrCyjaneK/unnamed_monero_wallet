@@ -15,6 +15,8 @@ jobs:
       #     && fdroid init
       - name: Check out repository code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Flutter pub get
         run: |
           cd ${{ gitea.workspace }} \
@@ -58,6 +60,6 @@ jobs:
           #name: "${{ gitea.reg_name }}-${{ gitea.sha }}"
           #tagname: "${{ gitea.reg_name }}-${{ gitea.sha }}"
           files: |-
-            ${{ gitea.workspace }}/build/app/outputs/flutter-apk/app-calc-release.apk
-            ${{ gitea.workspace }}/build/app/outputs/flutter-apk/app-clean-release.apk
             ${{ gitea.workspace }}/build/linux/x64/release/xmruw-linux-amd64.tar.xz
+            ${{ gitea.workspace }}/build/app/outputs/flutter-apk/app-clean-release.apk
+            ${{ gitea.workspace }}/build/app/outputs/flutter-apk/app-calc-release.apk
