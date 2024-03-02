@@ -30,5 +30,5 @@ steps:
       - chmod 600 ~/.ssh/id_rsa
       - rsync --mkpath -e "ssh -o StrictHostKeyChecking=no" -raz build/linux/x64/release/debian/xmruw_amd64.deb $${SSH_HOST}:"$${SSH_BASE_PATH}/$(git describe --tags)/$${triplet}_xmruw.deb"
       - rsync --mkpath -e "ssh -o StrictHostKeyChecking=no" -raz build/linux/x64/release/xmruw-linux-amd64.tar.xz $${SSH_HOST}:"$${SSH_BASE_PATH}/$(git describe --tags)/$${triplet}_xmruw.tar.xz"
-
-    secrets: [ ssh_privkey, ssh_host, ssh_base_path ]
+      - curl --user mrcyjanek:$${PAT_SECRET_PACKAGE} --upload-file build/linux/x64/release/debian/*.deb https://git.mrcyjanek.net/api/packages/mrcyjanek/debian/pool/no-distro/main/upload
+    secrets: [ ssh_privkey, ssh_host, ssh_base_path, pat_secret_package ]
