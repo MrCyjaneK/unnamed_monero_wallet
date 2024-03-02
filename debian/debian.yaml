@@ -1,7 +1,7 @@
 flutter_app: 
   command: xmruw
   arch: x64
-  parent: /usr/local/lib
+  parent: /opt/unnamed_monero_wallet
   nonInteractive: true
 
 control:

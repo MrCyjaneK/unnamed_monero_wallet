@@ -8,8 +8,8 @@ apk:
 linux: 
 	./build_changelog.sh
 	flutter build linux
-	echo https://git.mrcyjanek.net/mrcyjanek/monero_c/releases/download/${shell ./get_current_build.sh}/x86_64-linux-gnu_libwallet2_api_c.so.xz
-	wget https://git.mrcyjanek.net/mrcyjanek/monero_c/releases/download/v0.18.3.1-RC50/x86_64-linux-gnu_libwallet2_api_c.so.xz \
+	echo https://static.mrcyjanek.net/monero_c/${shell ./get_current_build.sh}/${TARGET_TRIPLET}_libwallet2_api_c.so.xz
+	wget https://static.mrcyjanek.net/monero_c/${shell ./get_current_build.sh}/${TARGET_TRIPLET}_libwallet2_api_c.so.xz \
 		-O build/linux/x64/release/bundle/lib/libwallet2_api_c.so.xz
 	-rm build/linux/x64/release/bundle/lib/libwallet2_api_c.so
 	unxz build/linux/x64/release/bundle/lib/libwallet2_api_c.so.xz
@@ -19,13 +19,12 @@ linux:
 
 .PHONY: linux_debug_lib
 linux_debug_lib:
-	wget https://git.mrcyjanek.net/mrcyjanek/monero_c/releases/download/v0.18.3.1-RC50/x86_64-linux-gnu_libwallet2_api_c.so.xz \
+	wget https://static.mrcyjanek.net/monero_c/${shell ./get_current_build.sh}/${shell gcc -dumpmachine}_libwallet2_api_c.so.xz \
 		-O build/linux/x64/debug/bundle/lib/libwallet2_api_c.so.xz
 	-rm build/linux/x64/debug/bundle/lib/libwallet2_api_c.so
 	unxz build/linux/x64/debug/bundle/lib/libwallet2_api_c.so.xz
 
-deb: linux
-	./build_changelog.sh
+deb:
 	dart pub global activate --source git https://github.com/tomekit/flutter_to_debian.git
 	${HOME}/.pub-cache/bin/flutter_to_debian
 

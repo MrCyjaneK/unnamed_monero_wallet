@@ -1,0 +1,34 @@
+clone:
+  git:
+    image: woodpeckerci/plugin-git
+    settings:
+      partial: false
+
+matrix:
+  include:
+    - image: git.mrcyjanek.net/mrcyjanek/flutter:linux
+      platform: linux/amd64
+      triplet: x86_64-linux-gnu
+
+steps:
+  - name: Build package
+    image: ${image}
+    steps:
+      - git config --global --add safe.directory $PWD
+      - git fetch
+      - flutter pub get
+      - make version
+      - TARGET_TRIPLET=${triplet} make linux
+      - TARGET_TRIPLET=${triplet} make deb
+  - name: Publish release
+    image: git.mrcyjanek.net/mrcyjanek/debian:bookworm
+    steps:
+      - rm -rf ~/.ssh || true
+      - mkdir -p ~/.ssh
+      - echo "$${SSH_PRIVKEY}" > ~/.ssh/id_rsa
+      - chmod 700 ~/.ssh
+      - chmod 600 ~/.ssh/id_rsa
+      - rsync --mkpath -e "ssh -o StrictHostKeyChecking=no" -raz build/linux/x64/release/debian/xmruw_amd64.deb $${SSH_HOST}:"$${SSH_BASE_PATH}/$(git describe --tags)/$${triplet}_xmruw.deb"
+      - rsync --mkpath -e "ssh -o StrictHostKeyChecking=no" -raz build/linux/x64/release/xmruw-linux-amd64.tar.xz $${SSH_HOST}:"$${SSH_BASE_PATH}/$(git describe --tags)/$${triplet}_xmruw.tar.xz"
+
+    secrets: [ ssh_privkey, ssh_host, ssh_base_path ]
