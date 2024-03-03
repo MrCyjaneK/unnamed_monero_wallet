@@ -165,10 +165,10 @@ packages:
     dependency: "direct main"
     description:
       name: flex_color_picker
-      sha256: "0871edc170153cfc3de316d30625f40a85daecfa76ce541641f3cc0ec7757cbf"
+      sha256: "904373c7b0531fd4a92d29705a80ab4594b7647da2d93044487aaec4614cb6ed"
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.1"
+    version: "3.4.0"
   flex_seed_scheme:
     dependency: transitive
     description:
@@ -436,10 +436,10 @@ packages:
     dependency: "direct main"
     description:
       name: offline_market_data
-      sha256: "1611cf1980ee26ef11736368446075eeae8aaad284c4fdd911ab9a0fc3847314"
+      sha256: "3e0507ca61316e2a2bab95ba43d90cfc4efad3ecc784348af35dfe9a71dd01af"
       url: "https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/"
     source: hosted
-    version: "2024.03.02+54"
+    version: "2024.03.04+62"
   path:
     dependency: "direct main"
     description:

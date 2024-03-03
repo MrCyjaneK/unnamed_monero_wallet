@@ -1,7 +1,7 @@
 name: xmruw
 description: "monero wallet for android."
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 0.0.1+16
+version: 1.0.0+68
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
@@ -47,7 +47,7 @@ dependencies:
   path: any
   offline_market_data:
     hosted: https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
-    version: 2024.03.02+54
+    version: 2024.03.04+62
     # path: ../offline_market_data
   flex_color_picker: ^3.3.1
 

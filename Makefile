@@ -1,5 +1,5 @@
-.PHONY: apk
-apk:
+.PHONY: android
+android:
 	./build_changelog.sh
 	flutter build apk --flavor calc  --dart-define=libstealth_calculator=true
 	flutter build apk --flavor clean --dart-define=libstealth_calculator=false
@@ -38,6 +38,10 @@ lib/const/resource.g.dart:
 	mv lib/const/resource.dart lib/const/resource.g.dart
 .PHONY: lib/const/resource.g.dart
 
+.PHONY: sailfishos
+sailfishos:
+	./build_changelog.sh
+	bash ./elinux/sailfish_build.sh
 
 .PHONY: version
 version:
