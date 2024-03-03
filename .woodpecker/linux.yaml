@@ -13,7 +13,7 @@ matrix:
 steps:
   - name: Build package
     image: ${image}
-    steps:
+    commands:
       - git config --global --add safe.directory $PWD
       - git fetch
       - flutter pub get
@@ -22,7 +22,7 @@ steps:
       - TARGET_TRIPLET=${triplet} make deb
   - name: Publish release
     image: git.mrcyjanek.net/mrcyjanek/debian:bookworm
-    steps:
+    commands:
       - rm -rf ~/.ssh || true
       - mkdir -p ~/.ssh
       - echo "$${SSH_PRIVKEY}" > ~/.ssh/id_rsa
