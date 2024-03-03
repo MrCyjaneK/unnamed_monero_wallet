@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0.0+62
+Name=xmruw
+GenericName=xmruw
+Comment=xmruw wallet for SailfishOS
+Exec=/opt/unnamed-monero-wallet/unnamed_monero_wallet %U
+Terminal=false
+Type=Application
+Categories=Utility
+Keywords=Finance;
+Icon=unnamed_monero_wallet
+
+[X-Sailjail]
+Sandboxing=Disabled

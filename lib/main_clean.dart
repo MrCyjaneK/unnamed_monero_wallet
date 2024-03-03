@@ -10,6 +10,7 @@ import 'package:xmruw/tools/wallet_lock.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
 import 'package:xmruw/tools/wallet_manager.dart';
+import 'dart:ui';
 
 bool _walletExists = false;
 
@@ -75,6 +76,7 @@ class MyAppState extends State<MyApp> {
       showPerformanceOverlay: config.showPerformanceOverlay,
       title: 'xmruw',
       theme: themeData,
+      scrollBehavior: MyCustomScrollBehavior(),
       home: _walletExists
           ? const PinScreen(
               flag: PinScreenFlag.openMainWallet,
@@ -89,4 +91,14 @@ class MyAppState extends State<MyApp> {
       state.themeData = theme;
     });
   }
+}
+
+class MyCustomScrollBehavior extends MaterialScrollBehavior {
+  // Override behavior methods and getters like dragDevices
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        // etc.
+      };
 }

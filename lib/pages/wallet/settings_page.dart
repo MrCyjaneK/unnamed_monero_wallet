@@ -24,6 +24,7 @@ import 'package:xmruw/widgets/primary_label.dart';
 import 'package:xmruw/widgets/settings_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
+import 'package:xmruw/widgets/setup_logo.dart';
 
 bool isProxyOn = false;
 
@@ -95,6 +96,8 @@ class _SettingsPageState extends State<SettingsPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            const SetupLogo(title: "Settings"),
+            const Divider(),
             const PrimaryLabel(title: "Connection"),
             SettingsListTile(
               title: "Nodes",
