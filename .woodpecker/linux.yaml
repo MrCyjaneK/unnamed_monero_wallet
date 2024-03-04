@@ -38,6 +38,8 @@ steps:
       - ${flutter} pub get # yes we need it twice
       - make version
       - TARGET_TRIPLET=${triplet} make ${makecmd}
+    volumes:
+      - /opt/cache/${triplet}/dotcache:/root/.cache
   - name: Publish release
     image: git.mrcyjanek.net/mrcyjanek/debian:bookworm
     commands:
