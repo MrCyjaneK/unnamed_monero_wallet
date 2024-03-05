@@ -12,18 +12,32 @@ matrix:
       makecmd: linux deb
       prepcmd: echo ok
       flutter: flutter
+      debian_arch: amd64
+      flutter_arch: x64
+    - image: git.mrcyjanek.net/mrcyjanek/flutter:linux
+      platform: linux/aarch64
+      triplet: aarch64-linux-gnu
+      makecmd: linux deb
+      prepcmd: echo ok
+      flutter: flutter
+      debian_arch: arm64
+      flutter_arch: arm64
     - image: git.mrcyjanek.net/mrcyjanek/sailfishos:4.5.0.18_aarch64
       platform: linux/aarch64
       triplet: aarch64-linux-sailfishos
       makecmd: sailfishos
       prepcmd: bash elinux/sailfish_prepare.sh && source $HOME/.bashrc
       flutter: flutter-elinux
+      debian_arch: arm64
+      flutter_arch: arm64
     - image: ghcr.io/cirruslabs/flutter:3.19.2
       platform: linux/amd64
       triplet: multiarch-android-unknown
       makecmd: android
       prepcmd: echo ok
       flutter: flutter
+      debian_arch: na
+      flutter_arch: na
 
 labels:
   platform: ${platform}
@@ -37,7 +51,7 @@ steps:
       - ${flutter} pub get
       - ${flutter} pub get # yes we need it twice
       - make version
-      - TARGET_TRIPLET=${triplet} make ${makecmd}
+      - TARGET_TRIPLET=${triplet} FLUTTER_ARCH=${flutter_arch} DEBIAN_ARCH=${debian_arch} make ${makecmd}
     volumes:
       - /opt/cache/${triplet}/dotcache:/root/.cache
   - name: Publish release
@@ -48,9 +62,9 @@ steps:
       - echo "$${SSH_PRIVKEY}" > ~/.ssh/id_rsa
       - chmod 700 ~/.ssh
       - chmod 600 ~/.ssh/id_rsa
-      - rsync --mkpath -e "ssh -o StrictHostKeyChecking=no" -raz build/linux/x64/release/debian/xmruw_amd64.deb $${SSH_HOST}:"$${SSH_BASE_PATH}/$(git describe --tags)/$${triplet}/xmruw.deb" || true
-      - curl --user mrcyjanek:$${PAT_SECRET_PACKAGE} --upload-file build/linux/x64/release/debian/*.deb https://git.mrcyjanek.net/api/packages/mrcyjanek/debian/pool/no-distro/main/upload || true
-      - rsync --mkpath -e "ssh -o StrictHostKeyChecking=no" -raz build/linux/x64/release/xmruw-linux-amd64.tar.xz $${SSH_HOST}:"$${SSH_BASE_PATH}/$(git describe --tags)/$${triplet}/xmruw.tar.xz" || true
-      - rsync --mkpath -e "ssh -o StrictHostKeyChecking=no" -raz build/elinux/arm64/release/*.rpm $${SSH_HOST}:"$${SSH_BASE_PATH}/$(git describe --tags)/$${triplet}/" || true
+      - rsync --mkpath -e "ssh -o StrictHostKeyChecking=no" -raz build/linux/*/release/debian/*.deb $${SSH_HOST}:"$${SSH_BASE_PATH}/$(git describe --tags)/$${triplet}/xmruw.deb" || true
+      - curl --user mrcyjanek:$${PAT_SECRET_PACKAGE} --upload-file build/linux/*/release/debian/*.deb https://git.mrcyjanek.net/api/packages/mrcyjanek/debian/pool/no-distro/main/upload || true
+      - rsync --mkpath -e "ssh -o StrictHostKeyChecking=no" -raz build/linux/*/release/*.tar.xz $${SSH_HOST}:"$${SSH_BASE_PATH}/$(git describe --tags)/$${triplet}/xmruw.tar.xz" || true
+      - rsync --mkpath -e "ssh -o StrictHostKeyChecking=no" -raz build/elinux/*/release/*.rpm $${SSH_HOST}:"$${SSH_BASE_PATH}/$(git describe --tags)/$${triplet}/" || true
       - rsync --mkpath -e "ssh -o StrictHostKeyChecking=no" -raz build/app/outputs/flutter-apk/*.apk $${SSH_HOST}:"$${SSH_BASE_PATH}/$(git describe --tags)/$${triplet}/" || true
     secrets: [ ssh_privkey, ssh_host, ssh_base_path, pat_secret_package ]

@@ -10,22 +10,23 @@ linux:
 	flutter build linux
 	echo https://static.mrcyjanek.net/monero_c/${shell ./get_current_build.sh}/${TARGET_TRIPLET}_libwallet2_api_c.so.xz
 	wget https://static.mrcyjanek.net/monero_c/${shell ./get_current_build.sh}/${TARGET_TRIPLET}_libwallet2_api_c.so.xz \
-		-O build/linux/x64/release/bundle/lib/libwallet2_api_c.so.xz
-	-rm build/linux/x64/release/bundle/lib/libwallet2_api_c.so
-	unxz build/linux/x64/release/bundle/lib/libwallet2_api_c.so.xz
-	-rm build/linux/x64/release/xmruw-linux-amd64.tar*
-	(cd build/linux/x64/release && cp -a bundle xmruw && tar -cvf xmruw-linux-amd64.tar xmruw && xz -e xmruw-linux-amd64.tar)
+		-O build/linux/${FLUTTER_ARCH}/release/bundle/lib/libwallet2_api_c.so.xz
+	-rm build/linux/${FLUTTER_ARCH}/release/bundle/lib/libwallet2_api_c.so
+	unxz build/linux/${FLUTTER_ARCH}/release/bundle/lib/libwallet2_api_c.so.xz
+	-rm build/linux/${FLUTTER_ARCH}/release/xmruw-linux-${DEBIAN_ARCH}.tar*
+	(cd build/linux/${FLUTTER_ARCH}/release && cp -a bundle xmruw && tar -cvf xmruw-linux-${DEBIAN_ARCH}.tar xmruw && xz -e xmruw-linux-${DEBIAN_ARCH}.tar)
 
 
 .PHONY: linux_debug_lib
 linux_debug_lib:
 	wget https://static.mrcyjanek.net/monero_c/${shell ./get_current_build.sh}/${shell gcc -dumpmachine}_libwallet2_api_c.so.xz \
-		-O build/linux/x64/debug/bundle/lib/libwallet2_api_c.so.xz
-	-rm build/linux/x64/debug/bundle/lib/libwallet2_api_c.so
-	unxz build/linux/x64/debug/bundle/lib/libwallet2_api_c.so.xz
+		-O build/linux/${FLUTTER_ARCH}/debug/bundle/lib/libwallet2_api_c.so.xz
+	-rm build/linux/${FLUTTER_ARCH}/debug/bundle/lib/libwallet2_api_c.so
+	unxz build/linux/${FLUTTER_ARCH}/debug/bundle/lib/libwallet2_api_c.so.xz
 
 deb:
 	dart pub global activate --source git https://github.com/tomekit/flutter_to_debian.git
+	cat debian/debian.yaml.txt | sed 's/x64/${FLUTTER_ARCH}/g' | sed 's/amd64/${DEBIAN_ARCH}/g' > debian/debian.yaml
 	${HOME}/.pub-cache/bin/flutter_to_debian
 
 .PHONY: dev
@@ -46,7 +47,7 @@ sailfishos:
 .PHONY: version
 version:
 	sed -i "s/^version: .*/version: 1.0.0+$(shell git rev-list --count HEAD)/" "pubspec.yaml"
-	sed -i "s/^  Version: .*/  Version: 1.0.0+$(shell git rev-list --count HEAD)/" "debian/debian.yaml"
+	sed -i "s/^  Version: .*/  Version: 1.0.0+$(shell git rev-list --count HEAD)/" "debian/debian.yaml.txt"
 	sed -i "s/^Version=.*/Version=1.0.0+$(shell git rev-list --count HEAD)/" "debian/gui/xmruw.desktop"
 	sed -i "s/^Version=.*/Version=1.0.0+$(shell git rev-list --count HEAD)/" "elinux/unnamed-monero-wallet.desktop"
 	sed -i "s/^Version:    .*/Version:    1.0.0+$(shell git rev-list --count HEAD)/" "elinux/sailfishos.spec"
