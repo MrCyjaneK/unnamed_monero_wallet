@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
 import 'package:xmruw/pages/sync_static_progress.dart';
 import 'package:xmruw/pages/wallet/spend_confirm.dart';
+import 'package:xmruw/pages/wallet/spend_screen.dart';
 import 'package:xmruw/pages/wallet/spend_success.dart';
 import 'package:xmruw/tools/dirs.dart';
 import 'package:xmruw/tools/hexdump.dart';
@@ -75,6 +76,7 @@ Future<void> processUr(BuildContext context, String tag, Uint8List data) async {
           address: MONERO_UnsignedTransaction_recipientAddress(tx),
           amount: (num.parse(MONERO_UnsignedTransaction_amount(tx))) ~/ 1,
           fee: (num.parse(MONERO_UnsignedTransaction_fee(tx))) ~/ 1,
+          priority: Priority.default_,
           notes: "N/A",
           isSweep: false,
           outputs: [],

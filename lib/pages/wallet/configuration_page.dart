@@ -158,6 +158,16 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
               },
               value: config.forceEnableText,
             ),
+            ConfigElement(
+              text: "enableGraphs",
+              description: "",
+              onClick: () {
+                config.enableGraphs = !config.enableGraphs;
+                config.save();
+                setState(() {});
+              },
+              value: config.enableGraphs,
+            ),
           ],
         ),
       ),

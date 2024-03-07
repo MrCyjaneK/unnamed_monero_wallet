@@ -31,6 +31,13 @@ class SpendScreen extends StatefulWidget {
   }
 }
 
+enum Priority {
+  default_,
+  low,
+  medium,
+  high,
+}
+
 class _SpendScreenState extends State<SpendScreen> {
   late final addressCtrl = TextEditingController(text: widget.address);
   final amountCtrl = TextEditingController();
@@ -139,6 +146,20 @@ class _SpendScreenState extends State<SpendScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text("Send"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              setState(() {
+                priorityIndex++;
+              });
+            },
+            child: (priority == Priority.default_)
+                ? const Text("Fee")
+                : Text(
+                    getPriorityText(priority),
+                  ),
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -255,10 +276,22 @@ class _SpendScreenState extends State<SpendScreen> {
       TxRequest(
         address: address,
         amount: amtInt,
+        priority: priority,
         notes: notesCtrl.text,
         isSweep: sweepAll,
         outputs: widget.outputs,
       ),
     );
   }
+
+  int priorityIndex = 0;
+  Priority get priority =>
+      Priority.values[priorityIndex % Priority.values.length];
 }
+
+String getPriorityText(Priority p) => switch (p) {
+      Priority.default_ => "Default",
+      Priority.low => "Low",
+      Priority.medium => "Medium",
+      Priority.high => "High",
+    };

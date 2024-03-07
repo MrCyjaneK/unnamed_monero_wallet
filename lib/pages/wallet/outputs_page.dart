@@ -152,13 +152,16 @@ class _OutputsPageState extends State<OutputsPage> {
         address: MONERO_Wallet_address(
           walletPtr!,
           accountIndex: globalAccountIndex,
-          addressIndex: MONERO_Wallet_numSubaddresses(walletPtr!,
-              accountIndex: globalAccountIndex),
+          addressIndex: MONERO_Wallet_numSubaddresses(
+            walletPtr!,
+            accountIndex: globalAccountIndex,
+          ),
         ),
         amount: 0,
         notes: "Churning self-spend transaction",
         isSweep: true,
         outputs: [],
+        priority: Priority.default_,
       ),
     );
     if (!mounted) return;

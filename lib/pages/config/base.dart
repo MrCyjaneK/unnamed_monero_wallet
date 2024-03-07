@@ -52,6 +52,7 @@ class Config {
     this.customThemeOnError = Colors.green,
     this.forceEnableScanner = false,
     this.forceEnableText = false,
+    this.enableGraphs = false,
   });
 
   final String confPath;
@@ -85,6 +86,7 @@ class Config {
   bool customThemeBrightness;
   bool forceEnableScanner;
   bool forceEnableText;
+  bool enableGraphs;
   void save() {
     file.writeAsString(json.encode(toJson()));
   }
@@ -172,6 +174,10 @@ class Config {
     if (json['forceEnableText'] is bool) {
       c.forceEnableText = json["forceEnableText"];
     }
+    if (json['enableGraphs'] is bool) {
+      c.enableGraphs = json["enableGraphs"];
+    }
+
     return c;
   }
 
@@ -203,6 +209,7 @@ class Config {
       "customThemeOnError": customThemeOnError.value,
       "customThemeBrightness": customThemeBrightness,
       "forceEnableScanner": forceEnableScanner,
+      "enableGraphs": enableGraphs,
     };
   }
 }

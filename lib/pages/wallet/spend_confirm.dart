@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:xmruw/pages/ur_broadcast.dart';
+import 'package:xmruw/pages/wallet/spend_screen.dart';
 import 'package:xmruw/pages/wallet/spend_success.dart';
 import 'package:xmruw/tools/dirs.dart';
 import 'package:xmruw/tools/format_monero.dart';
@@ -26,12 +27,14 @@ class TxRequest {
   final String notes;
   final bool isSweep;
   final List<String> outputs;
+  final Priority priority;
   final MONERO_UnsignedTransaction? txPtr;
   final bool isUR;
   TxRequest({
     required this.address,
     required this.amount,
     required this.notes,
+    required this.priority,
     this.fee = 0,
     required this.isSweep,
     required this.outputs,
@@ -83,7 +86,7 @@ class _SpendConfirmState extends State<SpendConfirm> {
         payment_id: "",
         amount: widget.tx.isSweep ? 0 : widget.tx.amount,
         mixin_count: 0,
-        pendingTransactionPriority: 0,
+        pendingTransactionPriority: widget.tx.priority.index,
         subaddr_account: globalAccountIndex,
         preferredInputs: widget.tx.outputs,
       );

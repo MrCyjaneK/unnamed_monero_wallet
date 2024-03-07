@@ -1,8 +1,11 @@
 import 'dart:io';
 
+import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/crypto/crypto.dart';
 import 'package:xmruw/pages/sync_static_progress.dart';
 import 'package:xmruw/pages/ur_broadcast.dart';
+import 'package:xmruw/pages/usage_graphs.dart';
+import 'package:xmruw/pages/wallet/outputs_page.dart';
 import 'package:xmruw/pages/wallet/settings_page.dart';
 import 'package:xmruw/tools/dirs.dart';
 import 'package:xmruw/tools/is_offline.dart';
@@ -153,7 +156,6 @@ class TxListPopupMenu extends StatelessWidget {
     switch (action) {
       case TxListPopupAction.resync:
         _resync();
-        break;
       case TxListPopupAction.exportKeyImages:
         exportKeyImages(c);
       case TxListPopupAction.exportOutputs:
@@ -170,8 +172,10 @@ class TxListPopupMenu extends StatelessWidget {
         _openCrypto(c);
       case TxListPopupAction.saveexit:
         _saveExit(c);
-      default:
-        Alert(title: "$action").show(c);
+      case TxListPopupAction.coinControl:
+        OutputsPage.push(c);
+      case TxListPopupAction.graphs:
+        UsageGraphsPage.push(c);
     }
   }
 
@@ -232,6 +236,7 @@ class TxListPopupMenu extends StatelessWidget {
     TxListPopupAction.crypto,
     TxListPopupAction.settings,
     TxListPopupAction.saveexit,
+    if (config.enableGraphs) TxListPopupAction.graphs,
   ];
 
   List<PopupMenuItem<TxListPopupAction>> _getWidgets() {
@@ -285,6 +290,10 @@ class TxListPopupMenu extends StatelessWidget {
           value: TxListPopupAction.saveexit,
           child: Text("Save & Exit"),
         ),
+      TxListPopupAction.graphs => const PopupMenuItem<TxListPopupAction>(
+          value: TxListPopupAction.graphs,
+          child: Text("Garphs"),
+        ),
     };
   }
 }
@@ -300,4 +309,5 @@ enum TxListPopupAction {
   settings,
   crypto,
   saveexit,
+  graphs
 }
