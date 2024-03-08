@@ -148,7 +148,9 @@ class _SpendConfirmState extends State<SpendConfirm> {
           amount: _getAmount(),
         ),
         StatusRow(
-          title: "Fee",
+          title: widget.tx.priority == Priority.default_
+              ? "Fee"
+              : "Fee: ${getPriorityText(widget.tx.priority)}",
           amount: _getFee(),
         ),
         StatusRow(

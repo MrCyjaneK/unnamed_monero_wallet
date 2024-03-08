@@ -1,8 +1,6 @@
 # unnamed_monero_wallet
 
-> **NOTE:** This software is experimental and alpha-quality. Testers are very much welcome but if you want to use a stable solution check out [anonero](https://anonero.io).
-
-Downloads can be obtained from [git.mrcyjanek.net](https://git.mrcyjanek.net/mrcyjanek/unnamed_monero_wallet/releases), CI builds are published for android and amd64 linux.
+Downloads can be obtained from [xmruw.net/xmruw.html](xmruw.net/xmruw.html), CI builds are published to static.mrcyjanek.net/unnamed_monero_wallet.
 
 If you want to test the wallet you can join any of these rooms, messages are bridged.
 

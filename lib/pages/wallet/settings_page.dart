@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:xmruw/legacy.dart';
+import 'package:xmruw/pages/settings/about.dart';
 import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/debug.dart';
 import 'package:xmruw/pages/pin_screen.dart';
@@ -153,6 +154,12 @@ class _SettingsPageState extends State<SettingsPage> {
                 subtitle: "Do fancy stuff",
                 onClick: () => DebugPage.push(context),
               ),
+            const PrimaryLabel(title: "About"),
+            SettingsListTile(
+              title: "About the app",
+              subtitle: "Licenses and other fancy stuff",
+              onClick: () => AboutPage.push(context),
+            ),
           ],
         ),
       ),

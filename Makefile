@@ -52,3 +52,9 @@ version:
 	sed -i "s/^Version=.*/Version=1.0.0+$(shell git rev-list --count HEAD)/" "elinux/unnamed-monero-wallet.desktop"
 	sed -i "s/^Version:    .*/Version:    1.0.0+$(shell git rev-list --count HEAD)/" "elinux/sailfishos.spec"
 	sed -i "s/^Release:    .*/Release:    $(shell git rev-list --count HEAD)/" "elinux/sailfishos.spec"
+	sed -i "s/^Version:    .*/Version:    1.0.0+$(shell git rev-list --count HEAD)/" "elinux/sailfishos.spec"
+	sed -i "s/^const xmruwVersion = .*/const xmruwVersion = '$(shell git describe --tags)';/" "lib/helpers/licenses_extra.dart"
+
+.PHONY: lib/helpers/licenses.g.dart
+lib/helpers/licenses.g.dart:
+	dart pub run flutter_oss_licenses:generate.dart -o lib/helpers/licenses.g.dart
