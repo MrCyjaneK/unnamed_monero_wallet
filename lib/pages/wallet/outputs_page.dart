@@ -36,9 +36,12 @@ class OutputsPage extends StatefulWidget {
 }
 
 class _OutputsPageState extends State<OutputsPage> {
-  final coins = MONERO_Wallet_coins(walletPtr!);
+  MONERO_Coins coins = MONERO_Wallet_coins(walletPtr!);
   int count = 0;
   void _refresh() {
+    setState(() {
+      coins = MONERO_Wallet_coins(walletPtr!);
+    });
     MONERO_Coins_refresh(coins);
     setState(() {
       count = MONERO_Coins_count(coins);

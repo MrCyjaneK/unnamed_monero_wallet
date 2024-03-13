@@ -53,6 +53,7 @@ class Config {
     this.forceEnableScanner = false,
     this.forceEnableText = false,
     this.enableGraphs = false,
+    this.enablePoS = false,
   });
 
   final String confPath;
@@ -87,6 +88,8 @@ class Config {
   bool forceEnableScanner;
   bool forceEnableText;
   bool enableGraphs;
+  bool enablePoS;
+
   void save() {
     file.writeAsString(json.encode(toJson()));
   }
@@ -177,7 +180,9 @@ class Config {
     if (json['enableGraphs'] is bool) {
       c.enableGraphs = json["enableGraphs"];
     }
-
+    if (json['enablePoS'] is bool) {
+      c.enablePoS = json["enablePoS"];
+    }
     return c;
   }
 
@@ -210,6 +215,7 @@ class Config {
       "customThemeBrightness": customThemeBrightness,
       "forceEnableScanner": forceEnableScanner,
       "enableGraphs": enableGraphs,
+      "enablePoS": enablePoS,
     };
   }
 }

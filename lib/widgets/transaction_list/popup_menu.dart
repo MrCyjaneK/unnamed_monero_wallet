@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/crypto/crypto.dart';
+import 'package:xmruw/pages/pos/home.dart';
 import 'package:xmruw/pages/sync_static_progress.dart';
 import 'package:xmruw/pages/ur_broadcast.dart';
 import 'package:xmruw/pages/usage_graphs.dart';
@@ -176,6 +177,8 @@ class TxListPopupMenu extends StatelessWidget {
         OutputsPage.push(c);
       case TxListPopupAction.graphs:
         UsageGraphsPage.push(c);
+        case TxListPopupAction.pos:
+        PoSHomePage.push(c);
     }
   }
 
@@ -235,8 +238,9 @@ class TxListPopupMenu extends StatelessWidget {
     if (isOffline) TxListPopupAction.importOutputs,
     TxListPopupAction.crypto,
     TxListPopupAction.settings,
-    TxListPopupAction.saveexit,
     if (config.enableGraphs) TxListPopupAction.graphs,
+    if (config.enablePoS) TxListPopupAction.pos,
+    TxListPopupAction.saveexit,
   ];
 
   List<PopupMenuItem<TxListPopupAction>> _getWidgets() {
@@ -294,6 +298,10 @@ class TxListPopupMenu extends StatelessWidget {
           value: TxListPopupAction.graphs,
           child: Text("Garphs"),
         ),
+            TxListPopupAction.pos => const PopupMenuItem<TxListPopupAction>(
+          value: TxListPopupAction.pos,
+          child: Text("PoS"),
+        ),
     };
   }
 }
@@ -309,5 +317,6 @@ enum TxListPopupAction {
   settings,
   crypto,
   saveexit,
-  graphs
+  graphs,
+  pos
 }

@@ -54,6 +54,13 @@ steps:
       - TARGET_TRIPLET=${triplet} FLUTTER_ARCH=${flutter_arch} DEBIAN_ARCH=${debian_arch} make ${makecmd}
     volumes:
       - /opt/cache/${triplet}/dotcache:/root/.cache
+      - /opt/cache/${triplet}/dotgradle:/root/.gradle
+      - /opt/cache/${triplet}/dotpub-cache:/root/.pub-cache
+      - /opt/cache/${triplet}/androidemulator:/opt/android-sdk-linux/emulator
+      - /opt/cache/${triplet}/androidplatforms:/opt/android-sdk-linux/platforms
+      - /opt/cache/${triplet}/androidbuild-tools:/opt/android-sdk-linux/build-tools
+      - /opt/cache/${triplet}/androidtools:/opt/android-sdk-linux/tools
+      - /opt/cache/${triplet}/androidplatform-tools:/opt/android-sdk-linux/platform-tools
   - name: Publish release
     image: git.mrcyjanek.net/mrcyjanek/debian:bookworm
     commands:

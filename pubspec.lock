@@ -436,10 +436,10 @@ packages:
     dependency: "direct main"
     description:
       name: monero_libs
-      sha256: "4bcd7743f75b2f016fc0f32179de92ed8bd2436bef2a00e20c9d1f2a2637cf6a"
+      sha256: "52f240e84bd28813026e572842f9eb3600935e5621b8fc0933b9876da36456dc"
       url: "https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/"
     source: hosted
-    version: "0.018003002.001"
+    version: "0.018003002.002"
   mutex:
     dependency: "direct main"
     description:
@@ -452,10 +452,10 @@ packages:
     dependency: "direct main"
     description:
       name: offline_market_data
-      sha256: "6e1ec3f870a8f5cdd20656bbd7a84e29d3a78a3b1f5b1018ee72c6473c7b7b69"
+      sha256: "0794e85e5ec81a87e9719c74a16c430319e4ec317753a1ecb19cd7be7e5f7ef8"
       url: "https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/"
     source: hosted
-    version: "2024.03.11+92"
+    version: "2024.03.12+96"
   path:
     dependency: "direct main"
     description:

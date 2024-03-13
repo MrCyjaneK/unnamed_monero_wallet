@@ -29,7 +29,7 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
             ConfigElement(
               text: "disableProxy",
               description:
-                  "Disable proxy (recommended when using clearnet node)",
+                  "Disable proxy (recommended when using clearnet node). By default xmruw knows when to disable the proxy, so this option shouldn't be needed unless you are porting to a new operating system and some undefined behaviour happens.",
               onClick: () {
                 config.disableProxy = !config.disableProxy;
                 config.save();
@@ -39,7 +39,8 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
             ),
             ConfigElement(
               text: "enableOpenAlias",
-              description: "",
+              description:
+                  "You can send transactions directly to OpenAlias addresses. If you don't wish to use this option feel free to disable this element.",
               onClick: () {
                 config.enableOpenAlias = !config.enableOpenAlias;
                 config.save();
@@ -49,7 +50,8 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
             ),
             ConfigElement(
               text: "enableAutoLock",
-              description: "",
+              description:
+                  "Automatically lock the wallet after fixed amount of time. Shouldn't be used with PoS mode enabled. Requires enableBackgroundSync",
               onClick: () {
                 config.enableAutoLock = !config.enableAutoLock;
                 config.save();
@@ -59,7 +61,8 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
             ),
             ConfigElement(
               text: "enableBackgroundSync",
-              description: "",
+              description:
+                  "Enable background sync patch to sync your wallet when it is left alone without storing private key in memory.",
               onClick: () {
                 config.enableBackgroundSync = !config.enableBackgroundSync;
                 config.save();
@@ -69,7 +72,8 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
             ),
             ConfigElement(
               text: "enableBuiltInTor",
-              description: "",
+              description:
+                  "On some platforms built-in tor is supported. Whenever there will be a need to talk to a onion service xmruw will start tor proxy if provided proxy details are not working. It is recommended to keep this on for good UX.",
               onClick: () {
                 config.enableBuiltInTor = !config.enableBuiltInTor;
                 config.save();
@@ -79,7 +83,8 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
             ),
             ConfigElement(
               text: "routeClearnetThruTor",
-              description: "",
+              description:
+                  "If you want you can rounte clearnet traffic over tor, this will hide node connection from ISP but will show that you are using tor. It is not recommended to keep this on, if you want to stay anonymous use Tor nodes.",
               onClick: () {
                 config.routeClearnetThruTor = !config.routeClearnetThruTor;
                 config.save();
@@ -90,7 +95,7 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
             ConfigElement(
               text: "printStarts",
               description:
-                  "NOTE: huge logs will be produced. Use only when needed.",
+                  "print() all starts of function calls. Check this if the wallet is crashing and you don't know why, even in release mode last line will tell you which function is causing the crash. NOTE: huge logs will be produced. Use only when needed.",
               onClick: () {
                 config.printStarts = !config.printStarts;
                 config.save();
@@ -100,7 +105,8 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
             ),
             ConfigElement(
               text: "showPerformanceOverlay",
-              description: "",
+              description:
+                  "Enables Flutter's built-in overlay that shows time to render a frame.",
               onClick: () {
                 config.showPerformanceOverlay = !config.showPerformanceOverlay;
                 config.save();
@@ -110,7 +116,7 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
             ),
             ConfigElement(
               text: "experimentalAccounts",
-              description: "",
+              description: "Enables experimental multi-account support.",
               onClick: () {
                 config.experimentalAccounts = !config.experimentalAccounts;
                 config.save();
@@ -120,7 +126,8 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
             ),
             ConfigElement(
               text: "enableExperiments",
-              description: "",
+              description:
+                  "Do you want to access the debug menu from settings? You probably don't need to but there is some fun stuff inside.",
               onClick: () {
                 config.enableExperiments = !config.enableExperiments;
                 config.save();
@@ -130,7 +137,8 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
             ),
             ConfigElement(
               text: "customThemeEnabled",
-              description: "",
+              description:
+                  "If you don't like the built-in theme you can make your own. p.s. if you make a nice one come to our chat group and let me know, I'd love to enable it in wallet.",
               onClick: () {
                 config.customThemeEnabled = !config.customThemeEnabled;
                 config.save();
@@ -140,7 +148,8 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
             ),
             ConfigElement(
               text: "forceEnableScanner",
-              description: "",
+              description:
+                  "Scanner is enabled only on iOS and Android. You can force it's behaviour here.",
               onClick: () {
                 config.forceEnableScanner = !config.forceEnableScanner;
                 config.save();
@@ -150,7 +159,8 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
             ),
             ConfigElement(
               text: "forceEnableText",
-              description: "",
+              description:
+                  "Text is enabled for platforms that do not support scanning. You can force it's behaviour here.",
               onClick: () {
                 config.forceEnableText = !config.forceEnableText;
                 config.save();
@@ -160,13 +170,23 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
             ),
             ConfigElement(
               text: "enableGraphs",
-              description: "",
+              description: "[WIP] Spending graphs",
               onClick: () {
                 config.enableGraphs = !config.enableGraphs;
                 config.save();
                 setState(() {});
               },
               value: config.enableGraphs,
+            ),
+            ConfigElement(
+              text: "enablePoS",
+              description: "[WIP] Enables experimental PoS mode",
+              onClick: () {
+                config.enablePoS = !config.enablePoS;
+                config.save();
+                setState(() {});
+              },
+              value: config.enablePoS,
             ),
           ],
         ),
