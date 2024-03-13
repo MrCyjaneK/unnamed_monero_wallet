@@ -6,6 +6,14 @@ clone:
 
 matrix:
   include:
+    - image: ghcr.io/cirruslabs/flutter:3.19.2
+      platform: linux/amd64
+      triplet: multiarch-android-unknown
+      makecmd: android
+      prepcmd: bash install-sdk.sh
+      flutter: flutter
+      debian_arch: na
+      flutter_arch: na
     - image: git.mrcyjanek.net/mrcyjanek/flutter:linux
       platform: linux/amd64
       triplet: x86_64-linux-gnu
@@ -30,22 +38,19 @@ matrix:
       flutter: flutter-elinux
       debian_arch: arm64
       flutter_arch: arm64
-    - image: ghcr.io/cirruslabs/flutter:3.19.2
-      platform: linux/amd64
-      triplet: multiarch-android-unknown
-      makecmd: android
-      prepcmd: echo ok
-      flutter: flutter
-      debian_arch: na
-      flutter_arch: na
+
 
 labels:
   platform: ${platform}
 steps:
   - name: Build package
     image: ${image}
+    environment:
+      - ANDROID_HOME=/root/.cache/android_sdk
+      - ANDROID_SDK_ROOT=/root/.cache/android_sdk
     commands:
       - ${prepcmd}
+      - export PATH="$${ANDROID_HOME}/cmdline-tools/latest/bin:$${ANDROID_HOME}/platform-tools:$${ANDROID_HOME}/emulator:$${PATH}"
       - git config --global --add safe.directory $PWD
       - git fetch
       - ${flutter} pub get
@@ -56,11 +61,6 @@ steps:
       - /opt/cache/${triplet}/dotcache:/root/.cache
       - /opt/cache/${triplet}/dotgradle:/root/.gradle
       - /opt/cache/${triplet}/dotpub-cache:/root/.pub-cache
-      - /opt/cache/${triplet}/androidemulator:/opt/android-sdk-linux/emulator
-      - /opt/cache/${triplet}/androidplatforms:/opt/android-sdk-linux/platforms
-      - /opt/cache/${triplet}/androidbuild-tools:/opt/android-sdk-linux/build-tools
-      - /opt/cache/${triplet}/androidtools:/opt/android-sdk-linux/tools
-      - /opt/cache/${triplet}/androidplatform-tools:/opt/android-sdk-linux/platform-tools
   - name: Publish release
     image: git.mrcyjanek.net/mrcyjanek/debian:bookworm
     commands:
