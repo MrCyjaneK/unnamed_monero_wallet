@@ -1,8 +1,8 @@
 .PHONY: android
 android:
 	./build_changelog.sh
-	flutter build apk --flavor calc  --dart-define=libstealth_calculator=true
-	flutter build apk --flavor clean --dart-define=libstealth_calculator=false
+	flutter build apk --split-per-abi --flavor calc  --dart-define=libstealth_calculator=true
+	flutter build apk --split-per-abi --flavor clean --dart-define=libstealth_calculator=false
 
 .PHONY: linux
 linux: 

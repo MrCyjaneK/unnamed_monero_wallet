@@ -21,7 +21,7 @@ dependencies:
   mutex: ^3.1.0
   monero_libs:
     hosted: https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
-    version: 0.018003002.4
+    version: 0.018003003.1
   cr_file_saver: ^0.0.2
   file_picker: ^6.1.1
   mobile_scanner: 4.0.0
@@ -47,7 +47,7 @@ dependencies:
   path: any
   offline_market_data:
     hosted: https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
-    version: 2024.03.12+96
+    version: 2024.03.14+104
     # path: ../offline_market_data
   flex_color_picker: ^3.3.1
 
