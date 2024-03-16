@@ -1,6 +1,6 @@
 # unnamed_monero_wallet
 
-Downloads can be obtained from [xmruw.net/xmruw.html](xmruw.net/xmruw.html), CI builds are published to static.mrcyjanek.net/unnamed_monero_wallet.
+Downloads can be obtained from https://xmruw.net/, CI builds are published to static.mrcyjanek.net/unnamed_monero_wallet.
 
 If you want to test the wallet you can join any of these rooms, messages are bridged.
 
