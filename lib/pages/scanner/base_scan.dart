@@ -1,15 +1,15 @@
 import 'dart:convert';
 
+import 'package:bytewords/bytewords.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/helpers/resource.g.dart';
 import 'package:xmruw/legacy.dart';
 import 'package:xmruw/pages/scanner/process_ur.dart';
 import 'package:xmruw/pages/wallet/spend_screen.dart';
 import 'package:xmruw/widgets/primary_label.dart';
-import 'package:bytewords/bytewords.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:monero/monero.dart';
 
 class BaseScannerPage extends StatefulWidget {
   const BaseScannerPage({super.key});
@@ -75,7 +75,7 @@ class _BaseScannerPageState extends State<BaseScannerPage> {
               for (final barcode in barcodes) {
                 print(barcode.rawValue!);
                 // check if address
-                if (MONERO_Wallet_addressValid(barcode.rawValue!, 0)) {
+                if (monero.Wallet_addressValid(barcode.rawValue!, 0)) {
                   Navigator.of(context).pop();
                   SpendScreen.push(context, address: barcode.rawValue!);
                 } else if (barcode.rawValue!.startsWith("ur:")) {

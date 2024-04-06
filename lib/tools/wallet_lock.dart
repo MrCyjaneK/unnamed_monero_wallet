@@ -1,11 +1,11 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/pin_screen.dart';
 import 'package:xmruw/tools/show_alert.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
-import 'package:flutter/material.dart';
-import 'package:monero/monero.dart';
 
 DateTime lastClick = DateTime.now();
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -21,23 +21,23 @@ void lockIfShould() {
   if (isLocked) return;
   final context = navigatorKey.currentContext!;
   if (tempWalletPassword != "") {
-    final stat = MONERO_Wallet_setupBackgroundSync(
+    final stat = monero.Wallet_setupBackgroundSync(
       walletPtr!,
       backgroundSyncType: 1,
       walletPassword: tempWalletPassword,
       backgroundCachePassword: "",
     );
     if (!stat) {
-      Alert(title: MONERO_Wallet_errorString(walletPtr!), cancelable: true)
+      Alert(title: monero.Wallet_errorString(walletPtr!), cancelable: true)
           .show(context);
       return;
     }
     tempWalletPassword = "";
   }
-  final status = MONERO_Wallet_startBackgroundSync(walletPtr!);
+  final status = monero.Wallet_startBackgroundSync(walletPtr!);
   if (!status) {
     Alert(
-      title: MONERO_Wallet_errorString(walletPtr!),
+      title: monero.Wallet_errorString(walletPtr!),
       cancelable: true,
     ).show(context);
     return;

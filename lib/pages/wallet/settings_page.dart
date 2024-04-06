@@ -1,15 +1,17 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/legacy.dart';
-import 'package:xmruw/pages/settings/about.dart';
 import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/debug.dart';
 import 'package:xmruw/pages/pin_screen.dart';
+import 'package:xmruw/pages/settings/about.dart';
 import 'package:xmruw/pages/settings/currency_settings.dart';
-import 'package:xmruw/pages/settings/theme_settings.dart';
-import 'package:xmruw/pages/setup/proxy_settings.dart';
 import 'package:xmruw/pages/settings/nodes_screen.dart';
+import 'package:xmruw/pages/settings/theme_settings.dart';
 import 'package:xmruw/pages/settings/view_seed_page.dart';
+import 'package:xmruw/pages/setup/proxy_settings.dart';
 import 'package:xmruw/pages/wallet/configuration_page.dart';
 import 'package:xmruw/tools/backup_class.dart' as b;
 import 'package:xmruw/tools/can_backup.dart';
@@ -23,8 +25,6 @@ import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/labeled_text_input.dart';
 import 'package:xmruw/widgets/primary_label.dart';
 import 'package:xmruw/widgets/settings_list_tile.dart';
-import 'package:flutter/material.dart';
-import 'package:monero/monero.dart';
 import 'package:xmruw/widgets/setup_logo.dart';
 
 bool isProxyOn = false;
@@ -38,11 +38,11 @@ Future<void> setProxy(BuildContext c) async {
     return;
   }
   final port = node.address.contains(".b32.i2p") ? p.i2pPort : p.torPort;
-  bool ok = MONERO_Wallet_setProxy(walletPtr!, address: "${p.address}:$port");
+  bool ok = monero.Wallet_setProxy(walletPtr!, address: "${p.address}:$port");
   print(ok);
   if (!ok) {
     // ignore: use_build_context_synchronously
-    await Alert(title: MONERO_Wallet_errorString(walletPtr!), cancelable: true)
+    await Alert(title: monero.Wallet_errorString(walletPtr!), cancelable: true)
         .show(c);
     isProxyOn = false;
     return;
@@ -196,13 +196,13 @@ class _SettingsPageState extends State<SettingsPage> {
             networkType: "NetworkType_Mainnet",
           ),
           wallet: b.Wallet(
-            address: MONERO_Wallet_address(walletPtr!),
-            seed: MONERO_Wallet_seed(walletPtr!, seedOffset: seedOffset),
-            restoreHeight: MONERO_Wallet_getRefreshFromBlockHeight(walletPtr!),
-            balanceAll: MONERO_Wallet_balance(walletPtr!,
+            address: monero.Wallet_address(walletPtr!),
+            seed: monero.Wallet_seed(walletPtr!, seedOffset: seedOffset),
+            restoreHeight: monero.Wallet_getRefreshFromBlockHeight(walletPtr!),
+            balanceAll: monero.Wallet_balance(walletPtr!,
                 accountIndex: globalAccountIndex),
-            numAccounts: MONERO_Wallet_numSubaddressAccounts(walletPtr!),
-            numSubaddresses: MONERO_Wallet_numSubaddresses(walletPtr!,
+            numAccounts: monero.Wallet_numSubaddressAccounts(walletPtr!),
+            numSubaddresses: monero.Wallet_numSubaddresses(walletPtr!,
                 accountIndex: globalAccountIndex),
             isWatchOnly: false, // v1 doesn't care. We can work both ways.
             isSynchronized: false, // this file was literally kept offline?

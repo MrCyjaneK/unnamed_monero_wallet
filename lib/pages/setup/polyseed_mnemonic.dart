@@ -1,14 +1,14 @@
+import 'package:flutter/material.dart';
+import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/pages/wallet/wallet_home.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/long_outlined_button.dart';
 import 'package:xmruw/widgets/setup_logo.dart';
-import 'package:flutter/material.dart';
-import 'package:monero/monero.dart';
 
 class PolyseedMnemonic extends StatelessWidget {
   PolyseedMnemonic({super.key});
 
-  final words = MONERO_Wallet_getPolyseed(walletPtr!, passphrase: "");
+  final words = monero.Wallet_getPolyseed(walletPtr!, passphrase: "");
 
   @override
   Widget build(BuildContext context) {

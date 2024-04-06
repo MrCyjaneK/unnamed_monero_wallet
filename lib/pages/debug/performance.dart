@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import 'package:xmruw/widgets/long_outlined_button.dart';
 import 'package:flutter/material.dart';
-import 'package:monero/monero.dart';
+import 'package:monero/monero.dart' as monero;
+import 'package:xmruw/widgets/long_outlined_button.dart';
 
 class PerformanceDebug extends StatefulWidget {
   const PerformanceDebug({super.key});
@@ -22,13 +22,13 @@ class PerformanceDebug extends StatefulWidget {
 const precalc = 1700298;
 
 int getOpenWalletTime() {
-  if (debugCallLength["MONERO_Wallet_init"] == null) {
+  if (monero.debugCallLength["MONERO_Wallet_init"] == null) {
     return precalc;
   }
-  if (debugCallLength["MONERO_Wallet_init"]!.isEmpty) {
+  if (monero.debugCallLength["MONERO_Wallet_init"]!.isEmpty) {
     return precalc;
   }
-  return debugCallLength["MONERO_Wallet_init"]!.last;
+  return monero.debugCallLength["MONERO_Wallet_init"]!.last;
 }
 
 final String perfInfo = """
@@ -108,11 +108,12 @@ class _PerformanceDebugState extends State<PerformanceDebug> {
         cw("> 200% of a frame (UI junk visible)", Colors.red),
       ],
     ));
-    final keys = debugCallLength.keys.toList();
+    final keys = monero.debugCallLength.keys.toList();
     keys.sort((s1, s2) =>
-        _n95th(debugCallLength[s2]!) - _n95th(debugCallLength[s1]!));
+        _n95th(monero.debugCallLength[s2]!) -
+        _n95th(monero.debugCallLength[s1]!));
     for (var key in keys) {
-      final value = debugCallLength[key];
+      final value = monero.debugCallLength[key];
       if (value == null) continue;
       final avg = _avg(value);
       final min = _min(value);
@@ -150,7 +151,7 @@ class _PerformanceDebugState extends State<PerformanceDebug> {
         ),
       );
     }
-    if (debugCallLength.isNotEmpty) {
+    if (monero.debugCallLength.isNotEmpty) {
       ws.add(
         LongOutlinedButton(
           text: "Purge statistics",
@@ -164,7 +165,7 @@ class _PerformanceDebugState extends State<PerformanceDebug> {
   }
 
   void _purgeStats() {
-    debugCallLength.clear();
+    monero.debugCallLength.clear();
     _buildWidgets();
   }
 

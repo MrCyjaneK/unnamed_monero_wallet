@@ -5,7 +5,7 @@ cd ..
 
 flutter-elinux pub get
 flutter-elinux build elinux --release 
-curl https://static.mrcyjanek.net/monero_c/$(./get_current_build.sh)/aarch64-linux-gnu_libwallet2_api_c.so.xz --output $PWD/build/elinux/arm64/release/bundle/lib/libwallet2_api_c.so.xz
+curl https://static.mrcyjanek.net/monero_c/$(grep MONERO_C_TAG Makefile | head -1 | tr = ' ' | awk '{ print $2 }')/aarch64-linux-gnu_libwallet2_api_c.so.xz --output $PWD/build/elinux/arm64/release/bundle/lib/libwallet2_api_c.so.xz
 unxz $PWD/build/elinux/arm64/release/bundle/lib/libwallet2_api_c.so.xz
 cp $HOME/SailfishOS/flutter-elinux/$(uname -m)/flutter-client build/elinux/arm64/release/bundle/flutter-client
 

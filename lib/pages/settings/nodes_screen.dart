@@ -1,11 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/pages/pin_screen.dart';
 import 'package:xmruw/pages/settings/add_node_screen.dart';
 import 'package:xmruw/pages/wallet/settings_page.dart';
 import 'package:xmruw/tools/node.dart';
 import 'package:xmruw/tools/show_alert.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
-import 'package:flutter/material.dart';
-import 'package:monero/monero.dart';
 
 class NodesScreen extends StatefulWidget {
   const NodesScreen({super.key});
@@ -211,10 +211,10 @@ class _NodeStatusCardState extends State<NodeStatusCard> {
   void initState() {
     super.initState();
     setState(() {
-      height = MONERO_Wallet_daemonBlockChainHeight_cached(walletPtr!);
-      status = MONERO_Wallet_status(walletPtr!);
+      height = monero.Wallet_daemonBlockChainHeight_cached(walletPtr!);
+      status = monero.Wallet_status(walletPtr!);
       if (status != 0) {
-        error = MONERO_Wallet_errorString(walletPtr!);
+        error = monero.Wallet_errorString(walletPtr!);
       }
     });
   }

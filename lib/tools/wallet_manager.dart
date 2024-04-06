@@ -1,3 +1,3 @@
-import 'package:monero/monero.dart';
+import 'package:monero/monero.dart' as monero;
 
-final wmPtr = MONERO_WalletManagerFactory_getWalletManager();
+final wmPtr = monero.WalletManagerFactory_getWalletManager();

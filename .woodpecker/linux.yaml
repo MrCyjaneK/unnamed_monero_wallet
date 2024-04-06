@@ -9,7 +9,7 @@ matrix:
     - image: ghcr.io/cirruslabs/flutter:3.19.2
       platform: linux/amd64
       triplet: multiarch-android-unknown
-      makecmd: android
+      makecmd: libs android
       prepcmd: bash install-sdk.sh
       flutter: flutter
       debian_arch: na

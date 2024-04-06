@@ -1,13 +1,13 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/pages/wallet/receive_screen.dart';
 import 'package:xmruw/pages/wallet/spend_screen.dart';
 import 'package:xmruw/pages/wallet/transaction_list.dart';
 import 'package:xmruw/tools/show_alert.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/bottom_bar.dart';
-import 'package:flutter/material.dart';
-import 'package:monero/monero.dart';
 
 enum Page { receive, home, send }
 
@@ -46,7 +46,7 @@ class WalletHomeState extends State<WalletHome> {
         Alert(
           title: "Exit wallet?",
           callback: () {
-            MONERO_Wallet_store(walletPtr!);
+            monero.Wallet_store(walletPtr!);
             exit(0);
           },
           callbackText: "Exit",

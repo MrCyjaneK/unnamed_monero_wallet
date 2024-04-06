@@ -1,11 +1,11 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/tools/show_alert.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/advanced_expansion_tile.dart';
 import 'package:xmruw/widgets/long_outlined_button.dart';
-import 'package:flutter/material.dart';
-import 'package:monero/monero.dart';
 
 final _rescanBlockchainSyncInfo = """
 NOTE: (sync) waits for the entire blockchain to be synced, therefore it may
@@ -32,61 +32,61 @@ class MoneroDartAdvancedDebug extends StatefulWidget {
 
 class _MoneroDartAdvancedDebugState extends State<MoneroDartAdvancedDebug> {
   void _rescanBlockchain() {
-    final rsc = MONERO_Wallet_rescanBlockchain(walletPtr!);
+    final rsc = monero.Wallet_rescanBlockchain(walletPtr!);
     Alert(
             title: "result: $rsc\n"
-                "status: ${MONERO_Wallet_status(walletPtr!)}\n"
-                "errorString: ${MONERO_Wallet_errorString(walletPtr!)}",
+                "status: ${monero.Wallet_status(walletPtr!)}\n"
+                "errorString: ${monero.Wallet_errorString(walletPtr!)}",
             cancelable: true)
         .show(context);
   }
 
   void _rescanBlockchainAsync() {
-    MONERO_Wallet_rescanBlockchainAsync(walletPtr!);
+    monero.Wallet_rescanBlockchainAsync(walletPtr!);
     Alert(
             title: "result: void\n"
-                "status: ${MONERO_Wallet_status(walletPtr!)}\n"
-                "errorString: ${MONERO_Wallet_errorString(walletPtr!)}",
+                "status: ${monero.Wallet_status(walletPtr!)}\n"
+                "errorString: ${monero.Wallet_errorString(walletPtr!)}",
             cancelable: true)
         .show(context);
   }
 
   void _refresh() {
-    final rsc = MONERO_Wallet_refresh(walletPtr!);
+    final rsc = monero.Wallet_refresh(walletPtr!);
     Alert(
             title: "result: $rsc\n"
-                "status: ${MONERO_Wallet_status(walletPtr!)}\n"
-                "errorString: ${MONERO_Wallet_errorString(walletPtr!)}",
+                "status: ${monero.Wallet_status(walletPtr!)}\n"
+                "errorString: ${monero.Wallet_errorString(walletPtr!)}",
             cancelable: true)
         .show(context);
   }
 
   void _store() {
-    final rsc = MONERO_Wallet_store(walletPtr!);
+    final rsc = monero.Wallet_store(walletPtr!);
     Alert(
             title: "result: $rsc\n"
-                "status: ${MONERO_Wallet_status(walletPtr!)}\n"
-                "errorString: ${MONERO_Wallet_errorString(walletPtr!)}",
+                "status: ${monero.Wallet_status(walletPtr!)}\n"
+                "errorString: ${monero.Wallet_errorString(walletPtr!)}",
             cancelable: true)
         .show(context);
   }
 
   void _connectToDaemon() {
-    final rsc = MONERO_Wallet_connectToDaemon(walletPtr!);
+    final rsc = monero.Wallet_connectToDaemon(walletPtr!);
     Alert(
             title: "result: $rsc\n"
-                "status: ${MONERO_Wallet_status(walletPtr!)}\n"
-                "errorString: ${MONERO_Wallet_errorString(walletPtr!)}",
+                "status: ${monero.Wallet_status(walletPtr!)}\n"
+                "errorString: ${monero.Wallet_errorString(walletPtr!)}",
             cancelable: true)
         .show(context);
   }
 
   void _refreshAsync() {
-    MONERO_Wallet_refreshAsync(walletPtr!);
+    monero.Wallet_refreshAsync(walletPtr!);
     Alert(
             title: "result: void\n"
-                "status: ${MONERO_Wallet_status(walletPtr!)}\n"
-                "errorString: ${MONERO_Wallet_errorString(walletPtr!)}",
+                "status: ${monero.Wallet_status(walletPtr!)}\n"
+                "errorString: ${monero.Wallet_errorString(walletPtr!)}",
             cancelable: true)
         .show(context);
   }
@@ -146,10 +146,10 @@ class _MoneroDartAdvancedDebugState extends State<MoneroDartAdvancedDebug> {
               ],
             ),
             AET(
-              "MONERO_isLibOk",
+              "monero.isLibOk",
               [
                 LongOutlinedButton(
-                  text: "MONERO_isLibOk",
+                  text: "monero.isLibOk",
                   onPressed: _isLibOk,
                 ),
                 if (libOk != null)
@@ -164,11 +164,11 @@ class _MoneroDartAdvancedDebugState extends State<MoneroDartAdvancedDebug> {
     );
   }
 
-  MONERO_libOk? libOk;
+  monero.libOk? libOk;
 
   void _isLibOk() {
     setState(() {
-      libOk = MONERO_isLibOk();
+      libOk = monero.isLibOk();
     });
   }
 }

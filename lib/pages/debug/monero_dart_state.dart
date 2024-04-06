@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/pages/wallet/transaction_list.dart';
 import 'package:xmruw/tools/dirs.dart';
 import 'package:xmruw/tools/monero/account_index.dart';
@@ -5,8 +7,6 @@ import 'package:xmruw/tools/monero/subaddress_label.dart';
 import 'package:xmruw/tools/wallet_manager.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/simple_expansion_tile.dart';
-import 'package:flutter/material.dart';
-import 'package:monero/monero.dart';
 
 const String about = """
 This simply represents everything that is happening at the monero side of things
@@ -52,167 +52,167 @@ class _MoneroDartStateState extends State<MoneroDartState> {
             const SET('about', about),
             SET('global walletPtr', walletPtr),
             SET('txHistPtr', txHistoryPtr),
-            SET('MONERO_isLibOk', MONERO_isLibOk()),
+            SET('MONERO_isLibOk', monero.isLibOk()),
             SET('MONERO_TransactionHistory_count',
-                MONERO_TransactionHistory_count(txHistoryPtr)),
-// MONERO_TransactionHistory_setTxNote(MONERO_TransactionHistory txHistory_ptr, {required String txid, required String note}) → void
-// MONERO_TransactionHistory_transaction(MONERO_TransactionHistory txHistory_ptr, {required int index}) → MONERO_TransactionInfo
-// MONERO_TransactionInfo_amount(MONERO_TransactionInfo pendingTx_ptr) → int
-// MONERO_TransactionInfo_blockHeight(MONERO_TransactionInfo pendingTx_ptr) → int
-// MONERO_TransactionInfo_confirmations(MONERO_TransactionInfo pendingTx_ptr) → int
-// MONERO_TransactionInfo_description(MONERO_TransactionInfo pendingTx_ptr) → String
-// MONERO_TransactionInfo_direction(MONERO_TransactionInfo pendingTx_ptr) → TransactionInfo_Direction
-// MONERO_TransactionInfo_fee(MONERO_TransactionInfo pendingTx_ptr) → int
-// MONERO_TransactionInfo_hash(MONERO_TransactionInfo pendingTx_ptr) → String
-// MONERO_TransactionInfo_isCoinbase(MONERO_TransactionInfo pendingTx_ptr) → bool
-// MONERO_TransactionInfo_isFailed(MONERO_TransactionInfo pendingTx_ptr) → bool
-// MONERO_TransactionInfo_isPending(MONERO_TransactionInfo pendingTx_ptr) → bool
-// MONERO_TransactionInfo_label(MONERO_TransactionInfo pendingTx_ptr) → String
-// MONERO_TransactionInfo_paymentId(MONERO_TransactionInfo pendingTx_ptr) → String
-// MONERO_TransactionInfo_subaddrAccount(MONERO_TransactionInfo pendingTx_ptr) → int
-// MONERO_TransactionInfo_timestamp(MONERO_TransactionInfo pendingTx_ptr) → int
-// MONERO_TransactionInfo_unlockTime(MONERO_TransactionInfo pendingTx_ptr) → int
+                monero.TransactionHistory_count(txHistoryPtr)),
+//monero.TransactionHistory_setTxNote(MONERO_TransactionHistory txHistory_ptr, {required String txid, required String note}) → void
+//monero.TransactionHistory_transaction(MONERO_TransactionHistory txHistory_ptr, {required int index}) →monero.TransactionInfo
+//monero.TransactionInfo_amount(MONERO_TransactionInfo pendingTx_ptr) → int
+//monero.TransactionInfo_blockHeight(MONERO_TransactionInfo pendingTx_ptr) → int
+//monero.TransactionInfo_confirmations(MONERO_TransactionInfo pendingTx_ptr) → int
+//monero.TransactionInfo_description(MONERO_TransactionInfo pendingTx_ptr) → String
+//monero.TransactionInfo_direction(MONERO_TransactionInfo pendingTx_ptr) → TransactionInfo_Direction
+//monero.TransactionInfo_fee(MONERO_TransactionInfo pendingTx_ptr) → int
+//monero.TransactionInfo_hash(MONERO_TransactionInfo pendingTx_ptr) → String
+//monero.TransactionInfo_isCoinbase(MONERO_TransactionInfo pendingTx_ptr) → bool
+//monero.TransactionInfo_isFailed(MONERO_TransactionInfo pendingTx_ptr) → bool
+//monero.TransactionInfo_isPending(MONERO_TransactionInfo pendingTx_ptr) → bool
+//monero.TransactionInfo_label(MONERO_TransactionInfo pendingTx_ptr) → String
+//monero.TransactionInfo_paymentId(MONERO_TransactionInfo pendingTx_ptr) → String
+//monero.TransactionInfo_subaddrAccount(MONERO_TransactionInfo pendingTx_ptr) → int
+//monero.TransactionInfo_timestamp(MONERO_TransactionInfo pendingTx_ptr) → int
+//monero.TransactionInfo_unlockTime(MONERO_TransactionInfo pendingTx_ptr) → int
             SET(
                 'MONERO_Wallet_address($globalAccountIndex,0)',
-                MONERO_Wallet_address(walletPtr!,
+                monero.Wallet_address(walletPtr!,
                     accountIndex: globalAccountIndex, addressIndex: 0)),
             SET(
                 'MONERO_Wallet_address($globalAccountIndex,1)',
-                MONERO_Wallet_address(walletPtr!,
+                monero.Wallet_address(walletPtr!,
                     accountIndex: globalAccountIndex, addressIndex: 1)),
             SET(
                 'MONERO_Wallet_address($globalAccountIndex,2)',
-                MONERO_Wallet_address(walletPtr!,
+                monero.Wallet_address(walletPtr!,
                     accountIndex: globalAccountIndex, addressIndex: 2)),
-// MONERO_Wallet_addressValid(String address) → bool
+//monero.Wallet_addressValid(String address) → bool
             SET('MONERO_Wallet_addressValid(\'asd\')',
-                MONERO_Wallet_addressValid('asd', 0)),
+                monero.Wallet_addressValid('asd', 0)),
             SET(
                 'MONERO_Wallet_addressValid(MONERO_Wallet_address($globalAccountIndex,0))',
-                MONERO_Wallet_addressValid(
-                    MONERO_Wallet_address(walletPtr!,
+                monero.Wallet_addressValid(
+                    monero.Wallet_address(walletPtr!,
                         accountIndex: globalAccountIndex, addressIndex: 0),
                     0)),
             SET(
                 'MONERO_Wallet_addressValid(MONERO_Wallet_address($globalAccountIndex,1))',
-                MONERO_Wallet_addressValid(
-                    MONERO_Wallet_address(walletPtr!,
+                monero.Wallet_addressValid(
+                    monero.Wallet_address(walletPtr!,
                         accountIndex: globalAccountIndex, addressIndex: 1),
                     0)),
-// MONERO_Wallet_approximateBlockChainHeight(MONERO_wallet wallet_ptr) → int
+//monero.Wallet_approximateBlockChainHeight(MONERO_wallet wallet_ptr) → int
             SET('MONERO_Wallet_approximateBlockChainHeight',
-                MONERO_Wallet_approximateBlockChainHeight(walletPtr!)),
-// MONERO_Wallet_autoRefreshInterval(MONERO_wallet wallet_ptr) → int
+                monero.Wallet_approximateBlockChainHeight(walletPtr!)),
+//monero.Wallet_autoRefreshInterval(MONERO_wallet wallet_ptr) → int
             SET('MONERO_Wallet_autoRefreshInterval',
-                MONERO_Wallet_autoRefreshInterval(walletPtr!)),
-// MONERO_Wallet_balance(MONERO_wallet wallet_ptr, {required int accountIndex}) → int
+                monero.Wallet_autoRefreshInterval(walletPtr!)),
+//monero.Wallet_balance(MONERO_wallet wallet_ptr, {required int accountIndex}) → int
             SET(
                 'MONERO_Wallet_balance($globalAccountIndex)',
-                MONERO_Wallet_balance(walletPtr!,
+                monero.Wallet_balance(walletPtr!,
                     accountIndex: globalAccountIndex)),
-// MONERO_Wallet_blockChainHeight(MONERO_wallet wallet_ptr) → int
+//monero.Wallet_blockChainHeight(MONERO_wallet wallet_ptr) → int
             SET('MONERO_Wallet_blockChainHeight',
-                MONERO_Wallet_blockChainHeight(walletPtr!)),
-// MONERO_Wallet_createTransaction(MONERO_wallet wallet_ptr, {required String dst_addr, required String payment_id, required int amount, required int mixin_count, required int pendingTransactionPriority, required int subaddr_account}) → MONERO_PendingTransaction
-// MONERO_Wallet_daemonBlockChainHeight(MONERO_wallet wallet_ptr) → int
+                monero.Wallet_blockChainHeight(walletPtr!)),
+//monero.Wallet_createTransaction(MONERO_wallet wallet_ptr, {required String dst_addr, required String payment_id, required int amount, required int mixin_count, required int pendingTransactionPriority, required int subaddr_account}) →monero.PendingTransaction
+//monero.Wallet_daemonBlockChainHeight(MONERO_wallet wallet_ptr) → int
             SET('MONERO_Wallet_daemonBlockChainHeight',
-                MONERO_Wallet_daemonBlockChainHeight(walletPtr!)),
+                monero.Wallet_daemonBlockChainHeight(walletPtr!)),
             SET('MONERO_Wallet_daemonBlockChainHeight_cached',
-                MONERO_Wallet_daemonBlockChainHeight_cached(walletPtr!)),
-// MONERO_Wallet_errorString(MONERO_wallet wallet_ptr) → String
+                monero.Wallet_daemonBlockChainHeight_cached(walletPtr!)),
+//monero.Wallet_errorString(MONERO_wallet wallet_ptr) → String
             SET('MONERO_Wallet_errorString',
-                MONERO_Wallet_errorString(walletPtr!)),
-// MONERO_Wallet_estimateBlockChainHeight(MONERO_wallet wallet_ptr) → int
+                monero.Wallet_errorString(walletPtr!)),
+//monero.Wallet_estimateBlockChainHeight(MONERO_wallet wallet_ptr) → int
             SET('MONERO_Wallet_estimateBlockChainHeight',
-                MONERO_Wallet_estimateBlockChainHeight(walletPtr!)),
-// MONERO_Wallet_exportKeyImages(MONERO_wallet wallet_ptr, String filename, {required bool all}) → bool
-// MONERO_Wallet_exportOutputs(MONERO_wallet wallet_ptr, String filename, {required bool all}) → bool
-// MONERO_Wallet_getBytesReceived(MONERO_wallet wallet_ptr) → int
+                monero.Wallet_estimateBlockChainHeight(walletPtr!)),
+//monero.Wallet_exportKeyImages(MONERO_wallet wallet_ptr, String filename, {required bool all}) → bool
+//monero.Wallet_exportOutputs(MONERO_wallet wallet_ptr, String filename, {required bool all}) → bool
+//monero.Wallet_getBytesReceived(MONERO_wallet wallet_ptr) → int
             SET('MONERO_Wallet_getBytesReceived',
-                MONERO_Wallet_getBytesReceived(walletPtr!)),
-            const SET('(crash) MONERO_Wallet_isOffline',
+                monero.Wallet_getBytesReceived(walletPtr!)),
+            const SET('(crash)monero.Wallet_isOffline',
                 "MONERO_Wallet_isOffline(walletPtr!)"),
-// MONERO_Wallet_getBytesSent(MONERO_wallet wallet_ptr) → int
-            const SET('(crash) MONERO_Wallet_getBytesSent',
+//monero.Wallet_getBytesSent(MONERO_wallet wallet_ptr) → int
+            const SET('(crash)monero.Wallet_getBytesSent',
                 'MONERO_Wallet_getBytesSent(walletPtr!)'),
-// MONERO_Wallet_getSubaddressLabel(MONERO_wallet wallet_ptr, {required int accountIndex, required int addressIndex}) → String
+//monero.Wallet_getSubaddressLabel(MONERO_wallet wallet_ptr, {required int accountIndex, required int addressIndex}) → String
             SET(
                 'MONERO_Wallet_getSubaddressLabel($globalAccountIndex, 0)',
-                MONERO_Wallet_getSubaddressLabel(walletPtr!,
+                monero.Wallet_getSubaddressLabel(walletPtr!,
                     accountIndex: globalAccountIndex, addressIndex: 0)),
             SET(
                 'MONERO_Wallet_getSubaddressLabel($globalAccountIndex, 1)',
-                MONERO_Wallet_getSubaddressLabel(walletPtr!,
+                monero.Wallet_getSubaddressLabel(walletPtr!,
                     accountIndex: globalAccountIndex, addressIndex: 0)),
             SET('subaddressLabel(0)', subaddressLabel(0)),
             SET('subaddressLabel(1)', subaddressLabel(1)),
-// MONERO_Wallet_history(MONERO_wallet wallet_ptr) → MONERO_TransactionHistory
-// MONERO_Wallet_importKeyImages(MONERO_wallet wallet_ptr, String filename) → bool
-// MONERO_Wallet_importOutputs(MONERO_wallet wallet_ptr, String filename) → bool
-// MONERO_Wallet_init(MONERO_wallet wallet_ptr, {required String daemonAddress, int upperTransacationSizeLimit = 0, String daemonUsername = "", String daemonPassword = "", bool useSsl = false, bool lightWallet = false, String proxyAddress = ""}) → bool
-// MONERO_Wallet_init3(MONERO_wallet wallet_ptr, {required String argv0, required String defaultLogBaseName, required String logPath, required bool console}) → void
+//monero.Wallet_history(MONERO_wallet wallet_ptr) →monero.TransactionHistory
+//monero.Wallet_importKeyImages(MONERO_wallet wallet_ptr, String filename) → bool
+//monero.Wallet_importOutputs(MONERO_wallet wallet_ptr, String filename) → bool
+//monero.Wallet_init(MONERO_wallet wallet_ptr, {required String daemonAddress, int upperTransacationSizeLimit = 0, String daemonUsername = "", String daemonPassword = "", bool useSsl = false, bool lightWallet = false, String proxyAddress = ""}) → bool
+//monero.Wallet_init3(MONERO_wallet wallet_ptr, {required String argv0, required String defaultLogBaseName, required String logPath, required bool console}) → void
             SET('MONERO_Wallet_getRefreshFromBlockHeight',
-                MONERO_Wallet_getRefreshFromBlockHeight(walletPtr!)),
-            SET('MONERO_Wallet_connected', MONERO_Wallet_connected(walletPtr!)),
-// MONERO_Wallet_numSubaddressAccounts(MONERO_wallet wallet_ptr) → int
+                monero.Wallet_getRefreshFromBlockHeight(walletPtr!)),
+            SET('MONERO_Wallet_connected', monero.Wallet_connected(walletPtr!)),
+//monero.Wallet_numSubaddressAccounts(MONERO_wallet wallet_ptr) → int
             SET('MONERO_Wallet_numSubaddressAccounts',
-                MONERO_Wallet_numSubaddressAccounts(walletPtr!)),
-// MONERO_Wallet_numSubaddresses(MONERO_wallet wallet_ptr, {required int accountIndex}) → int
+                monero.Wallet_numSubaddressAccounts(walletPtr!)),
+//monero.Wallet_numSubaddresses(MONERO_wallet wallet_ptr, {required int accountIndex}) → int
             SET(
                 'MONERO_Wallet_numSubaddresses($globalAccountIndex)',
-                MONERO_Wallet_numSubaddresses(walletPtr!,
+                monero.Wallet_numSubaddresses(walletPtr!,
                     accountIndex: globalAccountIndex)),
-// MONERO_Wallet_pauseRefresh(MONERO_wallet wallet_ptr) → void
-// MONERO_Wallet_publicSpendKey(MONERO_wallet wallet_ptr) → String1
+//monero.Wallet_pauseRefresh(MONERO_wallet wallet_ptr) → void
+//monero.Wallet_publicSpendKey(MONERO_wallet wallet_ptr) → String1
             SET('MONERO_Wallet_publicSpendKey',
-                MONERO_Wallet_publicSpendKey(walletPtr!)),
-// MONERO_Wallet_publicViewKey(MONERO_wallet wallet_ptr) → String
+                monero.Wallet_publicSpendKey(walletPtr!)),
+//monero.Wallet_publicViewKey(MONERO_wallet wallet_ptr) → String
             SET('MONERO_Wallet_publicViewKey',
-                MONERO_Wallet_publicViewKey(walletPtr!)),
-// MONERO_Wallet_refresh(MONERO_wallet wallet_ptr) → bool
-// MONERO_Wallet_refreshAsync(MONERO_wallet wallet_ptr) → void
-// MONERO_Wallet_rescanBlockchain(MONERO_wallet wallet_ptr) → bool
-// MONERO_Wallet_rescanBlockchainAsync(MONERO_wallet wallet_ptr) → void
-// MONERO_Wallet_secretSpendKey(MONERO_wallet wallet_ptr) → String
+                monero.Wallet_publicViewKey(walletPtr!)),
+//monero.Wallet_refresh(MONERO_wallet wallet_ptr) → bool
+//monero.Wallet_refreshAsync(MONERO_wallet wallet_ptr) → void
+//monero.Wallet_rescanBlockchain(MONERO_wallet wallet_ptr) → bool
+//monero.Wallet_rescanBlockchainAsync(MONERO_wallet wallet_ptr) → void
+//monero.Wallet_secretSpendKey(MONERO_wallet wallet_ptr) → String
             SET('MONERO_Wallet_secretSpendKey',
-                MONERO_Wallet_secretSpendKey(walletPtr!)),
-// MONERO_Wallet_secretViewKey(MONERO_wallet wallet_ptr) → String
+                monero.Wallet_secretSpendKey(walletPtr!)),
+//monero.Wallet_secretViewKey(MONERO_wallet wallet_ptr) → String
             SET('MONERO_Wallet_secretViewKey',
-                MONERO_Wallet_secretViewKey(walletPtr!)),
-// MONERO_Wallet_seed(MONERO_wallet wallet_ptr) → String
+                monero.Wallet_secretViewKey(walletPtr!)),
+//monero.Wallet_seed(MONERO_wallet wallet_ptr) → String
             SET('MONERO_Wallet_seed("")',
-                MONERO_Wallet_seed(walletPtr!, seedOffset: "")),
+                monero.Wallet_seed(walletPtr!, seedOffset: "")),
             SET('MONERO_Wallet_seed("m")',
-                MONERO_Wallet_seed(walletPtr!, seedOffset: "m")),
-// MONERO_Wallet_setAutoRefreshInterval(MONERO_wallet wallet_ptr, {required int millis}) → void
-// MONERO_Wallet_setSubaddressLabel(MONERO_wallet wallet_ptr, {required int accountIndex, required int addressIndex, required String label}) → void
-// MONERO_Wallet_startRefresh(MONERO_wallet wallet_ptr) → void
-// MONERO_Wallet_status(MONERO_wallet wallet_ptr) → int
-            SET('MONERO_Wallet_status', MONERO_Wallet_status(walletPtr!)),
-// MONERO_Wallet_stop(MONERO_wallet wallet_ptr) → void
-// MONERO_Wallet_store(MONERO_wallet wallet_ptr, {String path = ""}) → bool
-// MONERO_Wallet_submitTransaction(MONERO_wallet wallet_ptr, String filename) → bool
-// MONERO_Wallet_synchronized(MONERO_wallet wallet_ptr) → bool
+                monero.Wallet_seed(walletPtr!, seedOffset: "m")),
+//monero.Wallet_setAutoRefreshInterval(MONERO_wallet wallet_ptr, {required int millis}) → void
+//monero.Wallet_setSubaddressLabel(MONERO_wallet wallet_ptr, {required int accountIndex, required int addressIndex, required String label}) → void
+//monero.Wallet_startRefresh(MONERO_wallet wallet_ptr) → void
+//monero.Wallet_status(MONERO_wallet wallet_ptr) → int
+            SET('MONERO_Wallet_status', monero.Wallet_status(walletPtr!)),
+//monero.Wallet_stop(MONERO_wallet wallet_ptr) → void
+//monero.Wallet_store(MONERO_wallet wallet_ptr, {String path = ""}) → bool
+//monero.Wallet_submitTransaction(MONERO_wallet wallet_ptr, String filename) → bool
+//monero.Wallet_synchronized(MONERO_wallet wallet_ptr) → bool
             SET('MONERO_Wallet_synchronized',
-                MONERO_Wallet_synchronized(walletPtr!)),
-// MONERO_Wallet_unlockedBalance(MONERO_wallet wallet_ptr, {required int accountIndex}) → int
+                monero.Wallet_synchronized(walletPtr!)),
+//monero.Wallet_unlockedBalance(MONERO_wallet wallet_ptr, {required int accountIndex}) → int
             SET(
                 'MONERO_Wallet_unlockedBalance($globalAccountIndex)',
-                MONERO_Wallet_unlockedBalance(walletPtr!,
+                monero.Wallet_unlockedBalance(walletPtr!,
                     accountIndex: globalAccountIndex)),
-// MONERO_Wallet_watchOnly(MONERO_wallet wallet_ptr) → bool
-            SET('MONERO_Wallet_watchOnly', MONERO_Wallet_watchOnly(walletPtr!)),
-// MONERO_WalletManager_closeWallet(MONERO_wallet wallet_ptr, bool store) → bool
-// MONERO_WalletManager_createWallet({required String path, required String password, String language = "English", int networkType = 0}) → MONERO_wallet
-// MONERO_WalletManager_errorString() → String
+//monero.Wallet_watchOnly(MONERO_wallet wallet_ptr) → bool
+            SET('MONERO_Wallet_watchOnly', monero.Wallet_watchOnly(walletPtr!)),
+//monero.WalletManager_closeWallet(MONERO_wallet wallet_ptr, bool store) → bool
+//monero.WalletManager_createWallet({required String path, required String password, String language = "English", int networkType = 0}) →monero.wallet
+//monero.WalletManager_errorString() → String
             SET('MONERO_WalletManager_errorString',
-                MONERO_WalletManager_errorString(wmPtr)),
-// MONERO_WalletManager_openWallet({required String path, required String password, int networkType = 0}) → MONERO_wallet
-// MONERO_WalletManager_recoveryWallet({required String path, required String password, required String mnemonic, int networkType = 0, required int restoreHeight, int kdfRounds = 0, required String seedOffset}) → MONERO_wallet
-// MONERO_WalletManager_setDaemonAddress(String address) → void
-// MONERO_WalletManager_walletExists(String path) → bool
+                monero.WalletManager_errorString(wmPtr)),
+//monero.WalletManager_openWallet({required String path, required String password, int networkType = 0}) →monero.wallet
+//monero.WalletManager_recoveryWallet({required String path, required String password, required String mnemonic, int networkType = 0, required int restoreHeight, int kdfRounds = 0, required String seedOffset}) →monero.wallet
+//monero.WalletManager_setDaemonAddress(String address) → void
+//monero.WalletManager_walletExists(String path) → bool
             SET('MONERO_WalletManager_walletExists(await getMainWalletPath())',
-                MONERO_WalletManager_walletExists(wmPtr, mainWalletPath)),
+                monero.WalletManager_walletExists(wmPtr, mainWalletPath)),
           ],
         ),
       ),

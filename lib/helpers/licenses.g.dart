@@ -5,7 +5,7 @@
 const ossLicenses = <Package>[
   Package(
     name: 'unnamed_monero_wallet',
-    description: 'Key! I\'m running in debug mode!',
+    description: 'Hey! I\'m running in debug mode!',
     repository: 'https://xmruw.net',
     authors: [],
     version: '0.0.0',
@@ -14,29 +14,37 @@ const ossLicenses = <Package>[
     isSdk: false,
     isDirectDependency: true,
   ),
-
 ];
 
 /// Package license definition.
 class Package {
   /// Package name
   final String name;
+
   /// Description
   final String description;
+
   /// Website URL
   final String? homepage;
+
   /// Repository URL
   final String? repository;
+
   /// Authors
   final List<String> authors;
+
   /// Version
   final String version;
+
   /// License
   final String? license;
+
   /// Whether the license is in markdown format or not (plain text).
   final bool isMarkdown;
+
   /// Whether the package is included in the SDK or not.
   final bool isSdk;
+
   /// Whether the package is direct dependency or not.
   final bool isDirectDependency;
 

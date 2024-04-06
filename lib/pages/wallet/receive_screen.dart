@@ -1,12 +1,12 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/pages/wallet/subaddress_page.dart';
 import 'package:xmruw/tools/monero/account_index.dart';
 import 'package:xmruw/tools/monero/subaddress_label.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/qr_code.dart';
-import 'package:flutter/material.dart';
-import 'package:monero/monero.dart';
 
 class ReceiveScreen extends StatefulWidget {
   const ReceiveScreen({super.key});
@@ -16,10 +16,10 @@ class ReceiveScreen extends StatefulWidget {
 }
 
 class _ReceiveScreenState extends State<ReceiveScreen> {
-  late int currentAddressIndex = MONERO_Wallet_numSubaddresses(walletPtr!,
+  late int currentAddressIndex = monero.Wallet_numSubaddresses(walletPtr!,
       accountIndex: globalAccountIndex);
 
-  late String address = MONERO_Wallet_address(
+  late String address = monero.Wallet_address(
     walletPtr!,
     accountIndex: globalAccountIndex,
     addressIndex: currentAddressIndex,
@@ -28,12 +28,12 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
   void _refreshAddr() {
     Timer.periodic(const Duration(seconds: 15), (timer) {
       if (!mounted) return;
-      final ns = MONERO_Wallet_numSubaddresses(walletPtr!,
+      final ns = monero.Wallet_numSubaddresses(walletPtr!,
           accountIndex: globalAccountIndex);
       if (ns == currentAddressIndex) return;
       setState(() {
         currentAddressIndex = ns;
-        address = MONERO_Wallet_address(
+        address = monero.Wallet_address(
           walletPtr!,
           accountIndex: globalAccountIndex,
           addressIndex: currentAddressIndex,

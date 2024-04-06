@@ -1,3 +1,6 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:monero/monero.dart' as monero;
 import 'package:offline_market_data/offline_market_data.dart';
 import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/scanner/base_scan.dart';
@@ -10,9 +13,6 @@ import 'package:xmruw/tools/wallet_manager.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/labeled_text_input.dart';
 import 'package:xmruw/widgets/long_outlined_button.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:monero/monero.dart';
 
 class SpendScreen extends StatefulWidget {
   const SpendScreen({super.key, this.outputs = const [], this.address = ""});
@@ -46,7 +46,7 @@ class _SpendScreenState extends State<SpendScreen> {
 
   bool sweepAllVar = false;
   bool get sweepAll => sweepAllVar;
-  final coins = MONERO_Wallet_coins(walletPtr!);
+  final coins = monero.Wallet_coins(walletPtr!);
 
   @override
   void initState() {
@@ -69,19 +69,19 @@ class _SpendScreenState extends State<SpendScreen> {
   void _loadBalance() {
     if (widget.outputs.isEmpty) {
       setState(() {
-        availableBalance = MONERO_Wallet_unlockedBalance(walletPtr!,
+        availableBalance = monero.Wallet_unlockedBalance(walletPtr!,
             accountIndex: globalAccountIndex);
       });
       return;
     }
-    MONERO_Coins_refresh(coins);
-    final count = MONERO_Coins_count(coins);
+    monero.Coins_refresh(coins);
+    final count = monero.Coins_count(coins);
     int amt = 0;
     for (var i = 0; i < count; i++) {
-      final c = MONERO_Coins_coin(coins, i);
-      final keyImage = MONERO_CoinsInfo_keyImage(c);
+      final c = monero.Coins_coin(coins, i);
+      final keyImage = monero.CoinsInfo_keyImage(c);
       if (widget.outputs.contains(keyImage)) {
-        amt += MONERO_CoinsInfo_amount(c);
+        amt += monero.CoinsInfo_amount(c);
       }
     }
     setState(() {
@@ -127,10 +127,10 @@ class _SpendScreenState extends State<SpendScreen> {
     }
   }
 
-  final viewOnlyBalance = MONERO_Wallet_viewOnlyBalance(walletPtr!,
+  final viewOnlyBalance = monero.Wallet_viewOnlyBalance(walletPtr!,
       accountIndex: globalAccountIndex);
 
-  final hasUnknownKeyImages = MONERO_Wallet_hasUnknownKeyImages(walletPtr!);
+  final hasUnknownKeyImages = monero.Wallet_hasUnknownKeyImages(walletPtr!);
 
   bool amountInputXMR = true;
 
@@ -257,12 +257,12 @@ class _SpendScreenState extends State<SpendScreen> {
     String address = addressCtrl.text;
     final addrUri = Uri.tryParse(address);
     if (addrUri != null && config.enableOpenAlias && address.contains(".")) {
-      address = MONERO_WalletManager_resolveOpenAlias(
+      address = monero.WalletManager_resolveOpenAlias(
         wmPtr,
         address: address.replaceAll("@", "."),
         dnssecValid: false,
       );
-      final errstr = MONERO_WalletManager_errorString(wmPtr);
+      final errstr = monero.WalletManager_errorString(wmPtr);
       if (address.isEmpty) {
         Alert(title: 'Unresolvable OpenAlias\n$errstr', cancelable: true)
             .show(context);

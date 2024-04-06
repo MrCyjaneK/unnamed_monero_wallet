@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monero/monero.dart';
+import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/tools/show_alert.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/bottom_bar.dart';
@@ -78,20 +78,20 @@ class CryptoSign extends StatefulWidget {
 class _CryptoSignState extends State<CryptoSign> {
   final messageCtrl = TextEditingController();
   final addressCtrl = TextEditingController(
-    text: MONERO_Wallet_address(walletPtr!),
+    text: monero.Wallet_address(walletPtr!),
   );
 
   String result = "";
 
   void sign() {
-    final msg = MONERO_Wallet_signMessage(
+    final msg = monero.Wallet_signMessage(
       walletPtr!,
       message: messageCtrl.text,
       address: addressCtrl.text,
     );
-    final status = MONERO_Wallet_status(walletPtr!);
+    final status = monero.Wallet_status(walletPtr!);
     if (status != 0) {
-      final errstr = MONERO_Wallet_errorString(walletPtr!);
+      final errstr = monero.Wallet_errorString(walletPtr!);
       Alert(
         title: "Unable to sign: $errstr",
         cancelable: true,
@@ -134,7 +134,7 @@ class _CryptoVerifyState extends State<CryptoVerify> {
   final signatureCtrl = TextEditingController();
 
   void verify() {
-    final v = MONERO_Wallet_verifySignedMessage(
+    final v = monero.Wallet_verifySignedMessage(
       walletPtr!,
       message: messageCtrl.text,
       address: addressCtrl.text,

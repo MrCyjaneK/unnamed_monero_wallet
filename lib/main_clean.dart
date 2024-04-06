@@ -1,4 +1,8 @@
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/helpers/resource.g.dart';
 import 'package:xmruw/pages/anon/firstrun.dart';
 import 'package:xmruw/pages/config/base.dart';
@@ -7,10 +11,7 @@ import 'package:xmruw/pages/pin_screen.dart';
 import 'package:xmruw/tools/dirs.dart';
 import 'package:xmruw/tools/node.dart';
 import 'package:xmruw/tools/wallet_lock.dart';
-import 'package:flutter/material.dart';
-import 'package:monero/monero.dart';
 import 'package:xmruw/tools/wallet_manager.dart';
-import 'dart:ui';
 
 bool _walletExists = false;
 
@@ -20,9 +21,9 @@ void mainClean() async {
   if (!wd.existsSync()) wd.createSync();
   await loadConfig();
 
-  printStarts = config.printStarts;
+  monero.printStarts = config.printStarts;
   _walletExists =
-      MONERO_WalletManager_walletExists(wmPtr, await getMainWalletPath());
+      monero.WalletManager_walletExists(wmPtr, await getMainWalletPath());
   runApp(
     Listener(
       onPointerDown: (_) => _uh(),

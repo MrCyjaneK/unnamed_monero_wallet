@@ -1,11 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/pages/wallet/subaddress_details.dart';
 import 'package:xmruw/tools/format_monero.dart';
 import 'package:xmruw/tools/monero/account_index.dart';
 import 'package:xmruw/tools/monero/subaddress_label.dart';
 import 'package:xmruw/tools/show_alert.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
-import 'package:flutter/material.dart';
-import 'package:monero/monero.dart';
 
 class SubAddressPage extends StatefulWidget {
   const SubAddressPage({super.key});
@@ -23,7 +23,7 @@ class SubAddressPage extends StatefulWidget {
 }
 
 class _SubAddressPageState extends State<SubAddressPage> {
-  int addrCount = MONERO_Wallet_numSubaddresses(walletPtr!,
+  int addrCount = monero.Wallet_numSubaddresses(walletPtr!,
       accountIndex: globalAccountIndex);
 
   @override
@@ -31,7 +31,7 @@ class _SubAddressPageState extends State<SubAddressPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            "Subaddresses ${MONERO_Wallet_numSubaddresses(walletPtr!, accountIndex: globalAccountIndex)}"),
+            "Subaddresses ${monero.Wallet_numSubaddresses(walletPtr!, accountIndex: globalAccountIndex)}"),
         actions: [
           IconButton(onPressed: _addSubaddress, icon: const Icon(Icons.add))
         ],
@@ -52,7 +52,7 @@ class _SubAddressPageState extends State<SubAddressPage> {
             subaddressId: i,
             received: 0,
             label: subaddressLabel(i),
-            squashedAddress: MONERO_Wallet_address(
+            squashedAddress: monero.Wallet_address(
               walletPtr!,
               accountIndex: globalAccountIndex,
               addressIndex: i,
@@ -66,14 +66,14 @@ class _SubAddressPageState extends State<SubAddressPage> {
   }
 
   void _addSubaddress() {
-    MONERO_Wallet_addSubaddress(walletPtr!, accountIndex: globalAccountIndex);
+    monero.Wallet_addSubaddress(walletPtr!, accountIndex: globalAccountIndex);
     setState(() {
-      addrCount = MONERO_Wallet_numSubaddresses(walletPtr!,
+      addrCount = monero.Wallet_numSubaddresses(walletPtr!,
           accountIndex: globalAccountIndex);
     });
-    final status = MONERO_Wallet_status(walletPtr!);
+    final status = monero.Wallet_status(walletPtr!);
     if (status != 0) {
-      final errorString = MONERO_Wallet_errorString(walletPtr!);
+      final errorString = monero.Wallet_errorString(walletPtr!);
       Alert(title: errorString).show(context);
     }
   }

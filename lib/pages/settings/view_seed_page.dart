@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/tools/show_alert.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/labeled_text_input.dart';
@@ -8,9 +11,6 @@ import 'package:xmruw/widgets/padded_element.dart';
 import 'package:xmruw/widgets/primary_label.dart';
 import 'package:xmruw/widgets/qr_code.dart';
 import 'package:xmruw/widgets/tiny_card.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:monero/monero.dart';
 
 class ViewSeedPage extends StatefulWidget {
   const ViewSeedPage({super.key, required this.seedOffset});
@@ -32,13 +32,13 @@ class ViewSeedPage extends StatefulWidget {
 }
 
 class _ViewSeedPageState extends State<ViewSeedPage> {
-  final address = MONERO_Wallet_address(walletPtr!);
+  final address = monero.Wallet_address(walletPtr!);
 
   late final legacySeed =
-      MONERO_Wallet_seed(walletPtr!, seedOffset: widget.seedOffset).split(' ');
+      monero.Wallet_seed(walletPtr!, seedOffset: widget.seedOffset).split(' ');
 
   late final seed =
-      MONERO_Wallet_getPolyseed(walletPtr!, passphrase: widget.seedOffset)
+      monero.Wallet_getPolyseed(walletPtr!, passphrase: widget.seedOffset)
           .split(' ');
 
   late bool useLegacy = seed.isEmpty;
@@ -53,9 +53,9 @@ class _ViewSeedPageState extends State<ViewSeedPage> {
     return const JsonEncoder.withIndent('   ').convert({
       "version": 0,
       "primaryAddress":
-          MONERO_Wallet_address(walletPtr!, accountIndex: 0, addressIndex: 0),
-      "privateViewKey": MONERO_Wallet_secretViewKey(walletPtr!),
-      "restoreHeight": MONERO_Wallet_getRefreshFromBlockHeight(walletPtr!),
+          monero.Wallet_address(walletPtr!, accountIndex: 0, addressIndex: 0),
+      "privateViewKey": monero.Wallet_secretViewKey(walletPtr!),
+      "restoreHeight": monero.Wallet_getRefreshFromBlockHeight(walletPtr!),
     });
   }
 
@@ -80,9 +80,9 @@ class _ViewSeedPageState extends State<ViewSeedPage> {
     ).show(context);
   }
 
-  String viewKey = MONERO_Wallet_secretViewKey(walletPtr!);
-  String spendKey = MONERO_Wallet_secretSpendKey(walletPtr!);
-  int restoreHeight = MONERO_Wallet_getRefreshFromBlockHeight(walletPtr!);
+  String viewKey = monero.Wallet_secretViewKey(walletPtr!);
+  String spendKey = monero.Wallet_secretSpendKey(walletPtr!);
+  int restoreHeight = monero.Wallet_getRefreshFromBlockHeight(walletPtr!);
 
   void _copySeed() {
     Clipboard.setData(
@@ -158,7 +158,7 @@ class _ViewSeedPageState extends State<ViewSeedPage> {
       callback: () {
         final i = int.tryParse(tCtrl.text);
         if (i == null) return;
-        MONERO_Wallet_setRefreshFromBlockHeight(
+        monero.Wallet_setRefreshFromBlockHeight(
           walletPtr!,
           refresh_from_block_height: i,
         );

@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/legacy.dart';
 import 'package:xmruw/pages/wallet/transaction_list.dart';
 import 'package:xmruw/tools/format_monero.dart';
@@ -9,8 +11,6 @@ import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/labeled_text_input.dart';
 import 'package:xmruw/widgets/primary_label.dart';
 import 'package:xmruw/widgets/transaction_list/transaction_item.dart';
-import 'package:flutter/material.dart';
-import 'package:monero/monero.dart';
 
 class TransactionDetails extends StatefulWidget {
   final Transaction transaction;
@@ -42,13 +42,13 @@ class _TransactionDetailsState extends State<TransactionDetails> {
       callback: () => Navigator.of(context).pop(),
     ).show(context);
 
-    MONERO_TransactionHistory_setTxNote(
+    monero.TransactionHistory_setTxNote(
       txHistoryPtr,
       txid: widget.transaction.hash,
       note: tCtrl.text,
     );
-    print(MONERO_Wallet_status(walletPtr!));
-    print(MONERO_Wallet_errorString(walletPtr!));
+    print(monero.Wallet_status(walletPtr!));
+    print(monero.Wallet_errorString(walletPtr!));
     setState(() {
       description = tCtrl.text;
     });

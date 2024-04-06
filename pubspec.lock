@@ -427,19 +427,12 @@ packages:
   monero:
     dependency: "direct main"
     description:
-      name: monero
-      sha256: "1dd66005b9aae7ccdf3fcba1bed3e7a4e4f35a17496696941685c0fdb3ed14f0"
-      url: "https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/"
-    source: hosted
-    version: "0.018003001.37"
-  monero_libs:
-    dependency: "direct main"
-    description:
-      name: monero_libs
-      sha256: "0f67f1e0bf7b90bba16e20c9051252dc16cecb3ff885a616bde3c5a871f94332"
-      url: "https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/"
-    source: hosted
-    version: "0.018003003.001"
+      path: "."
+      ref: e78ae05fd0db0ff201f85fd626a81a9be53bbab4
+      resolved-ref: e78ae05fd0db0ff201f85fd626a81a9be53bbab4
+      url: "https://git.mrcyjanek.net/mrcyjanek/monero.dart"
+    source: git
+    version: "0.0.0"
   mutex:
     dependency: "direct main"
     description:

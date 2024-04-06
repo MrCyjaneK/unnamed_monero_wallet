@@ -5,27 +5,27 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:flutter_background_service_android/flutter_background_service_android.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:monero/monero.dart' as monero;
+import 'package:mutex/mutex.dart';
+import 'package:path/path.dart' as p;
+import 'package:tor_binary/tor_binary_platform_interface.dart';
 import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/pin_screen.dart';
 import 'package:xmruw/tools/dirs.dart';
 import 'package:xmruw/tools/monero/account_index.dart';
+import 'package:xmruw/tools/monero/subaddress_label.dart' as sl;
 import 'package:xmruw/tools/node.dart';
 import 'package:xmruw/tools/proxy.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:monero/monero.dart';
-import 'package:xmruw/tools/monero/subaddress_label.dart' as sl;
-import 'package:mutex/mutex.dart';
-import 'package:path/path.dart' as p;
-import 'package:tor_binary/tor_binary_platform_interface.dart';
-import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 
 class Transaction {
   final String displayLabel;
   String subaddressLabel = sl.subaddressLabel(0); // TODO: fixme
-  late final String address = MONERO_Wallet_address(
+  late final String address = monero.Wallet_address(
     walletPtr!,
     accountIndex: globalAccountIndex,
     addressIndex: 0,
@@ -66,23 +66,23 @@ class Transaction {
   // S finalubAddress? subAddress;
   // List<Transfer> transfers = [];
   // final int txIndex;
-  final MONERO_TransactionInfo txInfo;
+  final monero.TransactionInfo txInfo;
   Transaction({
     required this.txInfo,
-  })  : displayLabel = MONERO_TransactionInfo_label(txInfo),
-        hash = MONERO_TransactionInfo_hash(txInfo),
+  })  : displayLabel = monero.TransactionInfo_label(txInfo),
+        hash = monero.TransactionInfo_hash(txInfo),
         timeStamp = DateTime.fromMillisecondsSinceEpoch(
-          MONERO_TransactionInfo_timestamp(txInfo) * 1000,
+          monero.TransactionInfo_timestamp(txInfo) * 1000,
         ),
-        isSpend = MONERO_TransactionInfo_direction(txInfo) ==
-            TransactionInfo_Direction.Out,
-        amount = MONERO_TransactionInfo_amount(txInfo),
-        paymentId = MONERO_TransactionInfo_paymentId(txInfo),
-        accountIndex = MONERO_TransactionInfo_subaddrAccount(txInfo),
-        blockheight = MONERO_TransactionInfo_blockHeight(txInfo),
-        confirmations = MONERO_TransactionInfo_confirmations(txInfo),
-        fee = MONERO_TransactionInfo_fee(txInfo),
-        description = MONERO_TransactionInfo_description(txInfo);
+        isSpend = monero.TransactionInfo_direction(txInfo) ==
+            monero.TransactionInfo_Direction.Out,
+        amount = monero.TransactionInfo_amount(txInfo),
+        paymentId = monero.TransactionInfo_paymentId(txInfo),
+        accountIndex = monero.TransactionInfo_subaddrAccount(txInfo),
+        blockheight = monero.TransactionInfo_blockHeight(txInfo),
+        confirmations = monero.TransactionInfo_confirmations(txInfo),
+        fee = monero.TransactionInfo_fee(txInfo),
+        description = monero.TransactionInfo_description(txInfo);
 }
 
 class SubAddress {
@@ -319,9 +319,9 @@ Future<String> getStats() async {
   // return const JsonEncoder().convert(MONERO_isLibOk());
   final ptr = ffi.Pointer<ffi.Void>.fromAddress(ptrAddr);
   bool embeddedTor = await isSocks5ProxyListening("127.0.0.1", 42142);
-  final height = MONERO_Wallet_daemonBlockChainHeight(ptr);
-  final lh = MONERO_Wallet_blockChainHeight(ptr);
-  final isBSync = MONERO_Wallet_isBackgroundSyncing(ptr) || isLockedMonero;
+  final height = monero.Wallet_daemonBlockChainHeight(ptr);
+  final lh = monero.Wallet_blockChainHeight(ptr);
+  final isBSync = monero.Wallet_isBackgroundSyncing(ptr) || isLockedMonero;
   final leftText = ((height - lh) <= 0) ? "" : "${height - lh} left ";
   statsMx.release();
   return "${((!embeddedTor) ? "" : "[Tor] ")}"

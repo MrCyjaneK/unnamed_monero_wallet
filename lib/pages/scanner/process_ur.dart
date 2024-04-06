@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:monero/monero.dart';
+import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/pages/sync_static_progress.dart';
 import 'package:xmruw/pages/wallet/spend_confirm.dart';
 import 'package:xmruw/pages/wallet/spend_screen.dart';
@@ -21,11 +21,11 @@ Future<void> processUr(BuildContext context, String tag, Uint8List data) async {
     case "xmr-output":
       final p = await getMoneroImportOutputsPath();
       File(p).writeAsBytesSync(data);
-      final ok = MONERO_Wallet_importOutputs(walletPtr!, p);
+      final ok = monero.Wallet_importOutputs(walletPtr!, p);
       if (!ok) {
         // ignore: use_build_context_synchronously
         await Alert(
-          title: MONERO_Wallet_errorString(walletPtr!),
+          title: monero.Wallet_errorString(walletPtr!),
           cancelable: true,
         ).show(context);
         return;
@@ -39,19 +39,19 @@ Future<void> processUr(BuildContext context, String tag, Uint8List data) async {
         await Future.delayed(const Duration(milliseconds: 100));
         final p = await getMoneroImportKeyImagesPath();
         File(p).writeAsBytesSync(data);
-        final preState = MONERO_Wallet_trustedDaemon(walletPtr!);
-        MONERO_Wallet_setTrustedDaemon(walletPtr!, arg: true);
-        final ok = MONERO_Wallet_importKeyImages(walletPtr!, p);
+        final preState = monero.Wallet_trustedDaemon(walletPtr!);
+        monero.Wallet_setTrustedDaemon(walletPtr!, arg: true);
+        final ok = monero.Wallet_importKeyImages(walletPtr!, p);
         if (!ok) {
           // ignore: use_build_context_synchronously
           Alert(
-            title: MONERO_Wallet_errorString(walletPtr!),
+            title: monero.Wallet_errorString(walletPtr!),
             cancelable: true,
           ).show(context);
-          MONERO_Wallet_setTrustedDaemon(walletPtr!, arg: preState);
+          monero.Wallet_setTrustedDaemon(walletPtr!, arg: preState);
           return;
         }
-        MONERO_Wallet_setTrustedDaemon(walletPtr!, arg: preState);
+        monero.Wallet_setTrustedDaemon(walletPtr!, arg: preState);
         // ignore: use_build_context_synchronously
         Navigator.of(context).pop();
       });
@@ -59,12 +59,12 @@ Future<void> processUr(BuildContext context, String tag, Uint8List data) async {
       final p = await getMoneroUnsignedTxPath();
       if (File(p).existsSync()) File(p).deleteSync();
       File(p).writeAsBytesSync(data);
-      final MONERO_UnsignedTransaction tx =
-          MONERO_Wallet_loadUnsignedTx(walletPtr!, unsigned_filename: p);
-      if (MONERO_UnsignedTransaction_status(tx) != 0) {
+      final monero.UnsignedTransaction tx =
+          monero.Wallet_loadUnsignedTx(walletPtr!, unsigned_filename: p);
+      if (monero.UnsignedTransaction_status(tx) != 0) {
         // ignore: use_build_context_synchronously
         await Alert(
-          title: MONERO_UnsignedTransaction_errorString(tx),
+          title: monero.UnsignedTransaction_errorString(tx),
           cancelable: true,
         ).show(context);
         return;
@@ -73,9 +73,9 @@ Future<void> processUr(BuildContext context, String tag, Uint8List data) async {
       SpendConfirm.pushReplace(
         context,
         TxRequest(
-          address: MONERO_UnsignedTransaction_recipientAddress(tx),
-          amount: (num.parse(MONERO_UnsignedTransaction_amount(tx))) ~/ 1,
-          fee: (num.parse(MONERO_UnsignedTransaction_fee(tx))) ~/ 1,
+          address: monero.UnsignedTransaction_recipientAddress(tx),
+          amount: (num.parse(monero.UnsignedTransaction_amount(tx))) ~/ 1,
+          fee: (num.parse(monero.UnsignedTransaction_fee(tx))) ~/ 1,
           priority: Priority.default_,
           notes: "N/A",
           isSweep: false,
@@ -87,11 +87,11 @@ Future<void> processUr(BuildContext context, String tag, Uint8List data) async {
     case "xmr-txsigned":
       final p = await getMoneroSignedTxPath();
       File(p).writeAsBytesSync(data);
-      final tx = MONERO_Wallet_submitTransaction(walletPtr!, p);
+      final tx = monero.Wallet_submitTransaction(walletPtr!, p);
       if (tx == false) {
         // ignore: use_build_context_synchronously
         await Alert(
-          title: MONERO_Wallet_errorString(walletPtr!),
+          title: monero.Wallet_errorString(walletPtr!),
           cancelable: true,
         ).show(context);
         return;

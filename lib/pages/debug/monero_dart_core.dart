@@ -1,9 +1,9 @@
+import 'package:flutter/material.dart';
+import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/tools/wallet_manager.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/labeled_text_input.dart';
 import 'package:xmruw/widgets/long_outlined_button.dart';
-import 'package:flutter/material.dart';
-import 'package:monero/monero.dart';
 
 class MoneroDartCore extends StatefulWidget {
   const MoneroDartCore({super.key});
@@ -28,11 +28,11 @@ class _MoneroDartCoreState extends State<MoneroDartCore> {
   final networkTypeCtrl = TextEditingController(text: '0');
 
   String result = "NOTE: There are no safety checks, you may crash the app.";
-  MONERO_wallet? wallet = walletPtr;
+  monero.wallet? wallet = walletPtr;
 
   void _call() {
     try {
-      final p = MONERO_WalletManager_createWallet(
+      final p = monero.WalletManager_createWallet(
         wmPtr,
         path: pathCtrl.text,
         password: passwordCtrl.text,
@@ -50,7 +50,7 @@ class _MoneroDartCoreState extends State<MoneroDartCore> {
 
   void _callAddress(int accountIndex, int addressIndex) {
     try {
-      final p = MONERO_Wallet_address(
+      final p = monero.Wallet_address(
         wallet!,
         accountIndex: accountIndex,
         addressIndex: addressIndex,
@@ -69,7 +69,7 @@ class _MoneroDartCoreState extends State<MoneroDartCore> {
 
   void _status() {
     try {
-      final p = MONERO_Wallet_status(wallet!);
+      final p = monero.Wallet_status(wallet!);
       setState(() {
         result = p.toString();
         status = p;
@@ -83,7 +83,7 @@ class _MoneroDartCoreState extends State<MoneroDartCore> {
 
   void _errorString() {
     try {
-      final p = MONERO_Wallet_errorString(wallet!);
+      final p = monero.Wallet_errorString(wallet!);
       setState(() {
         result = p.toString();
       });

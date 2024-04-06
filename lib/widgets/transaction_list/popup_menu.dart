@@ -1,5 +1,10 @@
 import 'dart:io';
 
+import 'package:bytewords/bytewords.dart';
+import 'package:cr_file_saver/file_saver.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/crypto/crypto.dart';
 import 'package:xmruw/pages/pos/home.dart';
@@ -14,20 +19,15 @@ import 'package:xmruw/tools/is_view_only.dart';
 import 'package:xmruw/tools/show_alert.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/urqr.dart';
-import 'package:bytewords/bytewords.dart';
-import 'package:cr_file_saver/file_saver.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:monero/monero.dart';
 
 Future<void> exportOutputs(BuildContext c) async {
   final p = await getMoneroExportOutputsPath();
   if (File(p).existsSync()) File(p).deleteSync();
-  final stat = MONERO_Wallet_exportOutputs(walletPtr!, p, all: true);
+  final stat = monero.Wallet_exportOutputs(walletPtr!, p, all: true);
   if (!stat) {
     // ignore: use_build_context_synchronously
     await Alert(
-      title: MONERO_Wallet_errorString(walletPtr!),
+      title: monero.Wallet_errorString(walletPtr!),
       cancelable: true,
     ).show(c);
     return;
@@ -42,11 +42,11 @@ Future<void> exportOutputs(BuildContext c) async {
 
 void exportKeyImages(BuildContext c) async {
   final p = await getMoneroExportKeyImagesPath();
-  MONERO_Wallet_exportKeyImages(walletPtr!, p, all: true);
-  final status = MONERO_Wallet_status(walletPtr!);
+  monero.Wallet_exportKeyImages(walletPtr!, p, all: true);
+  final status = monero.Wallet_status(walletPtr!);
   if (status != 0) {
     // ignore: use_build_context_synchronously
-    await Alert(title: MONERO_Wallet_errorString(walletPtr!), cancelable: true)
+    await Alert(title: monero.Wallet_errorString(walletPtr!), cancelable: true)
         .show(c);
     return;
   }
@@ -70,8 +70,8 @@ class TxListPopupMenu extends StatelessWidget {
   }
 
   void _resync() {
-    MONERO_Wallet_rescanBlockchainAsync(walletPtr!);
-    MONERO_Wallet_refreshAsync(walletPtr!);
+    monero.Wallet_rescanBlockchainAsync(walletPtr!);
+    monero.Wallet_refreshAsync(walletPtr!);
   }
 
   void _importOutputs(BuildContext c) async {
@@ -84,17 +84,17 @@ class TxListPopupMenu extends StatelessWidget {
         return;
       }
       try {
-        MONERO_Wallet_importOutputs(walletPtr!, p.files.first.path!);
+        monero.Wallet_importOutputs(walletPtr!, p.files.first.path!);
       } catch (e) {
         // ignore: use_build_context_synchronously
         await Alert(title: "$e", cancelable: true).show(c);
         return;
       }
-      final status = MONERO_Wallet_status(walletPtr!);
+      final status = monero.Wallet_status(walletPtr!);
       if (status != 0) {
         // ignore: use_build_context_synchronously
         await Alert(
-                title: MONERO_Wallet_errorString(walletPtr!), cancelable: true)
+                title: monero.Wallet_errorString(walletPtr!), cancelable: true)
             .show(c);
         return;
       }
@@ -110,24 +110,24 @@ class TxListPopupMenu extends StatelessWidget {
         await Alert(title: "No file picked", cancelable: true).show(c);
         return;
       }
-      final MONERO_UnsignedTransaction utx = MONERO_Wallet_loadUnsignedTx(
+      final monero.UnsignedTransaction utx = monero.Wallet_loadUnsignedTx(
           walletPtr!,
           unsigned_filename: p.files.first.path!);
-      final status = MONERO_Wallet_status(walletPtr!);
+      final status = monero.Wallet_status(walletPtr!);
       if (status != 0) {
         // ignore: use_build_context_synchronously
         await Alert(
-                title: MONERO_Wallet_errorString(walletPtr!), cancelable: true)
+                title: monero.Wallet_errorString(walletPtr!), cancelable: true)
             .show(c);
         return;
       }
       final signedFileName = await getMoneroSignedTxPath();
-      final res = MONERO_UnsignedTransaction_sign(utx, signedFileName);
-      final status2 = MONERO_Wallet_status(walletPtr!);
+      final res = monero.UnsignedTransaction_sign(utx, signedFileName);
+      final status2 = monero.Wallet_status(walletPtr!);
       if (status2 != 0 || res == false) {
         // ignore: use_build_context_synchronously
         await Alert(
-                title: MONERO_Wallet_errorString(walletPtr!), cancelable: true)
+                title: monero.Wallet_errorString(walletPtr!), cancelable: true)
             .show(c);
         return;
       }
@@ -177,14 +177,14 @@ class TxListPopupMenu extends StatelessWidget {
         OutputsPage.push(c);
       case TxListPopupAction.graphs:
         UsageGraphsPage.push(c);
-        case TxListPopupAction.pos:
+      case TxListPopupAction.pos:
         PoSHomePage.push(c);
     }
   }
 
   void _saveExit(BuildContext c) async {
     Alert(title: "Saving and closing...").show(c);
-    MONERO_Wallet_store(walletPtr!);
+    monero.Wallet_store(walletPtr!);
     await Future.delayed(const Duration(seconds: 1));
     exit(0);
   }
@@ -206,18 +206,18 @@ class TxListPopupMenu extends StatelessWidget {
       return;
     }
     try {
-      MONERO_Wallet_importOutputs(walletPtr!, p.files.first.path!);
+      monero.Wallet_importOutputs(walletPtr!, p.files.first.path!);
     } catch (e) {
       // ignore: use_build_context_synchronously
       await Alert(title: "$e", cancelable: true).show(c);
       return;
     }
     final stat =
-        MONERO_Wallet_submitTransaction(walletPtr!, p.files.single.path!);
+        monero.Wallet_submitTransaction(walletPtr!, p.files.single.path!);
     if (!stat) {
       // ignore: use_build_context_synchronously
       Alert(
-        title: MONERO_Wallet_errorString(walletPtr!),
+        title: monero.Wallet_errorString(walletPtr!),
         cancelable: true,
       ).show(c);
       return;
@@ -298,7 +298,7 @@ class TxListPopupMenu extends StatelessWidget {
           value: TxListPopupAction.graphs,
           child: Text("Garphs"),
         ),
-            TxListPopupAction.pos => const PopupMenuItem<TxListPopupAction>(
+      TxListPopupAction.pos => const PopupMenuItem<TxListPopupAction>(
           value: TxListPopupAction.pos,
           child: Text("PoS"),
         ),

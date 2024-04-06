@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:libstealth_calculator/libstealth_calculator.dart';
-import 'package:monero/monero.dart';
+import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/main_clean.dart';
 import 'package:xmruw/tools/dirs.dart';
 import 'package:xmruw/tools/fuck_firebase.dart';
@@ -14,7 +14,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await fuckFirebase(); // MLkit privacy patch
   final walletExists =
-      MONERO_WalletManager_walletExists(wmPtr, await getMainWalletPath());
+      monero.WalletManager_walletExists(wmPtr, await getMainWalletPath());
   if (libstealthCalculator) {
     runApp(StealthHomeScreenCalculator(
       onSecretGiven: (String secret) async {
@@ -23,7 +23,7 @@ void main() async {
           return;
         } else {
           if (!walletExists) return;
-          final pwd = MONERO_WalletManager_verifyWalletPassword(
+          final pwd = monero.WalletManager_verifyWalletPassword(
             wmPtr,
             keysFileName: "${await getMainWalletPath()}.keys",
             password: secret.trim(),

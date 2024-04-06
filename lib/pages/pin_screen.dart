@@ -4,6 +4,10 @@ import 'dart:ffi';
 import 'dart:io';
 import 'dart:isolate';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:monero/monero.dart' as monero;
+import 'package:permission_handler/permission_handler.dart';
 import 'package:xmruw/legacy.dart';
 import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/debug.dart';
@@ -21,10 +25,6 @@ import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/normal_keyboard.dart';
 import 'package:xmruw/widgets/numerical_keyboard.dart';
 import 'package:xmruw/widgets/setup_logo.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:monero/monero.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 // createWallet -> createWalletConfirm -> "wallet"
 // /|\                               \__ Doesn't match -> \
@@ -43,7 +43,7 @@ enum PinScreenFlag {
 }
 
 bool isLocked = false;
-bool get isLockedMonero => MONERO_Wallet_isBackgroundSyncing(walletPtr!);
+bool get isLockedMonero => monero.Wallet_isBackgroundSyncing(walletPtr!);
 
 class PinScreen extends StatefulWidget {
   const PinScreen({
@@ -175,8 +175,8 @@ class _PinScreenState extends State<PinScreen> {
   }
 
   Future<bool> _createWallet() async {
-    final polyseed = MONERO_Wallet_createPolyseed();
-    walletPtr = MONERO_WalletManager_createWalletFromPolyseed(
+    final polyseed = monero.Wallet_createPolyseed();
+    walletPtr = monero.WalletManager_createWalletFromPolyseed(
       wmPtr,
       path: await getMainWalletPath(),
       password: pin.value,
@@ -186,13 +186,13 @@ class _PinScreenState extends State<PinScreen> {
       restoreHeight: 0,
       kdfRounds: 1,
     );
-    final status = MONERO_Wallet_status(walletPtr!);
+    final status = monero.Wallet_status(walletPtr!);
     if (status == 0) {
-      MONERO_Wallet_store(walletPtr!);
+      monero.Wallet_store(walletPtr!);
       return true;
     } // All went fine
     if (mounted) {
-      Alert(title: MONERO_Wallet_errorString(walletPtr!), cancelable: true)
+      Alert(title: monero.Wallet_errorString(walletPtr!), cancelable: true)
           .show(context);
     }
     return false;
@@ -257,7 +257,7 @@ class _PinScreenState extends State<PinScreen> {
       restoreWalletSeedConfirmText = "RESTORING";
     });
 
-    walletPtr = MONERO_WalletManager_createWalletFromKeys(wmPtr,
+    walletPtr = monero.WalletManager_createWalletFromKeys(wmPtr,
         path: await getMainWalletPath(),
         password: pin.value,
         restoreHeight: widget.restoreData!.restoreHeight!,
@@ -270,12 +270,12 @@ class _PinScreenState extends State<PinScreen> {
       restoreWalletSeedConfirmText = "Confirm your pin";
     });
     if (!mounted) return;
-    final status = MONERO_Wallet_status(walletPtr!);
+    final status = monero.Wallet_status(walletPtr!);
     if (status != 0) {
       Alert(
         title: """
 Unable to restore wallet.
-${MONERO_Wallet_errorString(walletPtr!)}
+${monero.Wallet_errorString(walletPtr!)}
 restoreHeight: ${widget.restoreData!.restoreHeight!},
 addressString: ${widget.restoreData!.primaryAddress!},
 viewKeyString: ${widget.restoreData!.privateViewKey!},
@@ -285,7 +285,7 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
       return;
     }
     if (widget.restoreData!.restoreHeight != null) {
-      MONERO_Wallet_setRefreshFromBlockHeight(
+      monero.Wallet_setRefreshFromBlockHeight(
         walletPtr!,
         refresh_from_block_height: widget.restoreData!.restoreHeight!,
       );
@@ -301,7 +301,7 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
       openMainWalletUnlockText = "UNLOCKING...";
     });
     await Future.delayed(const Duration(milliseconds: 90));
-    final status = MONERO_Wallet_stopBackgroundSync(walletPtr!, pin.value);
+    final status = monero.Wallet_stopBackgroundSync(walletPtr!, pin.value);
     if (!status) {
       setState(() {
         openMainWalletUnlockText = "UNLOCK: failed";
@@ -328,7 +328,7 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
       restoreWalletSeedConfirmText = "RESTORING";
     });
     if (widget.restoreData!.restoreHeight == null) {
-      walletPtr = MONERO_WalletManager_createWalletFromPolyseed(
+      walletPtr = monero.WalletManager_createWalletFromPolyseed(
         wmPtr,
         path: await getMainWalletPath(),
         password: pin.value,
@@ -339,7 +339,7 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
         kdfRounds: 1,
       );
     } else {
-      walletPtr = MONERO_WalletManager_recoveryWallet(
+      walletPtr = monero.WalletManager_recoveryWallet(
         wmPtr,
         path: await getMainWalletPath(),
         password: pin.value,
@@ -353,23 +353,24 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
       restoreWalletSeedConfirmText = "Confirm your pin";
     });
     if (!mounted) return;
-    final status = MONERO_Wallet_status(walletPtr!);
+    final status = monero.Wallet_status(walletPtr!);
     if (status != 0) {
       Alert(
         title:
-            "Unable to restore wallet.\n${MONERO_Wallet_errorString(walletPtr!)}",
+            "Unable to restore wallet.\n${monero.Wallet_errorString(walletPtr!)}",
         cancelable: true,
       ).show(context);
       return;
     }
     if (widget.restoreData!.restoreHeight != null) {
-      MONERO_Wallet_setRefreshFromBlockHeight(
+      monero.Wallet_setRefreshFromBlockHeight(
         walletPtr!,
         refresh_from_block_height: widget.restoreData!.restoreHeight!,
       );
     }
     await _initWallet();
     if (!mounted) return;
+    monero.Wallet_store(walletPtr!);
     await WalletHome.push(context);
   }
 
@@ -383,12 +384,12 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
     await runEmbeddedTor();
     final Node? node = (await NodeStore.getCurrentNode());
     final ProxyStore proxy = (await ProxyStore.getProxy());
-    MONERO_WalletManagerFactory_setLogLevel(logLevel);
+    monero.WalletManagerFactory_setLogLevel(logLevel);
     final proxyAddress = ((node == null || config.disableProxy)
         ? ""
         : proxy.getAddress(node.network));
     print("proxyAddress: $proxyAddress");
-    MONERO_Wallet_init(
+    monero.Wallet_init(
       walletPtr!,
       daemonAddress: node?.address ?? "",
       daemonUsername: node?.username ?? "",
@@ -404,12 +405,12 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
       "daemonPassword": node?.password ?? "",
       "proxyAddress": proxyAddress
     }));
-    MONERO_WalletManagerFactory_setLogLevel(logLevel);
-    MONERO_Wallet_init3(walletPtr!,
+    monero.WalletManagerFactory_setLogLevel(logLevel);
+    monero.Wallet_init3(walletPtr!,
         argv0: "", defaultLogBaseName: "", logPath: logPath, console: false);
-    MONERO_WalletManagerFactory_setLogLevel(logLevel);
-    MONERO_Wallet_startRefresh(walletPtr!);
-    MONERO_Wallet_refreshAsync(walletPtr!);
+    monero.WalletManagerFactory_setLogLevel(logLevel);
+    monero.Wallet_startRefresh(walletPtr!);
+    monero.Wallet_refreshAsync(walletPtr!);
     tempWalletPassword = pin.value;
 
     final addr = walletPtr!.address;
@@ -418,7 +419,7 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
         print("Skipping enableRefresh on kDebugMode");
         return;
       }
-      MONERO_Wallet_daemonBlockChainHeight_runThread(
+      monero.Wallet_daemonBlockChainHeight_runThread(
           Pointer.fromAddress(addr), 1);
     });
     if (Platform.isAndroid) await Permission.notification.request();
@@ -431,15 +432,15 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
     setState(() {
       openMainWalletUnlockText = "UNLOCKING...";
     });
-    MONERO_WalletManagerFactory_setLogLevel(logLevel);
-    walletPtr = MONERO_WalletManager_openWallet(wmPtr,
+    monero.WalletManagerFactory_setLogLevel(logLevel);
+    walletPtr = monero.WalletManager_openWallet(wmPtr,
         path: await getMainWalletPath(), password: pin.value);
     if (!mounted) return;
-    final status = MONERO_Wallet_status(walletPtr!);
+    final status = monero.Wallet_status(walletPtr!);
     if (status != 0) {
       Alert(
         title:
-            "Unable to unlock wallet.\n${MONERO_Wallet_errorString(walletPtr!)}",
+            "Unable to unlock wallet.\n${monero.Wallet_errorString(walletPtr!)}",
         cancelable: true,
       ).show(context);
       setState(() {

@@ -2,6 +2,8 @@
 
 import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/pages/ur_broadcast.dart';
 import 'package:xmruw/pages/wallet/spend_screen.dart';
 import 'package:xmruw/pages/wallet/spend_success.dart';
@@ -16,8 +18,6 @@ import 'package:xmruw/widgets/long_outlined_button.dart';
 import 'package:xmruw/widgets/padded_element.dart';
 import 'package:xmruw/widgets/primary_label.dart';
 import 'package:xmruw/widgets/setup_logo.dart';
-import 'package:flutter/material.dart';
-import 'package:monero/monero.dart';
 import 'package:xmruw/widgets/transaction_list/popup_menu.dart';
 
 class TxRequest {
@@ -28,7 +28,7 @@ class TxRequest {
   final bool isSweep;
   final List<String> outputs;
   final Priority priority;
-  final MONERO_UnsignedTransaction? txPtr;
+  final monero.UnsignedTransaction? txPtr;
   final bool isUR;
   TxRequest({
     required this.address,
@@ -69,7 +69,7 @@ class SpendConfirm extends StatefulWidget {
 }
 
 class _SpendConfirmState extends State<SpendConfirm> {
-  MONERO_PendingTransaction? txPtr;
+  monero.PendingTransaction? txPtr;
   @override
   void initState() {
     _prepTx();
@@ -80,7 +80,7 @@ class _SpendConfirmState extends State<SpendConfirm> {
     if (widget.tx.isUR) return;
     Future.delayed(const Duration(milliseconds: 700)).then((value) {
       print("outs: ${widget.tx.outputs}");
-      final tx = MONERO_Wallet_createTransaction(
+      final tx = monero.Wallet_createTransaction(
         walletPtr!,
         dst_addr: widget.tx.address,
         payment_id: "",
@@ -90,8 +90,8 @@ class _SpendConfirmState extends State<SpendConfirm> {
         subaddr_account: globalAccountIndex,
         preferredInputs: widget.tx.outputs,
       );
-      final status = MONERO_PendingTransaction_status(tx);
-      final errorString = MONERO_PendingTransaction_errorString(tx);
+      final status = monero.PendingTransaction_status(tx);
+      final errorString = monero.PendingTransaction_errorString(tx);
       if (status != 0) {
         Alert(
           title: errorString,
@@ -112,20 +112,20 @@ class _SpendConfirmState extends State<SpendConfirm> {
 
   int? _getAmount() {
     if (widget.tx.isUR) return widget.tx.amount;
-    return txPtr == null ? null : MONERO_PendingTransaction_amount(txPtr!);
+    return txPtr == null ? null : monero.PendingTransaction_amount(txPtr!);
   }
 
   int? _getFee() {
     if (widget.tx.isUR) return widget.tx.fee;
-    return txPtr == null ? null : MONERO_PendingTransaction_fee(txPtr!);
+    return txPtr == null ? null : monero.PendingTransaction_fee(txPtr!);
   }
 
   int? _getTotal() {
     if (widget.tx.isUR) return widget.tx.amount + widget.tx.fee;
     return txPtr == null
         ? null
-        : MONERO_PendingTransaction_amount(txPtr!) +
-            MONERO_PendingTransaction_fee(txPtr!);
+        : monero.PendingTransaction_amount(txPtr!) +
+            monero.PendingTransaction_fee(txPtr!);
   }
 
   @override
@@ -168,8 +168,8 @@ class _SpendConfirmState extends State<SpendConfirm> {
 
   bool _needExportOutputs() {
     if (isOffline) return false;
-    return MONERO_Wallet_hasUnknownKeyImages(walletPtr!) ||
-        (MONERO_Wallet_viewOnlyBalance(walletPtr!,
+    return monero.Wallet_hasUnknownKeyImages(walletPtr!) ||
+        (monero.Wallet_viewOnlyBalance(walletPtr!,
                 accountIndex: globalAccountIndex) <
             (_getAmount() ?? 0x7FFFFFFFFFFFFFFF));
   }
@@ -188,9 +188,9 @@ class _SpendConfirmState extends State<SpendConfirm> {
     final p = await getMoneroUnsignedTxPath();
     if (File(p).existsSync()) File(p).deleteSync();
     final stat =
-        MONERO_PendingTransaction_commit(txPtr!, filename: p, overwrite: false);
+        monero.PendingTransaction_commit(txPtr!, filename: p, overwrite: false);
     if (stat == false) {
-      final errorString = MONERO_PendingTransaction_errorString(txPtr!);
+      final errorString = monero.PendingTransaction_errorString(txPtr!);
       Alert(
         title: "Failed to send transaction - $errorString",
         callback: () {
@@ -213,7 +213,7 @@ class _SpendConfirmState extends State<SpendConfirm> {
       Navigator.of(context).pop();
       Navigator.of(context).pop();
       final signedFileName = await getMoneroSignedTxPath();
-      MONERO_UnsignedTransaction_sign(widget.tx.txPtr!, signedFileName);
+      monero.UnsignedTransaction_sign(widget.tx.txPtr!, signedFileName);
       UrBroadcastPage.push(
         context,
         filePath: signedFileName,
@@ -221,10 +221,10 @@ class _SpendConfirmState extends State<SpendConfirm> {
       );
       return;
     }
-    final stat = MONERO_PendingTransaction_commit(txPtr!,
+    final stat = monero.PendingTransaction_commit(txPtr!,
         filename: "", overwrite: false);
     if (stat == false) {
-      final errorString = MONERO_PendingTransaction_errorString(txPtr!);
+      final errorString = monero.PendingTransaction_errorString(txPtr!);
       Alert(
         title: "Failed to send transaction - $errorString",
         callback: () {
@@ -236,8 +236,8 @@ class _SpendConfirmState extends State<SpendConfirm> {
       return;
     }
 
-    final status = MONERO_PendingTransaction_status(txPtr!);
-    final errorString = MONERO_PendingTransaction_errorString(txPtr!);
+    final status = monero.PendingTransaction_status(txPtr!);
+    final errorString = monero.PendingTransaction_errorString(txPtr!);
     if (status != 0) {
       Alert(
         title: errorString,

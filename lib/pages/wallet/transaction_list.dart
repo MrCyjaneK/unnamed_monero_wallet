@@ -1,6 +1,10 @@
 import 'dart:async';
+import 'dart:math';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/helpers/platform_support.dart';
 import 'package:xmruw/helpers/resource.g.dart';
 import 'package:xmruw/legacy.dart';
@@ -19,9 +23,6 @@ import 'package:xmruw/tools/wallet_lock.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/transaction_list/popup_menu.dart';
 import 'package:xmruw/widgets/transaction_list/transaction_item.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:monero/monero.dart';
 
 class TransactionList extends StatefulWidget {
   const TransactionList({super.key});
@@ -30,14 +31,14 @@ class TransactionList extends StatefulWidget {
   State<TransactionList> createState() => _TransactionListState();
 }
 
-MONERO_TransactionHistory? txHistoryPtrVar;
-MONERO_TransactionHistory get txHistoryPtr {
-  txHistoryPtrVar ??= MONERO_Wallet_history(walletPtr!);
+monero.TransactionHistory? txHistoryPtrVar;
+monero.TransactionHistory get txHistoryPtr {
+  txHistoryPtrVar ??= monero.Wallet_history(walletPtr!);
   return txHistoryPtrVar!;
 }
 
 class _TransactionListState extends State<TransactionList> {
-  late int transactionCount = MONERO_TransactionHistory_count(txHistoryPtr);
+  late int transactionCount = monero.TransactionHistory_count(txHistoryPtr);
   Timer? refresh;
   @override
   void initState() {
@@ -96,23 +97,23 @@ class _TransactionListState extends State<TransactionList> {
       return;
     }
     if (tempWalletPassword != "") {
-      final stat = MONERO_Wallet_setupBackgroundSync(
+      final stat = monero.Wallet_setupBackgroundSync(
         walletPtr!,
         backgroundSyncType: 1,
         walletPassword: tempWalletPassword,
         backgroundCachePassword: "",
       );
       if (!stat) {
-        Alert(title: MONERO_Wallet_errorString(walletPtr!), cancelable: true)
+        Alert(title: monero.Wallet_errorString(walletPtr!), cancelable: true)
             .show(context);
         return;
       }
       tempWalletPassword = "";
     }
-    final status = MONERO_Wallet_startBackgroundSync(walletPtr!);
+    final status = monero.Wallet_startBackgroundSync(walletPtr!);
     if (!status) {
       Alert(
-        title: MONERO_Wallet_errorString(walletPtr!),
+        title: monero.Wallet_errorString(walletPtr!),
         cancelable: true,
       ).show(context);
       return;
@@ -122,16 +123,16 @@ class _TransactionListState extends State<TransactionList> {
 
   void _synchronized() {
     setState(() {
-      synchronized = MONERO_Wallet_synchronized(walletPtr!);
+      synchronized = monero.Wallet_synchronized(walletPtr!);
     });
   }
 
-  bool synchronized = MONERO_Wallet_synchronized(walletPtr!);
+  bool synchronized = monero.Wallet_synchronized(walletPtr!);
 
   Widget? _drawer() {
     if (config.experimentalAccounts == false) return null;
     // if (MONERO_Wallet_numSubaddressAccounts(walletPtr!) == 1) return null;
-    final count = MONERO_Wallet_numSubaddressAccounts(walletPtr!);
+    final count = monero.Wallet_numSubaddressAccounts(walletPtr!);
     return Drawer(
       child: ListView.builder(
         itemCount: count + 2,
@@ -143,7 +144,7 @@ class _TransactionListState extends State<TransactionList> {
             return InkWell(
               onTap: () {
                 setState(() {});
-                MONERO_Wallet_addSubaddressAccount(walletPtr!);
+                monero.Wallet_addSubaddressAccount(walletPtr!);
               },
               child: const ListTile(
                 leading: Icon(Icons.add),
@@ -152,7 +153,7 @@ class _TransactionListState extends State<TransactionList> {
             );
           }
 
-          final balance = MONERO_Wallet_balance(
+          final balance = monero.Wallet_balance(
             walletPtr!,
             accountIndex: index - 1,
           );
@@ -180,9 +181,9 @@ class _TransactionListState extends State<TransactionList> {
 
   Widget _getTopWidget() {
     int balTotal = 0;
-    final accounts = MONERO_Wallet_numSubaddressAccounts(walletPtr!);
+    final accounts = monero.Wallet_numSubaddressAccounts(walletPtr!);
     for (var i = 0; i < accounts; i++) {
-      balTotal += MONERO_Wallet_balance(walletPtr!, accountIndex: i);
+      balTotal += monero.Wallet_balance(walletPtr!, accountIndex: i);
     }
     return Container(
       color: Theme.of(context).cardColor,
@@ -210,7 +211,7 @@ class _TransactionListState extends State<TransactionList> {
             value: DateTime.now().difference(lastClick).inSeconds / lockAfter),
         automaticallyImplyLeading: false,
         leading: config.experimentalAccounts ? const DrawerButton() : null,
-        title: const SelectableText("wuxmr"),
+        title: SelectableText(getAppName()),
         actions: [
           if (config.enableBackgroundSync)
             IconButton(
@@ -263,12 +264,12 @@ class _TransactionListState extends State<TransactionList> {
   }
 
   List<Transaction> _buildTxList() {
-    MONERO_TransactionHistory_refresh(txHistoryPtr);
-    transactionCount = MONERO_TransactionHistory_count(txHistoryPtr);
+    monero.TransactionHistory_refresh(txHistoryPtr);
+    transactionCount = monero.TransactionHistory_count(txHistoryPtr);
     final txList = List.generate(
       transactionCount,
       (index) => Transaction(
-        txInfo: MONERO_TransactionHistory_transaction(txHistoryPtr,
+        txInfo: monero.TransactionHistory_transaction(txHistoryPtr,
             index: transactionCount - 1 - index),
       ),
     );
@@ -315,19 +316,19 @@ class _SyncProgressState extends State<SyncProgress> {
     super.dispose();
   }
 
-  int blockChainHeight = MONERO_Wallet_blockChainHeight(walletPtr!);
-  int uiHeight = MONERO_Wallet_blockChainHeight(walletPtr!);
+  int blockChainHeight = monero.Wallet_blockChainHeight(walletPtr!);
+  int uiHeight = monero.Wallet_blockChainHeight(walletPtr!);
   int daemonBlockchainHeight = kDebugMode
-      ? MONERO_Wallet_daemonBlockChainHeight(walletPtr!)
-      : MONERO_Wallet_daemonBlockChainHeight_cached(walletPtr!);
+      ? monero.Wallet_daemonBlockChainHeight(walletPtr!)
+      : monero.Wallet_daemonBlockChainHeight_cached(walletPtr!);
   bool? synchronized;
   void _refreshState() {
     setState(() {
-      synchronized = MONERO_Wallet_synchronized(walletPtr!);
-      blockChainHeight = MONERO_Wallet_blockChainHeight(walletPtr!);
+      synchronized = monero.Wallet_synchronized(walletPtr!);
+      blockChainHeight = monero.Wallet_blockChainHeight(walletPtr!);
       if (!kDebugMode) {
         daemonBlockchainHeight =
-            MONERO_Wallet_daemonBlockChainHeight_cached(walletPtr!);
+            monero.Wallet_daemonBlockChainHeight_cached(walletPtr!);
       }
     });
   }
@@ -395,7 +396,7 @@ class LargeBalanceWidget extends StatefulWidget {
 }
 
 class _LargeBalanceWidgetState extends State<LargeBalanceWidget> {
-  int balance = MONERO_Wallet_unlockedBalance(walletPtr!,
+  int balance = monero.Wallet_unlockedBalance(walletPtr!,
       accountIndex: globalAccountIndex);
 
   @override
@@ -410,12 +411,12 @@ class _LargeBalanceWidgetState extends State<LargeBalanceWidget> {
 
   void _refresh() {
     // int bal = 0;
-    // final count = MONERO_Wallet_numSubaddressAccounts(walletPtr!);
+    // final count =monero.Wallet_numSubaddressAccounts(walletPtr!);
     // for (int i = 0; i < count; i++) {
-    //   bal += MONERO_Wallet_balance(walletPtr!, accountIndex: 0);
+    //   bal +=monero.Wallet_balance(walletPtr!, accountIndex: 0);
     // }
     setState(() {
-      balance = MONERO_Wallet_unlockedBalance(walletPtr!,
+      balance = monero.Wallet_unlockedBalance(walletPtr!,
           accountIndex: globalAccountIndex);
     });
   }
@@ -442,4 +443,13 @@ class _LargeBalanceWidgetState extends State<LargeBalanceWidget> {
       ),
     );
   }
+}
+
+String getAppName() {
+  final date = DateTime.now();
+  if (date.day == 14 && date.month == 2) return "xmr uwu :3";
+  if (date.day == 1 && date.month == 4) return "Zcash Wallet";
+  if (date.day == 18 && date.month == 4) return "happy b day xmr!";
+  if (Random.secure().nextInt(1000) == 69) return "xmr uwu :3";
+  return "xmruw";
 }

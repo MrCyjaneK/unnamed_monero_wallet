@@ -1,3 +1,3 @@
-import 'package:monero/monero.dart';
+import 'package:monero/monero.dart' as monero;
 
-MONERO_wallet? walletPtr;
+monero.wallet? walletPtr;

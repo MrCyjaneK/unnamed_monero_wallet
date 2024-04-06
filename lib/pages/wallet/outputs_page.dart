@@ -1,11 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/pages/wallet/spend_confirm.dart';
 import 'package:xmruw/pages/wallet/spend_screen.dart';
 import 'package:xmruw/tools/format_monero.dart';
 import 'package:xmruw/tools/monero/account_index.dart';
 import 'package:xmruw/tools/show_alert.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
-import 'package:flutter/material.dart';
-import 'package:monero/monero.dart';
 
 class Output {
   Output({
@@ -36,15 +36,15 @@ class OutputsPage extends StatefulWidget {
 }
 
 class _OutputsPageState extends State<OutputsPage> {
-  MONERO_Coins coins = MONERO_Wallet_coins(walletPtr!);
+  monero.Coins coins = monero.Wallet_coins(walletPtr!);
   int count = 0;
   void _refresh() {
     setState(() {
-      coins = MONERO_Wallet_coins(walletPtr!);
+      coins = monero.Wallet_coins(walletPtr!);
     });
-    MONERO_Coins_refresh(coins);
+    monero.Coins_refresh(coins);
     setState(() {
-      count = MONERO_Coins_count(coins);
+      count = monero.Coins_count(coins);
     });
   }
 
@@ -59,25 +59,25 @@ class _OutputsPageState extends State<OutputsPage> {
     List<OutputItem> list = [];
     list.clear();
     for (var i = 0; i < count; i++) {
-      final coin = MONERO_Coins_coin(coins, i);
-      if (MONERO_CoinsInfo_spent(coin)) {
+      final coin = monero.Coins_coin(coins, i);
+      if (monero.CoinsInfo_spent(coin)) {
         continue;
       }
-      if (MONERO_CoinsInfo_subaddrAccount(coin) != globalAccountIndex) {
+      if (monero.CoinsInfo_subaddrAccount(coin) != globalAccountIndex) {
         continue;
       }
-      final keyImage = MONERO_CoinsInfo_keyImage(coin);
+      final keyImage = monero.CoinsInfo_keyImage(coin);
       list.add(
         OutputItem(
           output: Output(
-            amount: MONERO_CoinsInfo_amount(coin),
-            hash: MONERO_CoinsInfo_keyImage(coin),
+            amount: monero.CoinsInfo_amount(coin),
+            hash: monero.CoinsInfo_keyImage(coin),
             keyImage: keyImage,
             value: selectedKeyImages.contains(keyImage),
           ),
           id: i,
-          triggerChange: (!MONERO_CoinsInfo_unlocked(coin) ||
-                  MONERO_CoinsInfo_frozen(coin))
+          triggerChange: (!monero.CoinsInfo_unlocked(coin) ||
+                  monero.CoinsInfo_frozen(coin))
               ? null
               : () {
                   if (selectedKeyImages.contains(keyImage)) {
@@ -99,10 +99,10 @@ class _OutputsPageState extends State<OutputsPage> {
   int _amount() {
     int amount = 0;
     for (var i = 0; i < count; i++) {
-      final coin = MONERO_Coins_coin(coins, i);
-      final keyImage = MONERO_CoinsInfo_keyImage(coin);
+      final coin = monero.Coins_coin(coins, i);
+      final keyImage = monero.CoinsInfo_keyImage(coin);
       if (selectedKeyImages.contains(keyImage)) {
-        amount += MONERO_CoinsInfo_amount(coin);
+        amount += monero.CoinsInfo_amount(coin);
       }
     }
     return amount;
@@ -152,10 +152,10 @@ class _OutputsPageState extends State<OutputsPage> {
     await SpendConfirm.push(
       context,
       TxRequest(
-        address: MONERO_Wallet_address(
+        address: monero.Wallet_address(
           walletPtr!,
           accountIndex: globalAccountIndex,
-          addressIndex: MONERO_Wallet_numSubaddresses(
+          addressIndex: monero.Wallet_numSubaddresses(
             walletPtr!,
             accountIndex: globalAccountIndex,
           ),

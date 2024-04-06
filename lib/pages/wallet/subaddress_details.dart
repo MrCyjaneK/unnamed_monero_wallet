@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/pages/wallet/subaddress_page.dart';
 import 'package:xmruw/tools/monero/account_index.dart';
 import 'package:xmruw/tools/monero/subaddress_label.dart';
@@ -5,9 +8,6 @@ import 'package:xmruw/tools/show_alert.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/labeled_text_input.dart';
 import 'package:xmruw/widgets/qr_code.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:monero/monero.dart';
 
 class SubaddressDetailsPage extends StatefulWidget {
   const SubaddressDetailsPage({super.key, required this.subaddressId});
@@ -32,7 +32,7 @@ class SubaddressDetailsPage extends StatefulWidget {
 class _SubaddressDetailsPageState extends State<SubaddressDetailsPage> {
   void _copyAddress() {
     Clipboard.setData(ClipboardData(
-        text: MONERO_Wallet_address(walletPtr!,
+        text: monero.Wallet_address(walletPtr!,
             addressIndex: widget.subaddressId)));
   }
 
@@ -42,7 +42,7 @@ class _SubaddressDetailsPageState extends State<SubaddressDetailsPage> {
         singleBody: SizedBox(
           width: 512,
           child: Qr(
-            data: MONERO_Wallet_address(walletPtr!,
+            data: monero.Wallet_address(walletPtr!,
                 addressIndex: widget.subaddressId),
           ),
         )).show(c);
@@ -62,7 +62,7 @@ class _SubaddressDetailsPageState extends State<SubaddressDetailsPage> {
       ),
       cancelable: true,
       callback: () {
-        MONERO_Wallet_setSubaddressLabel(
+        monero.Wallet_setSubaddressLabel(
           walletPtr!,
           accountIndex: globalAccountIndex,
           addressIndex: widget.subaddressId,
@@ -104,7 +104,7 @@ class _SubaddressDetailsPageState extends State<SubaddressDetailsPage> {
                 subaddressId: widget.subaddressId,
                 label: label,
                 received: 0,
-                squashedAddress: MONERO_Wallet_address(walletPtr!,
+                squashedAddress: monero.Wallet_address(walletPtr!,
                     addressIndex: widget.subaddressId),
                 rebuildParent: () {
                   setState(() {});
