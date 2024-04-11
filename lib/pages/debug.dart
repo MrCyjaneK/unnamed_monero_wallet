@@ -12,6 +12,7 @@ import 'package:xmruw/pages/debug/monero_dart_state.dart';
 import 'package:xmruw/pages/debug/monero_log.dart';
 import 'package:xmruw/pages/debug/monero_log_level.dart';
 import 'package:xmruw/pages/debug/performance.dart';
+import 'package:xmruw/pages/debug/polyseed_test.dart';
 import 'package:xmruw/pages/debug/theme_config.dart';
 import 'package:xmruw/pages/debug/tor_test.dart';
 import 'package:xmruw/pages/debug/urqr_codes.dart';
@@ -114,6 +115,10 @@ class DebugPage extends StatelessWidget {
             LongOutlinedButton(
               text: "Config dump",
               onPressed: () => ConfigPage.push(context),
+            ),
+            LongOutlinedButton(
+              text: "Polyseed test",
+              onPressed: () => PolyseedCompatTestDebug.push(context),
             ),
           ],
         ),

@@ -13,6 +13,10 @@ Future<String> getMainWalletPath() async {
   return "${(await getWd()).path}/main_wallet";
 }
 
+Future<String> getPolyseedTestPath() async {
+  return "${(await getWd()).path}/polyseed_tests";
+}
+
 Future<String> getNodeStore() async {
   return "${(await getWd()).path}/nodes.json";
 }

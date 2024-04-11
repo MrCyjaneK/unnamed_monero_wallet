@@ -45,3 +45,6 @@ app.*.map.json
 assets/changelog.jsonp
 
 debian/debian.yaml
+
+# FVM Version Cache
+.fvm/

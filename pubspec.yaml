@@ -19,7 +19,7 @@ dependencies:
   monero:
     git: 
       url: https://git.mrcyjanek.net/mrcyjanek/monero.dart
-      ref: 4a5e1b2f6b77a7788046483b1946c084572d8227
+      ref: d045f0b934273dc6a8699d5dbd1c3b532eb0479f
   cr_file_saver: ^0.0.2
   file_picker: ^6.1.1
   mobile_scanner: 4.0.0
