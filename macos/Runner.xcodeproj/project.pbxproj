@@ -29,6 +29,7 @@
 		33CC11132044BFA00003C045 /* MainFlutterWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC11122044BFA00003C045 /* MainFlutterWindow.swift */; };
 		6C2D298BE56495AC4D85C797 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8400998C5D8048B236ECABD5 /* Pods_Runner.framework */; };
 		8415ADF57B52404411EE87B6 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18C006A38CD8AF6F9DE31898 /* Pods_RunnerTests.framework */; };
+		CE2DEC852BD3DAFD00EDCCC3 /* monero_libwallet2_api_c.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE2DEC842BD3DAFD00EDCCC3 /* monero_libwallet2_api_c.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,16 @@
 			name = "Bundle Framework";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CE2DEC7F2BD3DA6C00EDCCC3 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				CE2DEC852BD3DAFD00EDCCC3 /* monero_libwallet2_api_c.dylib in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -87,6 +98,9 @@
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		8400998C5D8048B236ECABD5 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		CE2DEC802BD3DA9800EDCCC3 /* host-apple-darwin_libwallet2_api_c.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "host-apple-darwin_libwallet2_api_c.dylib"; sourceTree = "<group>"; };
+		CE2DEC822BD3DADF00EDCCC3 /* host-apple-darwin_libwallet2_api_c.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "host-apple-darwin_libwallet2_api_c.dylib"; sourceTree = "<group>"; };
+		CE2DEC842BD3DAFD00EDCCC3 /* monero_libwallet2_api_c.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = monero_libwallet2_api_c.dylib; sourceTree = "<group>"; };
 		FB41198E71A3FF28ED26A5D7 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -120,7 +134,6 @@
 				54197A0D1822545E85CA7C74 /* Pods-RunnerTests.release.xcconfig */,
 				62E1424A1E2A6E19F5D44F3D /* Pods-RunnerTests.profile.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -146,6 +159,9 @@
 		33CC10E42044A3C60003C045 = {
 			isa = PBXGroup;
 			children = (
+				CE2DEC842BD3DAFD00EDCCC3 /* monero_libwallet2_api_c.dylib */,
+				CE2DEC802BD3DA9800EDCCC3 /* host-apple-darwin_libwallet2_api_c.dylib */,
+				CE2DEC822BD3DADF00EDCCC3 /* host-apple-darwin_libwallet2_api_c.dylib */,
 				33FAB671232836740065AC1E /* Runner */,
 				33CEB47122A05771004F2AC0 /* Flutter */,
 				331C80D6294CF71000263BE5 /* RunnerTests */,
@@ -241,6 +257,7 @@
 				33CC110E2044A8840003C045 /* Bundle Framework */,
 				3399D490228B24CF009A79C7 /* ShellScript */,
 				271052837B38DEE774661D6F /* [CP] Embed Pods Frameworks */,
+				CE2DEC7F2BD3DA6C00EDCCC3 /* CopyFiles */,
 			);
 			buildRules = (
 			);

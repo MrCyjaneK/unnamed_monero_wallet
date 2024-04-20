@@ -36,8 +36,9 @@ class AboutPage extends StatelessWidget {
 xmruw by mrcyjanek <cyjan@mrcyjanek.net>
 
 Special thanks to:
+- ofrnxmr for existing, keep up the good work!
+- stack and cake for believing in the libs and me
 - Mister_Magister and NotKit for help with SailfishOS
-
 
 -------------
 
