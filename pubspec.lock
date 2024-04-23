@@ -296,6 +296,22 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  hashlib:
+    dependency: transitive
+    description:
+      name: hashlib
+      sha256: "0f8ae37da8350f50576406a0554e272cb2ecee8501fd8772ffb0dfaab464cfaa"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.13.1"
+  hashlib_codecs:
+    dependency: transitive
+    description:
+      name: hashlib_codecs
+      sha256: "49e2a471f74b15f1854263e58c2ac11f2b631b5b12c836f9708a35397d36d626"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
   http:
     dependency: transitive
     description:
@@ -428,8 +444,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: d045f0b934273dc6a8699d5dbd1c3b532eb0479f
-      resolved-ref: d045f0b934273dc6a8699d5dbd1c3b532eb0479f
+      ref: "57e075ee67d16aa0f3f75fba67d79529fbc73a6c"
+      resolved-ref: "57e075ee67d16aa0f3f75fba67d79529fbc73a6c"
       url: "https://git.mrcyjanek.net/mrcyjanek/monero.dart"
     source: git
     version: "0.0.0"
@@ -593,6 +609,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.7.4"
+  polyseed:
+    dependency: "direct main"
+    description:
+      name: polyseed
+      sha256: a340962242d7917b0f3e6bd02c4acc3f90eae8ff766f1244f793ae7a6414dd68
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.4"
   qr:
     dependency: transitive
     description:

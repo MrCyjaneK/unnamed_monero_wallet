@@ -1,6 +1,6 @@
 // This is a generated file; do not edit or check into version control.
 FLUTTER_ROOT=/Users/user/fvm/versions/stable
-FLUTTER_APPLICATION_PATH=/Users/user/go/src/git.mrcyjanek.net/unnamed_monero_wallet
+FLUTTER_APPLICATION_PATH=/Users/user/go/src/git.mrcyjanek.net/mrcyjanek/unnamed_monero_wallet
 COCOAPODS_PARALLEL_CODE_SIGN=true
 FLUTTER_TARGET=lib/main.dart
 FLUTTER_BUILD_DIR=build

@@ -19,7 +19,7 @@ dependencies:
   monero:
     git: 
       url: https://git.mrcyjanek.net/mrcyjanek/monero.dart
-      ref: d045f0b934273dc6a8699d5dbd1c3b532eb0479f
+      ref: 57e075ee67d16aa0f3f75fba67d79529fbc73a6c
   cr_file_saver: ^0.0.2
   file_picker: ^6.1.1
   mobile_scanner: 4.0.0
@@ -48,6 +48,7 @@ dependencies:
     version: 2024.03.14+104
     # path: ../offline_market_data
   flex_color_picker: ^3.3.1
+  polyseed: ^0.0.4
 
 
 dev_dependencies:

@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:xmruw/pages/changelog.dart';
 import 'package:xmruw/pages/debug/backup_test.dart';
 import 'package:xmruw/pages/debug/battery_optimization.dart';
@@ -12,6 +14,7 @@ import 'package:xmruw/pages/debug/monero_dart_state.dart';
 import 'package:xmruw/pages/debug/monero_log.dart';
 import 'package:xmruw/pages/debug/monero_log_level.dart';
 import 'package:xmruw/pages/debug/performance.dart';
+import 'package:xmruw/pages/debug/polyseed_dart_compat.dart';
 import 'package:xmruw/pages/debug/polyseed_test.dart';
 import 'package:xmruw/pages/debug/theme_config.dart';
 import 'package:xmruw/pages/debug/tor_test.dart';
@@ -19,8 +22,6 @@ import 'package:xmruw/pages/debug/urqr_codes.dart';
 import 'package:xmruw/pages/wallet/configuration_page.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/long_outlined_button.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 
 class DebugPage extends StatelessWidget {
   const DebugPage({super.key});
@@ -119,6 +120,10 @@ class DebugPage extends StatelessWidget {
             LongOutlinedButton(
               text: "Polyseed test",
               onPressed: () => PolyseedCompatTestDebug.push(context),
+            ),
+            LongOutlinedButton(
+              text: "Polyseed dart test",
+              onPressed: () => PolyseedDartCompatTestDebug.push(context),
             ),
           ],
         ),

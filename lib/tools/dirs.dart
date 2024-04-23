@@ -17,6 +17,10 @@ Future<String> getPolyseedTestPath() async {
   return "${(await getWd()).path}/polyseed_tests";
 }
 
+Future<String> getPolyseedDartTestPath() async {
+  return "${(await getWd()).path}/polyseed_tests";
+}
+
 Future<String> getNodeStore() async {
   return "${(await getWd()).path}/nodes.json";
 }

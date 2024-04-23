@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
 export "FLUTTER_ROOT=/Users/user/fvm/versions/stable"
-export "FLUTTER_APPLICATION_PATH=/Users/user/go/src/git.mrcyjanek.net/unnamed_monero_wallet"
+export "FLUTTER_APPLICATION_PATH=/Users/user/go/src/git.mrcyjanek.net/mrcyjanek/unnamed_monero_wallet"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_TARGET=lib/main.dart"
 export "FLUTTER_BUILD_DIR=build"
