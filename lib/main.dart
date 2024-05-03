@@ -5,7 +5,6 @@ import 'package:xmruw/main_clean.dart';
 import 'package:xmruw/tools/dirs.dart';
 import 'package:xmruw/tools/fuck_firebase.dart';
 import 'package:xmruw/tools/wallet_manager.dart';
-
 const bool libstealthCalculator = bool.hasEnvironment("libstealth_calculator")
     ? bool.fromEnvironment("libstealth_calculator")
     : false;

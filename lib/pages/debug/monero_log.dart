@@ -1,7 +1,8 @@
 import 'dart:io';
 
-import 'package:xmruw/tools/dirs.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:xmruw/tools/dirs.dart';
 
 class MoneroLogDebug extends StatefulWidget {
   const MoneroLogDebug({super.key});
@@ -37,6 +38,11 @@ class _MoneroLogDebugState extends State<MoneroLogDebug> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("monero logs"),
+        actions: [
+          IconButton(onPressed: () {
+            Clipboard.setData(ClipboardData(text: logFile?.readAsStringSync() ?? "404"));
+          }, icon: const Icon(Icons.copy)),
+        ]
       ),
       body: SingleChildScrollView(
         child: Padding(

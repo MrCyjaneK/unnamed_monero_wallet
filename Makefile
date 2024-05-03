@@ -107,6 +107,24 @@ libs: android/app/src/main/jniLibs/x86_64/libc++_shared.so
 android/app/src/main/jniLibs/x86_64/libc++_shared.so:
 	wget -q https://git.mrcyjanek.net/mrcyjanek/libcpp_shared.so/releases/download/${LIBCPP_SHARED_SO_TAG}/${LIBCPP_SHARED_SO_NDKVERSION}_x86_64_libc++_shared.so -O android/app/src/main/jniLibs/x86_64/libc++_shared.so
 
+.PHONY: macos
+macos:
+	# cd macos && ./use_prebuild.sh
+	# flutter build macos -v
+	test -f build/xmruw.dmg && rm -rf build/xmruw.dmg || true
+	create-dmg \
+		--volname "xmruw" \
+		--background "assets/macos_installer_background.png" \
+		--window-pos 200 120 \
+		--window-size 588 440 \
+		--icon-size 75 \
+		--icon unnamed_monero_wallet.app 134 205 \
+		--hide-extension unnamed_monero_wallet.app \
+		--app-drop-link 460 205 \
+		--eula LICENSE \
+		build/xmruw.dmg \
+		build/macos/Build/Products/Release
+
 clean_libs:
 	-rm android/app/src/main/jniLibs/x86_64/libc++_shared.so*
 	-rm android/app/src/main/jniLibs/x86_64/*_libwallet2_api_c.so*
