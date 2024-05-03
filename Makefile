@@ -1,4 +1,4 @@
-MONERO_C_TAG=v0.18.3.3-RC35
+MONERO_C_TAG=v0.18.3.3-RC42
 LIBCPP_SHARED_SO_TAG=latest-RC1
 LIBCPP_SHARED_SO_NDKVERSION=r17c
 
@@ -16,7 +16,7 @@ linux:
 	wget https://static.mrcyjanek.net/monero_c/${MONERO_C_TAG}/monero/${TARGET_TRIPLET}_libwallet2_api_c.so.xz \
 		-O build/linux/${FLUTTER_ARCH}/release/bundle/lib/libmonero_libwallet2_api_c.so.xz
 	-rm build/linux/${FLUTTER_ARCH}/release/bundle/lib/libmonero_libwallet2_api_c.so
-	unxz build/linux/${FLUTTER_ARCH}/release/bundle/lib/libmonero_libwallet2_api_c.so.xz
+	unxz -f build/linux/${FLUTTER_ARCH}/release/bundle/lib/libmonero_libwallet2_api_c.so.xz
 	-rm build/linux/${FLUTTER_ARCH}/release/xmruw-linux-${DEBIAN_ARCH}.tar*
 	(cd build/linux/${FLUTTER_ARCH}/release && cp -a bundle xmruw && tar -cvf xmruw-linux-${DEBIAN_ARCH}.tar xmruw && xz -e xmruw-linux-${DEBIAN_ARCH}.tar)
 
@@ -26,7 +26,7 @@ linux_debug_lib:
 	wget https://static.mrcyjanek.net/monero_c/${MONERO_C_TAG}/monero/${shell gcc -dumpmachine}_libwallet2_api_c.so.xz \
 		-O build/linux/${FLUTTER_ARCH}/debug/bundle/lib/libmonero_libwallet2_api_c.so.xz
 	-rm build/linux/${FLUTTER_ARCH}/debug/bundle/lib/libmonero_libwallet2_api_c.so
-	unxz build/linux/${FLUTTER_ARCH}/debug/bundle/lib/libmonero_libwallet2_api_c.so.xz
+	unxz -f build/linux/${FLUTTER_ARCH}/debug/bundle/lib/libmonero_libwallet2_api_c.so.xz
 
 deb:
 	dart pub global activate --source git https://github.com/tomekit/flutter_to_debian.git
@@ -67,7 +67,7 @@ libs: android/app/src/main/jniLibs/arm64-v8a/libmonero_libwallet2_api_c.so
 .PHONY: android/app/src/main/jniLibs/arm64-v8a/libmonero_libwallet2_api_c.so
 android/app/src/main/jniLibs/arm64-v8a/libmonero_libwallet2_api_c.so:
 	wget -q https://static.mrcyjanek.net/monero_c/${MONERO_C_TAG}/monero/aarch64-linux-android_libwallet2_api_c.so.xz -O android/app/src/main/jniLibs/arm64-v8a/libmonero_libwallet2_api_c.so.xz
-	unxz android/app/src/main/jniLibs/arm64-v8a/libmonero_libwallet2_api_c.so.xz
+	unxz -f android/app/src/main/jniLibs/arm64-v8a/libmonero_libwallet2_api_c.so.xz
 
 libs: android/app/src/main/jniLibs/arm64-v8a/libc++_shared.so
 .PHONY: android/app/src/main/jniLibs/arm64-v8a/libc++_shared.so
@@ -78,7 +78,7 @@ libs: android/app/src/main/jniLibs/armeabi-v7a/libmonero_libwallet2_api_c.so
 .PHONY: android/app/src/main/jniLibs/armeabi-v7a/libmonero_libwallet2_api_c.so
 android/app/src/main/jniLibs/armeabi-v7a/libmonero_libwallet2_api_c.so:
 	wget -q https://static.mrcyjanek.net/monero_c/${MONERO_C_TAG}/monero/arm-linux-androideabi_libwallet2_api_c.so.xz -O android/app/src/main/jniLibs/armeabi-v7a/libmonero_libwallet2_api_c.so.xz
-	unxz android/app/src/main/jniLibs/armeabi-v7a/libmonero_libwallet2_api_c.so.xz
+	unxz -f android/app/src/main/jniLibs/armeabi-v7a/libmonero_libwallet2_api_c.so.xz
 
 libs: android/app/src/main/jniLibs/armeabi-v7a/libc++_shared.so
 .PHONY: android/app/src/main/jniLibs/armeabi-v7a/libc++_shared.so
@@ -89,7 +89,7 @@ android/app/src/main/jniLibs/armeabi-v7a/libc++_shared.so:
 # .PHONY: android/app/src/main/jniLibs/x86/libmonero_libwallet2_api_c.so
 # android/app/src/main/jniLibs/x86/libmonero_libwallet2_api_c.so:
 # 	wget -q https://static.mrcyjanek.net/monero_c/${MONERO_C_TAG}/monero/i686-linux-android_libwallet2_api_c.so.xz -O android/app/src/main/jniLibs/x86/libmonero_libwallet2_api_c.so.xz
-# 	unxz android/app/src/main/jniLibs/x86/libmonero_libwallet2_api_c.so.xz
+# 	unxz -f android/app/src/main/jniLibs/x86/libmonero_libwallet2_api_c.so.xz
 
 libs: android/app/src/main/jniLibs/x86/libc++_shared.so
 .PHONY: android/app/src/main/jniLibs/x86/libc++_shared.so
@@ -100,7 +100,7 @@ libs: android/app/src/main/jniLibs/x86_64/libmonero_libwallet2_api_c.so
 .PHONY: android/app/src/main/jniLibs/x86_64/libmonero_libwallet2_api_c.so
 android/app/src/main/jniLibs/x86_64/libmonero_libwallet2_api_c.so:
 	wget -q https://static.mrcyjanek.net/monero_c/${MONERO_C_TAG}/monero/x86_64-linux-android_libwallet2_api_c.so.xz -O android/app/src/main/jniLibs/x86_64/libmonero_libwallet2_api_c.so.xz
-	unxz android/app/src/main/jniLibs/x86_64/libmonero_libwallet2_api_c.so.xz
+	unxz -f android/app/src/main/jniLibs/x86_64/libmonero_libwallet2_api_c.so.xz
 
 libs: android/app/src/main/jniLibs/x86_64/libc++_shared.so
 .PHONY: android/app/src/main/jniLibs/x86_64/libc++_shared.so
