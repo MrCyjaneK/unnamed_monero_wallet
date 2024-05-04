@@ -48,3 +48,5 @@ debian/debian.yaml
 
 # FVM Version Cache
 .fvm/
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
