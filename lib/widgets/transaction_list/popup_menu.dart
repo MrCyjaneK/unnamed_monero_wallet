@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:bytewords/bytewords.dart';
 import 'package:cr_file_saver/file_saver.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/crypto/crypto.dart';
+import 'package:xmruw/pages/debug/urqr_codes.dart';
 import 'package:xmruw/pages/pos/home.dart';
 import 'package:xmruw/pages/sync_static_progress.dart';
 import 'package:xmruw/pages/ur_broadcast.dart';

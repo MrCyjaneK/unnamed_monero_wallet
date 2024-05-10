@@ -63,9 +63,9 @@ class _ScannerTextOnlyState extends State<ScannerTextOnly> {
     }
     Uint8List? data;
     try {
-      data = bytewordsToUint8List(
+      data = bytewordsDecode(
+        BytewordsStyle.minimal,
         splTxt[1],
-        isLong: false,
       );
     } catch (e) {
       Alert(

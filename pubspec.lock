@@ -44,11 +44,12 @@ packages:
   bytewords:
     dependency: "direct main"
     description:
-      name: bytewords
-      sha256: a98efd6431ed180a1e9b9707a3a378268c8629115514e9ea5c0d95a892533e42
-      url: "https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/"
-    source: hosted
-    version: "0.0.23"
+      path: "."
+      ref: "5cb47bb5bac6dceaaf736bd61c6520afca3adc7c"
+      resolved-ref: "5cb47bb5bac6dceaaf736bd61c6520afca3adc7c"
+      url: "https://git.mrcyjanek.net/mrcyjanek/bytewords"
+    source: git
+    version: "0.0.1"
   characters:
     dependency: transitive
     description:
@@ -791,5 +792,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.3.0 <4.0.0"
+  dart: ">=3.3.4 <4.0.0"
   flutter: ">=3.16.0"

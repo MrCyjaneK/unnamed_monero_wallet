@@ -1,11 +1,12 @@
 import 'dart:convert';
+import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:bytewords/bytewords.dart';
+import 'package:flutter/material.dart';
 import 'package:xmruw/widgets/labeled_text_input.dart';
 import 'package:xmruw/widgets/long_outlined_button.dart';
 import 'package:xmruw/widgets/urqr.dart';
-import 'package:bytewords/bytewords.dart';
-import 'package:flutter/material.dart';
 
 class URQRCodeDebug extends StatefulWidget {
   const URQRCodeDebug({super.key});
@@ -57,4 +58,21 @@ Phasellus blandit iaculis urna sed efficitur. Donec metus leo, eleifend et ultri
       ),
     );
   }
+}
+
+List<String> uint8ListToURQR(Uint8List list, String tag,
+    {int fragLength = 130}) {
+  List<String> retList = [];
+  final bw = bytewordsEncode(BytewordsStyle.minimal, list);
+  int frames = 0;
+  for (var i = 0; i < bw.length; i += fragLength) {
+    frames++;
+  }
+  int frame = 1;
+  for (var i = 0; i < bw.length; i += fragLength) {
+    retList.add(
+        'ur:$tag/$frame-$frames/${bw.substring(i, min(i + fragLength, bw.length))}');
+    frame++;
+  }
+  return retList;
 }

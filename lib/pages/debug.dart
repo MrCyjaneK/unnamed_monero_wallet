@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:xmruw/pages/changelog.dart';
+import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/debug/backup_test.dart';
 import 'package:xmruw/pages/debug/battery_optimization.dart';
 import 'package:xmruw/pages/debug/button_x_textfield.dart';
+import 'package:xmruw/pages/debug/bytewords_debug.dart';
 import 'package:xmruw/pages/debug/config_json.dart';
 import 'package:xmruw/pages/debug/mobile_scanner.dart';
 import 'package:xmruw/pages/debug/monero_dart_advanced.dart';
@@ -83,7 +85,9 @@ class DebugPage extends StatelessWidget {
             ),
             LongOutlinedButton(
               text: "URQR",
-              onPressed: (!Platform.isAndroid)
+              onPressed: (!Platform.isAndroid &&
+                      !Platform.isIOS &&
+                      !config.forceEnableScanner)
                   ? null
                   : () => URQRCodeDebug.push(context),
             ),
@@ -129,6 +133,10 @@ class DebugPage extends StatelessWidget {
             LongOutlinedButton(
               text: "Multisig",
               onPressed: () => MultisigDebug.push(context),
+            ),
+            LongOutlinedButton(
+              text: "Bytewords",
+              onPressed: () => BytewordsDebug.push(context),
             ),
           ],
         ),

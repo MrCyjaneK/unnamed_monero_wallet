@@ -1,16 +1,17 @@
 import 'dart:io';
 
+import 'package:bytewords/bytewords.dart';
+import 'package:cr_file_saver/file_saver.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:xmruw/helpers/platform_support.dart';
 import 'package:xmruw/helpers/resource.g.dart';
+import 'package:xmruw/pages/debug/urqr_codes.dart';
 import 'package:xmruw/pages/scanner/base_scan.dart';
 import 'package:xmruw/pages/wallet/wallet_home.dart';
 import 'package:xmruw/widgets/long_outlined_button.dart';
 import 'package:xmruw/widgets/primary_label.dart';
 import 'package:xmruw/widgets/urqr.dart';
-import 'package:bytewords/bytewords.dart';
-import 'package:cr_file_saver/file_saver.dart';
-import 'package:flutter/material.dart';
 
 enum UrBroadcastPageFlag {
   xmrUnsignedTx,
@@ -200,7 +201,7 @@ class _UrBroadcastPageState extends State<UrBroadcastPage> {
 
   Widget _buildTextPage() {
     final fileContent = File(widget.filePath).readAsBytesSync();
-    final bw = uint8ListToBytewordsShort(fileContent);
+    final bw = bytewordsEncode(BytewordsStyle.minimal, fileContent);
     final flag = _urBroadcastPageFlagToTag(widget.flag);
     final text = "$flag:$bw";
     return SingleChildScrollView(

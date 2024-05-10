@@ -24,8 +24,9 @@ dependencies:
   file_picker: ^6.1.1
   mobile_scanner: 4.0.0
   bytewords:
-    hosted: https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
-    version: 0.0.23
+    git:
+      url: https://git.mrcyjanek.net/mrcyjanek/bytewords
+      ref: 5cb47bb5bac6dceaaf736bd61c6520afca3adc7c
   anonero_backup:
     hosted: https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
     version: 0.0.14
