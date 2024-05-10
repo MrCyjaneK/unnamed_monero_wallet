@@ -45,7 +45,7 @@ dependencies:
   path: any
   offline_market_data:
     hosted: https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
-    version: 2024.03.14+104
+    version: ^2024.05.09+307
     # path: ../offline_market_data
   flex_color_picker: ^3.3.1
   polyseed: ^0.0.4
@@ -66,7 +66,7 @@ dev_dependencies:
 
 flutter_launcher_icons:
   android: true
-  ios: false
+  ios: true
   image_path: "assets/logo.png"
   remove_alpha_ios: true
   windows:
