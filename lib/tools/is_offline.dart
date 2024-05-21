@@ -1,6 +1,6 @@
 import 'package:xmruw/tools/node.dart';
 
-late bool isOffline;
+bool isOffline = false;
 
 Future<void> isOfflineRefresh() async {
   isOffline = (await NodeStore.getCurrentNode()) == null;

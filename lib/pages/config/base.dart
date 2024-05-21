@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:xmruw/pages/config/themes.dart';
 
@@ -54,6 +55,8 @@ class Config {
     this.forceEnableText = false,
     this.enableGraphs = false,
     this.enablePoS = false,
+    this.autoSave = false,
+    this.showExtraOptions = false,
   });
 
   final String confPath;
@@ -89,6 +92,8 @@ class Config {
   bool forceEnableText;
   bool enableGraphs;
   bool enablePoS;
+  bool autoSave;
+  bool showExtraOptions;
 
   void save() {
     file.writeAsString(json.encode(toJson()));
@@ -183,6 +188,12 @@ class Config {
     if (json['enablePoS'] is bool) {
       c.enablePoS = json["enablePoS"];
     }
+    if (json['autoSave'] is bool) {
+      c.autoSave = json["autoSave"];
+    }
+    if (json['showExtraOptions'] is bool) {
+      c.showExtraOptions = json["showExtraOptions"];
+    }
     return c;
   }
 
@@ -216,6 +227,8 @@ class Config {
       "forceEnableScanner": forceEnableScanner,
       "enableGraphs": enableGraphs,
       "enablePoS": enablePoS,
+      "autoSave": autoSave,
+      "showExtraOptions": showExtraOptions,
     };
   }
 }

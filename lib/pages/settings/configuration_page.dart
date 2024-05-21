@@ -188,6 +188,26 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
               },
               value: config.enablePoS,
             ),
+            ConfigElement(
+              text: "autoSave",
+              description: "Enable background store() calls",
+              onClick: () {
+                config.autoSave = !config.autoSave;
+                config.save();
+                setState(() {});
+              },
+              value: config.autoSave,
+            ),
+            ConfigElement(
+              text: "showExtraOptions",
+              description: "Show extra options that may not work",
+              onClick: () {
+                config.showExtraOptions = !config.showExtraOptions;
+                config.save();
+                setState(() {});
+              },
+              value: config.showExtraOptions,
+            ),
           ],
         ),
       ),

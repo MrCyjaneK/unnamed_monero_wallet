@@ -9,6 +9,13 @@
         "args": ["--flavor", "clean", "--dart-define=libstealth_calculator=false" ]
       },
       {
+        "name": "clean (macos)",
+        "request": "launch",
+        "type": "dart",
+        "program": "lib/main.dart",
+        "args": ["--dart-define=libstealth_calculator=false" ]
+      },
+      {
         "name": "calc",
         "request": "launch",
         "type": "dart",

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:xmruw/main_clean.dart';
 import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/config/themes.dart';
-import 'package:xmruw/pages/wallet/configuration_page.dart';
+import 'package:xmruw/pages/settings/configuration_page.dart';
 import 'package:xmruw/widgets/labeled_text_input.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:xmruw/widgets/long_outlined_button.dart';

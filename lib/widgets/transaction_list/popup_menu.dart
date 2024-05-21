@@ -21,10 +21,9 @@ import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/urqr.dart';
 
 Future<void> exportOutputs(BuildContext c) async {
-  final p = await getMoneroExportOutputsPath();
-  if (File(p).existsSync()) File(p).deleteSync();
-  final stat = monero.Wallet_exportOutputs(walletPtr!, p, all: true);
-  if (!stat) {
+  final ur = monero.Wallet_exportOutputsUR(walletPtr!, all: true);
+  final status = monero.Wallet_status(walletPtr!);
+  if (status != 0) {
     // ignore: use_build_context_synchronously
     await Alert(
       title: monero.Wallet_errorString(walletPtr!),
@@ -35,7 +34,7 @@ Future<void> exportOutputs(BuildContext c) async {
   // ignore: use_build_context_synchronously
   await UrBroadcastPage.push(
     c,
-    filePath: p,
+    content: ur,
     flag: UrBroadcastPageFlag.xmrOutputs,
   );
 }
@@ -53,7 +52,7 @@ void exportKeyImages(BuildContext c) async {
   // ignore: use_build_context_synchronously
   await UrBroadcastPage.push(
     c,
-    filePath: p,
+    content: File(p).readAsStringSync(),
     flag: UrBroadcastPageFlag.xmrKeyImage,
   );
 }
@@ -230,16 +229,16 @@ class TxListPopupMenu extends StatelessWidget {
   }
 
   final enabledActions = [
-    TxListPopupAction.resync,
-    if (isOffline) TxListPopupAction.exportKeyImages,
-    if (isViewOnly) TxListPopupAction.exportOutputs,
-    if (isViewOnly) TxListPopupAction.broadcastTx,
-    if (isOffline) TxListPopupAction.signTx,
-    if (isOffline) TxListPopupAction.importOutputs,
+    if (config.showExtraOptions || !isOffline) TxListPopupAction.resync,
+    if (config.showExtraOptions || isOffline) TxListPopupAction.exportKeyImages,
+    if (config.showExtraOptions || isViewOnly) TxListPopupAction.exportOutputs,
+    if (config.showExtraOptions || isViewOnly) TxListPopupAction.broadcastTx,
+    if (config.showExtraOptions || isOffline) TxListPopupAction.signTx,
+    if (config.showExtraOptions || isOffline) TxListPopupAction.importOutputs,
     TxListPopupAction.crypto,
     TxListPopupAction.settings,
-    if (config.enableGraphs) TxListPopupAction.graphs,
-    if (config.enablePoS) TxListPopupAction.pos,
+    if (config.showExtraOptions || config.enableGraphs) TxListPopupAction.graphs,
+    if (config.showExtraOptions || config.enablePoS) TxListPopupAction.pos,
     TxListPopupAction.saveexit,
   ];
 

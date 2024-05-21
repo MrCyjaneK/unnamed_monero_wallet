@@ -2,8 +2,10 @@ import 'dart:typed_data';
 
 import 'package:bytewords/bytewords.dart';
 import 'package:flutter/material.dart';
+import 'package:monero/monero.dart';
 import 'package:xmruw/pages/scanner/process_ur.dart';
 import 'package:xmruw/tools/show_alert.dart';
+import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/labeled_text_input.dart';
 import 'package:xmruw/widgets/long_outlined_button.dart';
 
@@ -52,33 +54,27 @@ class _ScannerTextOnlyState extends State<ScannerTextOnly> {
   bool isProcessing = false;
   void _processUr() async {
     if (isProcessing) return;
-
+    setState(() {
+      isProcessing = true;
+    });
     final splTxt = codeCtrl.text.split(":");
-    if (splTxt.length != 2) {
+    if (splTxt.length <= 1) {
       Alert(
         title: "Invalid code provided",
         cancelable: true,
       ).show(context);
       return;
     }
-    Uint8List? data;
-    try {
-      data = bytewordsDecode(
-        BytewordsStyle.minimal,
-        splTxt[1],
-      );
-    } catch (e) {
-      Alert(
-        title: "bytewords error: $e",
-        cancelable: true,
-      ).show(context);
-      return;
+    final tag = splTxt[1].split("/")[0];
+    switch (tag) {
+      case "xmr-output": Wallet_importOutputsUR(walletPtr!, codeCtrl.text);
     }
-    setState(() {
-      isProcessing = true;
-    });
+    final status = Wallet_status(walletPtr!);
+    if (status != 0) {
+      final errorString = Wallet_errorString(walletPtr!);
+      await Alert(title: "Error", singleBody: SelectableText(errorString), cancelable: true).show(context);
+    }
 
-    await processUr(context, splTxt[0], data);
     setState(() {
       isProcessing = false;
     });

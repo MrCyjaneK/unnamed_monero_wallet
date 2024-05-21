@@ -203,7 +203,7 @@ class _SpendConfirmState extends State<SpendConfirm> {
     }
     UrBroadcastPage.push(
       context,
-      filePath: p,
+      content: File(p).readAsStringSync(),
       flag: UrBroadcastPageFlag.xmrUnsignedTx,
     );
   }
@@ -216,7 +216,7 @@ class _SpendConfirmState extends State<SpendConfirm> {
       monero.UnsignedTransaction_sign(widget.tx.txPtr!, signedFileName);
       UrBroadcastPage.push(
         context,
-        filePath: signedFileName,
+        content: File(signedFileName).readAsStringSync(),
         flag: UrBroadcastPageFlag.xmrSignedTx,
       );
       return;

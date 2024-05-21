@@ -2,7 +2,7 @@
 import 'package:xmruw/legacy.dart';
 import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/sync_static_progress.dart';
-import 'package:xmruw/pages/wallet/configuration_page.dart';
+import 'package:xmruw/pages/settings/configuration_page.dart';
 import 'package:xmruw/pages/wallet/settings_page.dart';
 import 'package:xmruw/tools/proxy.dart';
 import 'package:xmruw/tools/show_alert.dart';

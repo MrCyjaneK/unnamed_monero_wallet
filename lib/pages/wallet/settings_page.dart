@@ -12,7 +12,7 @@ import 'package:xmruw/pages/settings/nodes_screen.dart';
 import 'package:xmruw/pages/settings/theme_settings.dart';
 import 'package:xmruw/pages/settings/view_seed_page.dart';
 import 'package:xmruw/pages/setup/proxy_settings.dart';
-import 'package:xmruw/pages/wallet/configuration_page.dart';
+import 'package:xmruw/pages/settings/configuration_page.dart';
 import 'package:xmruw/tools/backup_class.dart' as b;
 import 'package:xmruw/tools/can_backup.dart';
 import 'package:xmruw/tools/dirs.dart';

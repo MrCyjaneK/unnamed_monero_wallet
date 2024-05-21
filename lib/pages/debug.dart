@@ -22,7 +22,7 @@ import 'package:xmruw/pages/debug/polyseed_test.dart';
 import 'package:xmruw/pages/debug/theme_config.dart';
 import 'package:xmruw/pages/debug/tor_test.dart';
 import 'package:xmruw/pages/debug/urqr_codes.dart';
-import 'package:xmruw/pages/wallet/configuration_page.dart';
+import 'package:xmruw/pages/settings/configuration_page.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/long_outlined_button.dart';
 

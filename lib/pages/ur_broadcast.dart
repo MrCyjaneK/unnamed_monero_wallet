@@ -56,21 +56,21 @@ enum OfflineMode {
 class UrBroadcastPage extends StatefulWidget {
   const UrBroadcastPage({
     super.key,
-    required this.filePath,
+    required this.content,
     required this.flag,
   });
   final UrBroadcastPageFlag flag;
-  final String filePath;
+  final String content;
 
   @override
   State<UrBroadcastPage> createState() => _UrBroadcastPageState();
 
   static Future<void> push(BuildContext context,
-      {required String filePath, required UrBroadcastPageFlag flag}) async {
+      {required String content, required UrBroadcastPageFlag flag}) async {
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
-          return UrBroadcastPage(filePath: filePath, flag: flag);
+          return UrBroadcastPage(content: content, flag: flag);
         },
       ),
     );
@@ -83,15 +83,6 @@ class _UrBroadcastPageState extends State<UrBroadcastPage> {
       : canPlatformScan()
           ? OfflineMode.urqr
           : OfflineMode.text;
-
-  void _save() {
-    CRFileSaver.saveFileWithDialog(
-      SaveFileDialogParams(
-        sourceFilePath: widget.filePath,
-        destinationFileName: _urBroadcastPageFlagToFileName(widget.flag),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,18 +127,9 @@ class _UrBroadcastPageState extends State<UrBroadcastPage> {
           child: Padding(
             padding: const EdgeInsets.all(32.0),
             child: URQR(
-              frames: uint8ListToURQR(
-                File(widget.filePath).readAsBytesSync(),
-                _urBroadcastPageFlagToTag(widget.flag),
-                fragLength: 300,
-              ),
+              frames: widget.content.split('\n'),
             ),
           ),
-        ),
-        TextButton.icon(
-          onPressed: _save,
-          icon: const Icon(Icons.download),
-          label: const Text("Save to file"),
         ),
         const Spacer(flex: 3),
       ],
@@ -200,8 +182,7 @@ class _UrBroadcastPageState extends State<UrBroadcastPage> {
   }
 
   Widget _buildTextPage() {
-    final fileContent = File(widget.filePath).readAsBytesSync();
-    final bw = bytewordsEncode(BytewordsStyle.minimal, fileContent);
+    final bw = widget.content;
     final flag = _urBroadcastPageFlagToTag(widget.flag);
     final text = "$flag:$bw";
     return SingleChildScrollView(
