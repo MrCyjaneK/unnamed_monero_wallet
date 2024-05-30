@@ -1,0 +1,33 @@
+name: Does it even compile
+run-name: Building xmruw for supported targets
+on: [push]
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+      - uses: kuhnroyal/flutter-fvm-config-action@v2
+        id: fvm-config-action
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.fvm-config-action.outputs.FLUTTER_VERSION }}
+          channel: ${{ steps.fvm-config-action.outputs.FLUTTER_CHANNEL }}
+      - name: Flutter pub get
+        run: |
+          flutter pub get
+      - name: make version
+        run: |
+          make version
+      - name: Build apk
+        run: |
+          make libs_android_download
+          make android
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        # if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: build/app/outputs/flutter-apk/*
+          token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}

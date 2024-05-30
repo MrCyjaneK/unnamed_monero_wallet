@@ -1,9 +1,6 @@
-import 'dart:typed_data';
 
-import 'package:bytewords/bytewords.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
-import 'package:xmruw/pages/scanner/process_ur.dart';
 import 'package:xmruw/tools/show_alert.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/labeled_text_input.dart';

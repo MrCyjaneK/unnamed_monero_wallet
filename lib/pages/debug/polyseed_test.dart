@@ -10,7 +10,8 @@ class PolyseedCompatTestDebug extends StatefulWidget {
   const PolyseedCompatTestDebug({super.key});
 
   @override
-  State<PolyseedCompatTestDebug> createState() => _PolyseedCompatTestDebugState();
+  State<PolyseedCompatTestDebug> createState() =>
+      _PolyseedCompatTestDebugState();
 
   static void push(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(
@@ -23,7 +24,7 @@ class PolyseedCompatTestDebug extends StatefulWidget {
 
 class _PolyseedCompatTestDebugState extends State<PolyseedCompatTestDebug> {
   String? path;
-  
+
   @override
   void initState() {
     getPolyseedTestPath().then((value) {
@@ -48,23 +49,21 @@ class _PolyseedCompatTestDebugState extends State<PolyseedCompatTestDebug> {
       appBar: AppBar(
         title: const Text("Polyseed Compat"),
       ),
-      body:  SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Column(
           children: [
-            (Directory(path!).existsSync()) 
-              ? LongOutlinedButton(
-                text: "Delete temp dir",
-                onPressed: () {
-                  Directory(path!).deleteSync(recursive: true);
-                  setState(() {
-                    
-                  });
-                },
-              ) 
-              :  LongOutlinedButton(
-                text: "Create wallets",
-                onPressed: _createWallets,
-              ),
+            (Directory(path!).existsSync())
+                ? LongOutlinedButton(
+                    text: "Delete temp dir",
+                    onPressed: () {
+                      Directory(path!).deleteSync(recursive: true);
+                      setState(() {});
+                    },
+                  )
+                : LongOutlinedButton(
+                    text: "Create wallets",
+                    onPressed: _createWallets,
+                  ),
             ..._buildWidgets(pWallets),
           ],
         ),
@@ -81,11 +80,15 @@ class _PolyseedCompatTestDebugState extends State<PolyseedCompatTestDebug> {
       }
       list.add(
         ExpansionTile(
-          collapsedBackgroundColor: (pSeeds[key] != monero.Wallet_getPolyseed(value, passphrase: '')) ? Theme.of(context).colorScheme.error : null,
+          collapsedBackgroundColor:
+              (pSeeds[key] != monero.Wallet_getPolyseed(value, passphrase: ''))
+                  ? Theme.of(context).colorScheme.error
+                  : null,
           title: Text(key),
           children: [
             SelectableText("polyseed (Wallet::createPolyseed): ${pSeeds[key]}"),
-            SelectableText("polyseed (Wallet::getPolyseed): ${monero.Wallet_getPolyseed(value, passphrase: '')}"),
+            SelectableText(
+                "polyseed (Wallet::getPolyseed): ${monero.Wallet_getPolyseed(value, passphrase: '')}"),
             SelectableText("address: ${monero.Wallet_address(value)}"),
             SelectableText("error: ${pErrors[key]}")
           ],
@@ -164,14 +167,13 @@ class _PolyseedCompatTestDebugState extends State<PolyseedCompatTestDebug> {
   Future<void> _createWallets() async {
     Directory(path!).createSync();
     for (var k in pWallets.keys) {
-      final ps = monero.Wallet_createPolyseed(
-        language: k
-      );
+      final ps = monero.Wallet_createPolyseed(language: k);
       setState(() {
         pSeeds[k] = ps;
         pWallets[k] = monero.WalletManager_createWalletFromPolyseed(
-          wmPtr, 
-          path: "${path!}/monero_wallet-${DateTime.now().microsecondsSinceEpoch}",
+          wmPtr,
+          path:
+              "${path!}/monero_wallet-${DateTime.now().microsecondsSinceEpoch}",
           password: 'p',
           mnemonic: ps,
           seedOffset: '',
