@@ -12,13 +12,9 @@ android:
 linux: 
 	./build_changelog.sh
 	flutter build linux
-	echo https://static.mrcyjanek.net/monero_c/${MONERO_C_TAG}/monero/${TARGET_TRIPLET}_libwallet2_api_c.so.xz
-	wget https://static.mrcyjanek.net/monero_c/${MONERO_C_TAG}/monero/${TARGET_TRIPLET}_libwallet2_api_c.so.xz \
-		-O build/linux/${FLUTTER_ARCH}/release/bundle/lib/libmonero_libwallet2_api_c.so.xz
-	-rm build/linux/${FLUTTER_ARCH}/release/bundle/lib/libmonero_libwallet2_api_c.so
-	unxz -f build/linux/${FLUTTER_ARCH}/release/bundle/lib/libmonero_libwallet2_api_c.so.xz
-	-rm build/linux/${FLUTTER_ARCH}/release/xmruw-linux-${DEBIAN_ARCH}.tar*
-	(cd build/linux/${FLUTTER_ARCH}/release && cp -a bundle xmruw && tar -cvf xmruw-linux-${DEBIAN_ARCH}.tar xmruw && xz -e xmruw-linux-${DEBIAN_ARCH}.tar)
+	./build_moneroc.sh --prebuild --coin monero --tag ${MONERO_C_TAG} --triplet $(shell gcc -dumpmachine)  --location build/linux/${FLUTTER_ARCH}/release/bundle/lib
+	-rm build/linux/${FLUTTER_ARCH}/release/xmruw-linux-${FLUTTER_ARCH}.tar*
+	(cd build/linux/${FLUTTER_ARCH}/release && cp -a bundle xmruw && tar -cvf xmruw-linux-${FLUTTER_ARCH}.tar xmruw && xz -e xmruw-linux-${FLUTTER_ARCH}.tar)
 
 
 .PHONY: linux_debug_lib
@@ -27,11 +23,6 @@ linux_debug_lib:
 		-O build/linux/${FLUTTER_ARCH}/debug/bundle/lib/libmonero_libwallet2_api_c.so.xz
 	-rm build/linux/${FLUTTER_ARCH}/debug/bundle/lib/libmonero_libwallet2_api_c.so
 	unxz -f build/linux/${FLUTTER_ARCH}/debug/bundle/lib/libmonero_libwallet2_api_c.so.xz
-
-deb:
-	dart pub global activate --source git https://github.com/tomekit/flutter_to_debian.git
-	cat debian/debian.yaml.txt | sed 's/x64/${FLUTTER_ARCH}/g' | sed 's/amd64/${DEBIAN_ARCH}/g' > debian/debian.yaml
-	${HOME}/.pub-cache/bin/flutter_to_debian
 
 .PHONY: dev
 dev: libs
