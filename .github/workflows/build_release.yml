@@ -70,7 +70,7 @@ jobs:
   sailfishos:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/mrcyjanek/sailfishos:4.6.0.11_target_aarch64
+      image: ghcr.io/mrcyjanek/sailfishos:4.6.0.11_target_i486
     steps:
       - name: prepare os
         run: |
