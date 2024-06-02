@@ -14,7 +14,7 @@ cat > build/elinux/arm64/release/bundle/unnamed_monero_wallet <<EOF
 cd \$(dirname \$0)
 killall flutter-client || true
 
-FLUTTER_LOG_LEVELS=TRACE LD_PRELOAD=\$PWD/lib/libflutter_engine.so ./flutter-client --bundle=\$PWD --fullscreen --force-scale-factor=3
+LD_PRELOAD=\$PWD/lib/libflutter_engine.so ./flutter-client --bundle=\$PWD --fullscreen --force-scale-factor=3
 EOF
 chmod +x build/elinux/arm64/release/bundle/unnamed_monero_wallet
 
