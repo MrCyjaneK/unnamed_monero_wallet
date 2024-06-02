@@ -75,9 +75,9 @@ jobs:
       - name: prepare os
         run: |
           zypper in -y ffmpeg-tools git clang libxkbcommon-devel wayland-protocols-devel wayland-client wayland-egl-devel make glibc-static
-          touch /root/.profile
+          touch ~/.profile
           curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-          source /root/.profile
+          source ~/.profile
           nvm install 20
       - uses: actions/checkout@v4
         with:
