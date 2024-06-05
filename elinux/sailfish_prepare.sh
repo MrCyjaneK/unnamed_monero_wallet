@@ -11,8 +11,6 @@ pushd "$HOME/flutter-elinux/$(uname -m)"
     git checkout $FVM_VERSION
 popd
 
-echo "adding exports to $HOME/.bashrc"
-
 echo 'export PATH="$PATH:$HOME/flutter-elinux/$(uname -m)/bin"' >> $HOME/.bashrc
 echo 'export PATH="$PATH:$HOME/flutter-elinux/$(uname -m)/flutter/bin"' >> $HOME/.bashrc
 echo 'export PATH="$PATH:$HOME/.pub-cache/bin"' >> $HOME/.bashrc
