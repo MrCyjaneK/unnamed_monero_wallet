@@ -28,6 +28,6 @@ EOF
 chmod +x build/elinux/${FLUTTER_ARCH}/release/bundle/unnamed_monero_wallet
 
 rpmbuild -bb elinux/sailfishos.spec --define "_bundledir $PWD/build/elinux/${FLUTTER_ARCH}/release/bundle/" --define "_sourcedir $PWD"
-cp $HOME/rpmbuild/RPMS/$(uname -m)/unnamed-monero-wallet-debuginfo-1.0.0+*.rpm build/elinux/${FLUTTER_ARCH}/release/unnamed-monero-wallet-debuginfo.$(uname -m).rpm
-cp $HOME/rpmbuild/RPMS/$(uname -m)/unnamed-monero-wallet-debugsource-1.0.0+*.rpm build/elinux/${FLUTTER_ARCH}/release/unnamed-monero-wallet-debugsource.$(uname -m).rpm
-cp $HOME/rpmbuild/RPMS/$(uname -m)/unnamed-monero-wallet-1.0.0+*.rpm build/elinux/${FLUTTER_ARCH}/release/unnamed-monero-wallet.$(uname -m).rpm
+cp $HOME/rpmbuild/RPMS/$(uname -m)/unnamed-monero-wallet-debuginfo-1.0.0*.rpm build/elinux/${FLUTTER_ARCH}/release/unnamed-monero-wallet-debuginfo.$(uname -m).rpm
+cp $HOME/rpmbuild/RPMS/$(uname -m)/unnamed-monero-wallet-debugsource-1.0.0*.rpm build/elinux/${FLUTTER_ARCH}/release/unnamed-monero-wallet-debugsource.$(uname -m).rpm
+cp $HOME/rpmbuild/RPMS/$(uname -m)/unnamed-monero-wallet-1.0.0*.rpm build/elinux/${FLUTTER_ARCH}/release/unnamed-monero-wallet.$(uname -m).rpm
