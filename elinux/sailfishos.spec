@@ -1,8 +1,8 @@
 Name:       unnamed-monero-wallet
-Version:    1.0.0+62
-Release:    62_manual
+Version:    1.0.0+100
+Release:    100
 Summary:    Unnamed Monero Wallet for SailfishOS
-License:    Proprietary
+License:    GPLv3
 BuildRequires: ffmpeg-tools
 
 %description
@@ -20,7 +20,7 @@ cp %{_sourcedir}/assets/logo.png logo.png
 
 %install
 mkdir -p %{buildroot}%{_libdir}
-mv files/lib/libwallet2_api_c.so %{buildroot}%{_libdir}
+mv files/lib/monero_libwallet2_api_c.so %{buildroot}%{_libdir}
 mkdir -p %{buildroot}/opt/unnamed-monero-wallet
 cp -r files/* %{buildroot}/opt/unnamed-monero-wallet
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/108x108/apps
@@ -38,7 +38,7 @@ cp unnamed-monero-wallet.desktop %{buildroot}%{_datadir}/applications/unnamed-mo
 /opt/unnamed-monero-wallet/
 %{_datadir}/icons/hicolor/*/apps/unnamed_monero_wallet.png
 %{_datadir}/applications/unnamed-monero-wallet.desktop
-%{_libdir}/libwallet2_api_c.so
+%{_libdir}/monero_libwallet2_api_c.so
 
 %changelog
 # let's skip this for now

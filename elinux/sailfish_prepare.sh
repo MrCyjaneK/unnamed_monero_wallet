@@ -2,7 +2,9 @@
 set -e
 set -x
 
-zypper in -y ffmpeg-tools git clang libxkbcommon-devel wayland-protocols-devel wayland-client wayland-egl-devel make glibc-static
+# -f is here as a workaround
+# https://t.me/SFOSFanclub/142531
+zypper in -f -y cmake ffmpeg-tools git clang libxkbcommon-devel wayland-protocols-devel wayland-client wayland-egl-devel make glibc-static
 mkdir -p $HOME/flutter-elinux
 git clone https://github.com/sony/flutter-elinux.git $HOME/flutter-elinux/$(uname -m)
 

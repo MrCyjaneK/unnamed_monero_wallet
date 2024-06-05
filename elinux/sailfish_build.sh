@@ -3,7 +3,7 @@ set -e
 set -x
 cd $(dirname $0)
 cd ..
-
+MONERO_C_TAG=$(cat Makefile | grep 'MONERO_C_TAG=' | tr '=' ' ' | awk '{ print $2 }')
 FLUTTER_ARCH=""
 if [[ "$(uname -m)" == "aarch64" ]];
 then

@@ -71,10 +71,22 @@ then
     lib_name_prefix=lib
 fi
 
+if ! command -v jq;
+then
+    pushd $(mktemp -d)
+        git clone --recursive https://github.com/jqlang/jq.git --depth=1
+        cd jq
+        autoreconf -i
+        ./configure
+        make -j$(nproc)
+        make install
+    popd
+fi
+
 if [[ ! "x$ARG_PREBUILD" == "x" ]];
 then
     # download prebuild
-    GH_JSON="$(wget --quiet -O - 'https://api.github.com/repos/MrCyjaneK/monero_c/releases/tags/'"${ARG_TAG}")"
+    GH_JSON="$(curl -o- 'https://api.github.com/repos/MrCyjaneK/monero_c/releases/tags/'"${ARG_TAG}")"
     for release_url in $(echo "$GH_JSON" | jq -r '.assets[].browser_download_url')
     do
         asset_basename=$(urldecode $(basename $release_url))
@@ -82,10 +94,10 @@ then
         then            
             if [[ "$asset_basename" == *libwallet2_api_c* ]];
             then
-                wget "$release_url" -O "$ARG_LOCATION/$lib_name_prefix${asset_basename/${ARG_TRIPLET}_/}"
+                curl -L "$release_url" > "$ARG_LOCATION/$lib_name_prefix${asset_basename/${ARG_TRIPLET}_/}"
                 unxz -f "$ARG_LOCATION/$lib_name_prefix${asset_basename/${ARG_TRIPLET}_/}"
             else
-                wget "$release_url" -O "$ARG_LOCATION/${asset_basename/${ARG_COIN}_${ARG_TRIPLET}_/}"
+                curl -L "$release_url" > "$ARG_LOCATION/${asset_basename/${ARG_COIN}_${ARG_TRIPLET}_/}"
                 unxz -f "$ARG_LOCATION/${asset_basename/${ARG_COIN}_${ARG_TRIPLET}_/}"
             fi
         fi
