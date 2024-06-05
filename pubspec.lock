@@ -41,15 +41,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
-  bytewords:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: "5cb47bb5bac6dceaaf736bd61c6520afca3adc7c"
-      resolved-ref: "5cb47bb5bac6dceaaf736bd61c6520afca3adc7c"
-      url: "https://git.mrcyjanek.net/mrcyjanek/bytewords"
-    source: git
-    version: "0.0.1"
   characters:
     dependency: transitive
     description:
@@ -445,9 +436,9 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "54a13b1d60c7e7b8b353a95014179f6f41ed5ac6"
-      resolved-ref: "54a13b1d60c7e7b8b353a95014179f6f41ed5ac6"
-      url: "https://git.mrcyjanek.net/mrcyjanek/monero.dart"
+      ref: "7b301d37215c79059ccf3b7aefddc3842d4ef9d4"
+      resolved-ref: "7b301d37215c79059ccf3b7aefddc3842d4ef9d4"
+      url: "https://github.com/mrcyjanek/monero.dart"
     source: git
     version: "0.0.0"
   mutex:
@@ -462,10 +453,10 @@ packages:
     dependency: "direct main"
     description:
       name: offline_market_data
-      sha256: "00120904990306a064d4a0d7ccc41d6110bcaabc3e3d27f6424565ee7750f121"
+      sha256: a7ae25e728d9f93f35745fae761b2b288a9e93bdd613db6c2d6c0fb22931c7c9
       url: "https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/"
     source: hosted
-    version: "2024.05.09+307"
+    version: "2024.06.05+381"
   path:
     dependency: "direct main"
     description:
@@ -792,5 +783,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.3.4 <4.0.0"
+  dart: ">=3.3.0 <4.0.0"
   flutter: ">=3.16.0"

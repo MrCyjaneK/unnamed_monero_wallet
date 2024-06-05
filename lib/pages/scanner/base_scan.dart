@@ -1,7 +1,5 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
-import 'package:bytewords/bytewords.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -139,7 +137,7 @@ class _BaseScannerPageState extends State<BaseScannerPage> {
     });
     print(const JsonEncoder.withIndent('    ').convert(ur));
 
-    await processUr(context, ur.tag, ur.data);
+    await processUr(context, ur.tag, urCodes);
     setState(() {
       isProcessing = false;
     });
@@ -149,14 +147,12 @@ class _BaseScannerPageState extends State<BaseScannerPage> {
 class URQRData {
   URQRData(
       {required this.tag,
-      required this.data,
       required this.str,
       required this.progress,
       required this.count,
       required this.error,
       required this.inputs});
   final String tag;
-  final Uint8List data;
   final String str;
   final double progress;
   final int count;
@@ -166,7 +162,6 @@ class URQRData {
     return {
       "tag": tag,
       "str": str,
-      "data": data,
       "progress": progress,
       "count": count,
       "error": error,
@@ -200,19 +195,11 @@ URQRData URQRToURQRData(List<String> urqr_) {
     final byteWords = s2[2];
     bw += byteWords;
   }
-  Uint8List? data;
   String? error;
-  if ((urqr.length / count) == 1) {
-    try {
-      data = bytewordsDecode(BytewordsStyle.minimal, bw);
-    } catch (e) {
-      error = e.toString();
-    }
-  }
+
   return URQRData(
     tag: tag,
     str: bw,
-    data: data ?? Uint8List.fromList([]),
     progress: count == 0 ? 0 : (urqr.length / count),
     count: count,
     error: error ?? "",

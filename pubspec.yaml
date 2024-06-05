@@ -1,7 +1,7 @@
 name: xmruw
 description: "monero wallet for android."
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 1.0.0+68
+version: 1.0.0+100
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
@@ -18,15 +18,11 @@ dependencies:
   mutex: ^3.1.0
   monero:
     git: 
-      url: https://git.mrcyjanek.net/mrcyjanek/monero.dart
-      ref: 54a13b1d60c7e7b8b353a95014179f6f41ed5ac6
+      url: https://github.com/mrcyjanek/monero.dart
+      ref: 7b301d37215c79059ccf3b7aefddc3842d4ef9d4
   cr_file_saver: ^0.0.2
   file_picker: ^6.1.1
   mobile_scanner: 4.0.0
-  bytewords:
-    git:
-      url: https://git.mrcyjanek.net/mrcyjanek/bytewords
-      ref: 5cb47bb5bac6dceaaf736bd61c6520afca3adc7c
   anonero_backup:
     hosted: https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
     version: 0.0.14
@@ -46,7 +42,7 @@ dependencies:
   path: any
   offline_market_data:
     hosted: https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
-    version: ^2024.05.09+307
+    version: ^2024.06.05+381
     # path: ../offline_market_data
   flex_color_picker: ^3.3.1
   polyseed: ^0.0.4

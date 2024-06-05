@@ -3,11 +3,9 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:xmruw/pages/changelog.dart';
-import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/debug/backup_test.dart';
 import 'package:xmruw/pages/debug/battery_optimization.dart';
 import 'package:xmruw/pages/debug/button_x_textfield.dart';
-import 'package:xmruw/pages/debug/bytewords_debug.dart';
 import 'package:xmruw/pages/debug/config_json.dart';
 import 'package:xmruw/pages/debug/mobile_scanner.dart';
 import 'package:xmruw/pages/debug/monero_dart_advanced.dart';
@@ -21,7 +19,6 @@ import 'package:xmruw/pages/debug/polyseed_dart_compat.dart';
 import 'package:xmruw/pages/debug/polyseed_test.dart';
 import 'package:xmruw/pages/debug/theme_config.dart';
 import 'package:xmruw/pages/debug/tor_test.dart';
-import 'package:xmruw/pages/debug/urqr_codes.dart';
 import 'package:xmruw/pages/settings/configuration_page.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/long_outlined_button.dart';
@@ -84,14 +81,6 @@ class DebugPage extends StatelessWidget {
                   : () => MobileScannerDebug.push(context),
             ),
             LongOutlinedButton(
-              text: "URQR",
-              onPressed: (!Platform.isAndroid &&
-                      !Platform.isIOS &&
-                      !config.forceEnableScanner)
-                  ? null
-                  : () => URQRCodeDebug.push(context),
-            ),
-            LongOutlinedButton(
               text: "Backup",
               onPressed: (!Platform.isAndroid)
                   ? null
@@ -133,10 +122,6 @@ class DebugPage extends StatelessWidget {
             LongOutlinedButton(
               text: "Multisig",
               onPressed: () => MultisigDebug.push(context),
-            ),
-            LongOutlinedButton(
-              text: "Bytewords",
-              onPressed: () => BytewordsDebug.push(context),
             ),
           ],
         ),

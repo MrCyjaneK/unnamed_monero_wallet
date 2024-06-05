@@ -1,27 +1,20 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/pages/sync_static_progress.dart';
 import 'package:xmruw/pages/wallet/spend_confirm.dart';
 import 'package:xmruw/pages/wallet/spend_screen.dart';
 import 'package:xmruw/pages/wallet/spend_success.dart';
-import 'package:xmruw/tools/dirs.dart';
-import 'package:xmruw/tools/hexdump.dart';
 import 'package:xmruw/tools/show_alert.dart';
 import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/transaction_list/popup_menu.dart';
 
-Future<void> processUr(BuildContext context, String tag, Uint8List data) async {
+Future<void> processUr(
+    BuildContext context, String tag, List<String> urCodes) async {
   switch (tag) {
     case "debug":
-      Alert(title: utf8.decode(data), cancelable: true).show(context);
+      Alert(title: urCodes.join("\n"), cancelable: true).show(context);
     case "xmr-output":
-      final p = await getMoneroImportOutputsPath();
-      File(p).writeAsBytesSync(data);
-      final ok = monero.Wallet_importOutputs(walletPtr!, p);
+      final ok = monero.Wallet_importOutputsUR(walletPtr!, urCodes.join("\n"));
       if (!ok) {
         // ignore: use_build_context_synchronously
         await Alert(
@@ -37,11 +30,10 @@ Future<void> processUr(BuildContext context, String tag, Uint8List data) async {
     case "xmr-keyimage":
       SyncStaticProgress.push(context, "IMPORTING KEY IMAGES", () async {
         await Future.delayed(const Duration(milliseconds: 100));
-        final p = await getMoneroImportKeyImagesPath();
-        File(p).writeAsBytesSync(data);
         final preState = monero.Wallet_trustedDaemon(walletPtr!);
         monero.Wallet_setTrustedDaemon(walletPtr!, arg: true);
-        final ok = monero.Wallet_importKeyImages(walletPtr!, p);
+        final ok =
+            monero.Wallet_importKeyImagesUR(walletPtr!, urCodes.join("\n"));
         if (!ok) {
           // ignore: use_build_context_synchronously
           Alert(
@@ -56,11 +48,8 @@ Future<void> processUr(BuildContext context, String tag, Uint8List data) async {
         Navigator.of(context).pop();
       });
     case "xmr-txunsigned":
-      final p = await getMoneroUnsignedTxPath();
-      if (File(p).existsSync()) File(p).deleteSync();
-      File(p).writeAsBytesSync(data);
       final monero.UnsignedTransaction tx =
-          monero.Wallet_loadUnsignedTx(walletPtr!, unsigned_filename: p);
+          monero.Wallet_loadUnsignedTxUR(walletPtr!, input: urCodes.join("\n"));
       if (monero.UnsignedTransaction_status(tx) != 0) {
         // ignore: use_build_context_synchronously
         await Alert(
@@ -85,9 +74,8 @@ Future<void> processUr(BuildContext context, String tag, Uint8List data) async {
         ),
       );
     case "xmr-txsigned":
-      final p = await getMoneroSignedTxPath();
-      File(p).writeAsBytesSync(data);
-      final tx = monero.Wallet_submitTransaction(walletPtr!, p);
+      final tx =
+          monero.Wallet_submitTransactionUR(walletPtr!, urCodes.join("\n"));
       if (tx == false) {
         // ignore: use_build_context_synchronously
         await Alert(
@@ -102,7 +90,7 @@ Future<void> processUr(BuildContext context, String tag, Uint8List data) async {
     case _:
       Alert(
         singleBody: SelectableText(
-          hexDump(data),
+          urCodes.join("\n"),
           style: const TextStyle(fontSize: 8),
         ),
         cancelable: true,

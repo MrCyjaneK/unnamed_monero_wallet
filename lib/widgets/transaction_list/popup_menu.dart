@@ -1,12 +1,10 @@
 import 'dart:io';
 
-import 'package:cr_file_saver/file_saver.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/crypto/crypto.dart';
-import 'package:xmruw/pages/debug/urqr_codes.dart';
 import 'package:xmruw/pages/pos/home.dart';
 import 'package:xmruw/pages/sync_static_progress.dart';
 import 'package:xmruw/pages/ur_broadcast.dart';
@@ -120,8 +118,7 @@ class TxListPopupMenu extends StatelessWidget {
             .show(c);
         return;
       }
-      final signedFileName = await getMoneroSignedTxPath();
-      final res = monero.UnsignedTransaction_sign(utx, signedFileName);
+      final res = monero.UnsignedTransaction_signUR(utx, 130);
       final status2 = monero.Wallet_status(walletPtr!);
       if (status2 != 0 || res == false) {
         // ignore: use_build_context_synchronously
@@ -135,18 +132,9 @@ class TxListPopupMenu extends StatelessWidget {
         singleBody: SizedBox(
           width: double.maxFinite,
           height: double.maxFinite,
-          child: URQR(
-            frames: uint8ListToURQR(
-              File(signedFileName).readAsBytesSync(),
-              "xmr-txsigned",
-              fragLength: 200,
-            ),
-          ),
+          child: URQR(frames: res.split("\n")),
         ),
         cancelable: true,
-        callback: () => CRFileSaver.saveFileWithDialog(SaveFileDialogParams(
-            sourceFilePath: signedFileName,
-            destinationFileName: 'signed_transaction')),
         callbackText: "File",
       ).show(c);
     });
@@ -237,7 +225,8 @@ class TxListPopupMenu extends StatelessWidget {
     if (config.showExtraOptions || isOffline) TxListPopupAction.importOutputs,
     TxListPopupAction.crypto,
     TxListPopupAction.settings,
-    if (config.showExtraOptions || config.enableGraphs) TxListPopupAction.graphs,
+    if (config.showExtraOptions || config.enableGraphs)
+      TxListPopupAction.graphs,
     if (config.showExtraOptions || config.enablePoS) TxListPopupAction.pos,
     TxListPopupAction.saveexit,
   ];

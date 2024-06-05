@@ -145,7 +145,6 @@ final importantLicenses = [
   "cr_file_saver",
   "file_picker",
   "mobile_scanner",
-  "bytewords",
   "anonero_backup",
   "flutter_svg",
   "archive",

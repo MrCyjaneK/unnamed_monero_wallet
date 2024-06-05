@@ -6,10 +6,8 @@ source /etc/os-release
 if [[ "x$ID" == "xsailfishos" ]];
 then
     flutter-elinux pub get
-    flutter-elinux pub add offline_market_data --hosted-url=https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
 else
     flutter pub get
-    flutter pub add offline_market_data --hosted-url=https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
 fi
 
 make lib/helpers/licenses.g.dart
