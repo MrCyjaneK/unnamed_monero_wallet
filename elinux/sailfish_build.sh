@@ -8,8 +8,7 @@ FLUTTER_ARCH=""
 if [[ "$(uname -m)" == "aarch64" ]];
 then
     FLUTTER_ARCH="arm64"
-fi        curl -L https://github.com/sony/flutter-embedded-linux/releases/download/c4cd48e186/elinux-arm64-release.zip --output elinux-arm64-release.zip
-
+fi
 
 flutter-elinux pub get
 flutter-elinux build elinux --release
