@@ -11,7 +11,6 @@ import 'package:xmruw/pages/ur_broadcast.dart';
 import 'package:xmruw/pages/usage_graphs.dart';
 import 'package:xmruw/pages/wallet/outputs_page.dart';
 import 'package:xmruw/pages/wallet/settings_page.dart';
-import 'package:xmruw/tools/dirs.dart';
 import 'package:xmruw/tools/is_offline.dart';
 import 'package:xmruw/tools/is_view_only.dart';
 import 'package:xmruw/tools/show_alert.dart';
@@ -38,8 +37,7 @@ Future<void> exportOutputs(BuildContext c) async {
 }
 
 void exportKeyImages(BuildContext c) async {
-  final p = await getMoneroExportKeyImagesPath();
-  monero.Wallet_exportKeyImages(walletPtr!, p, all: true);
+  final ur = monero.Wallet_exportKeyImagesUR(walletPtr!, all: true);
   final status = monero.Wallet_status(walletPtr!);
   if (status != 0) {
     // ignore: use_build_context_synchronously
@@ -50,7 +48,7 @@ void exportKeyImages(BuildContext c) async {
   // ignore: use_build_context_synchronously
   await UrBroadcastPage.push(
     c,
-    content: File(p).readAsStringSync(),
+    content: ur,
     flag: UrBroadcastPageFlag.xmrKeyImage,
   );
 }

@@ -212,11 +212,10 @@ class _SpendConfirmState extends State<SpendConfirm> {
     if (isOffline) {
       Navigator.of(context).pop();
       Navigator.of(context).pop();
-      final signedFileName = await getMoneroSignedTxPath();
-      monero.UnsignedTransaction_sign(widget.tx.txPtr!, signedFileName);
+      final content = monero.UnsignedTransaction_signUR(widget.tx.txPtr!, 120);
       UrBroadcastPage.push(
         context,
-        content: File(signedFileName).readAsStringSync(),
+        content: content.trim(),
         flag: UrBroadcastPageFlag.xmrSignedTx,
       );
       return;

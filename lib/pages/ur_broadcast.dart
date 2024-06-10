@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:xmruw/helpers/platform_support.dart';
@@ -83,6 +82,7 @@ class _UrBroadcastPageState extends State<UrBroadcastPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         leading: IconButton(
@@ -123,10 +123,11 @@ class _UrBroadcastPageState extends State<UrBroadcastPage> {
           child: Padding(
             padding: const EdgeInsets.all(32.0),
             child: URQR(
-              frames: widget.content.split('\n'),
+              frames: widget.content.trim().split('\n'),
             ),
           ),
         ),
+        // if (kDebugMode) Text(widget.content),
         const Spacer(flex: 3),
       ],
     );
