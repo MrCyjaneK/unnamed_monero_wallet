@@ -4,7 +4,7 @@ Release:    100
 Summary:    Unnamed Monero Wallet for SailfishOS
 License:    GPLv3
 BuildRequires: ffmpeg-tools
-Requires: maliit-framework-wayland-glibc
+Requires: maliit-framework-wayland-glib
 
 %description
 Unnamed Monero Wallet (xmruw.net) port for SailfishOS.
