@@ -609,7 +609,7 @@ class Circle extends StatelessWidget {
 
 void _doAutoSaveStuff() async {
   while (true) {
-    await Future.delayed(const Duration(seconds: 15));
+    await Future.delayed(const Duration(seconds: 30));
     final addr = walletPtr!.address;
     await Isolate.run(() {
       final ret = monero.Wallet_store(Pointer.fromAddress(addr));

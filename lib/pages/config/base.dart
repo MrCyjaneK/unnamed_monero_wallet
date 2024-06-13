@@ -55,7 +55,7 @@ class Config {
     this.forceEnableText = false,
     this.enableGraphs = false,
     this.enablePoS = false,
-    this.autoSave = false,
+    this.autoSave = true,
     this.showExtraOptions = false,
   });
 
