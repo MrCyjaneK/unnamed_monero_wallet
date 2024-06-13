@@ -7,12 +7,12 @@ import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/debug.dart';
 import 'package:xmruw/pages/pin_screen.dart';
 import 'package:xmruw/pages/settings/about.dart';
+import 'package:xmruw/pages/settings/configuration_page.dart';
 import 'package:xmruw/pages/settings/currency_settings.dart';
 import 'package:xmruw/pages/settings/nodes_screen.dart';
 import 'package:xmruw/pages/settings/theme_settings.dart';
 import 'package:xmruw/pages/settings/view_seed_page.dart';
 import 'package:xmruw/pages/setup/proxy_settings.dart';
-import 'package:xmruw/pages/settings/configuration_page.dart';
 import 'package:xmruw/tools/backup_class.dart' as b;
 import 'package:xmruw/tools/can_backup.dart';
 import 'package:xmruw/tools/dirs.dart';
@@ -56,9 +56,18 @@ Future<void> setNode(BuildContext c) async {
     return;
   }
   // ignore: use_build_context_synchronously
-  return Alert(
-          title: "Node set, you need to restart your wallet.", cancelable: true)
-      .show(c);
+  final ProxyStore proxy = (await ProxyStore.getProxy());
+  final proxyAddress =
+      ((config.disableProxy) ? "" : proxy.getAddress(node.network));
+  print("proxyAddress: $proxyAddress");
+  monero.Wallet_init(
+    walletPtr!,
+    daemonAddress: node.address ?? "",
+    daemonUsername: node.username ?? "",
+    daemonPassword: node.password ?? "",
+    proxyAddress: proxyAddress,
+  );
+  return Alert(title: "Node set.", cancelable: true).show(c);
 }
 
 class SettingsPage extends StatefulWidget {
