@@ -1,11 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:monero/monero.dart' as monero;
+import 'package:http/http.dart' as http;
 import 'package:xmruw/pages/pin_screen.dart';
 import 'package:xmruw/pages/settings/add_node_screen.dart';
 import 'package:xmruw/pages/wallet/settings_page.dart';
 import 'package:xmruw/tools/node.dart';
 import 'package:xmruw/tools/show_alert.dart';
-import 'package:xmruw/tools/wallet_ptr.dart';
 
 class NodesScreen extends StatefulWidget {
   const NodesScreen({super.key});
@@ -165,17 +166,20 @@ class _SingleNodeWidgetState extends State<SingleNodeWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 16.0, left: 16, right: 16),
-      child: InkWell(
-        onTap: disabled ? null : () => _showDetails(context),
-        child: Card(
-          child: ListTile(
-            title: Text(widget.node.address),
-            trailing: IconButton(
-              onPressed: disabled ? null : _delete,
-              icon: const Icon(Icons.delete),
-            ),
+    return InkWell(
+      onTap: disabled ? null : () => _showDetails(context),
+      child: Card(
+        child: ListTile(
+          title: Text(
+            widget.node.address
+                .replaceAll("http://", "")
+                .replaceAll("https://", ""),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          trailing: IconButton(
+            onPressed: disabled ? null : _delete,
+            icon: const Icon(Icons.delete),
           ),
         ),
       ),
@@ -203,50 +207,87 @@ class NodeStatusCard extends StatefulWidget {
 }
 
 class _NodeStatusCardState extends State<NodeStatusCard> {
-  int height = 0;
-  int status = 1;
+  int? height;
+  int status = 0;
   String error = '';
+
+  void loadStats() async {
+    if (!mounted) return;
+    setState(() {
+      height = null;
+      error = "";
+    });
+    final headers = {
+      'Content-Type': 'application/json',
+    };
+
+    const data = '{"jsonrpc":"2.0","id":"0","method":"get_block_count"}';
+
+    final url = Uri.parse('${widget.node.address}/json_rpc');
+    try {
+      final res = await http.post(url, headers: headers, body: data);
+      final jsonData = json.decode(res.body);
+      if (!mounted) return;
+      setState(() {
+        status = res.statusCode;
+        height = jsonData["result"]["count"];
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        status = 500;
+        error = e.toString();
+      });
+    }
+  }
 
   @override
   void initState() {
+    loadStats();
     super.initState();
-    setState(() {
-      height = monero.Wallet_daemonBlockChainHeight_cached(walletPtr!);
-      status = monero.Wallet_status(walletPtr!);
-      if (status != 0) {
-        error = monero.Wallet_errorString(walletPtr!);
-      }
-    });
   }
 
-  Color? _getColor() {
-    if (status != 0) {
-      return Theme.of(context).colorScheme.errorContainer;
-    }
-    return null;
+  @override
+  void didUpdateWidget(covariant NodeStatusCard oldWidget) {
+    loadStats();
+    super.didUpdateWidget(oldWidget);
   }
+
+  Color? _getColor() => switch (status) {
+        200 => null,
+        _ => Theme.of(context).colorScheme.errorContainer,
+      };
+
+  // Color? _getColor()  {
+  //   if (status != 200) {
+  //     return Theme.of(context).colorScheme.errorContainer;
+  //   }
+  //   return null;
+  // }
 
   String _statusText() {
-    if (status == 0) return "Daemon Height: $height";
+    if (status == 200) return "Daemon Height: ${height ?? 'checking...'}";
     if (error == "") return "Unknown error";
     return error;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
+    return InkWell(
+      onTap: () => loadStats(),
       child: SizedBox(
         height: 120,
         child: Card(
-          margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 14),
           color: _getColor(),
           child: Center(
             child: ListTile(
               title: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Text(
-                  widget.node.address,
+                  widget.node.address
+                      .toString()
+                      .replaceAll("http://", "")
+                      .replaceAll("https://", ""),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),

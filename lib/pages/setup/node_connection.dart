@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:xmruw/helpers/resource.g.dart';
 import 'package:xmruw/pages/setup/mnemonic_seed.dart';
@@ -9,7 +10,6 @@ import 'package:xmruw/widgets/labeled_text_input.dart';
 import 'package:xmruw/widgets/long_outlined_button.dart';
 import 'package:xmruw/widgets/proxy_button.dart';
 import 'package:xmruw/widgets/setup_logo.dart';
-import 'package:flutter/material.dart';
 
 enum SetupNodeConnectionFlag {
   createWallet,

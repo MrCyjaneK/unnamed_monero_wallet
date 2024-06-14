@@ -8,6 +8,3 @@ bool get isViewOnly {
       int.tryParse(monero.Wallet_secretSpendKey(walletPtr!)) == 0;
   return _isViewOnlyCache!;
 }
-
-bool isNero = true;
-bool isAnon = true;

@@ -52,6 +52,7 @@ Future<void> setProxy(BuildContext c) async {
 
 Future<void> setNode(BuildContext c) async {
   final node = await NodeStore.getCurrentNode();
+  if (walletPtr == null) return;
   if (node == null) {
     return;
   }

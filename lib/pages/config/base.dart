@@ -57,6 +57,7 @@ class Config {
     this.enablePoS = false,
     this.autoSave = true,
     this.showExtraOptions = false,
+    this.enableStaticOnlineServices = true,
   });
 
   final String confPath;
@@ -94,6 +95,7 @@ class Config {
   bool enablePoS;
   bool autoSave;
   bool showExtraOptions;
+  bool enableStaticOnlineServices;
 
   void save() {
     file.writeAsString(json.encode(toJson()));
@@ -194,6 +196,9 @@ class Config {
     if (json['showExtraOptions'] is bool) {
       c.showExtraOptions = json["showExtraOptions"];
     }
+    if (json['enableStaticOnlineServices'] is bool) {
+      c.enableStaticOnlineServices = json['enableStaticOnlineServices'];
+    }
     return c;
   }
 
@@ -229,6 +234,7 @@ class Config {
       "enablePoS": enablePoS,
       "autoSave": autoSave,
       "showExtraOptions": showExtraOptions,
+      "enableStaticOnlineServices": enableStaticOnlineServices,
     };
   }
 }

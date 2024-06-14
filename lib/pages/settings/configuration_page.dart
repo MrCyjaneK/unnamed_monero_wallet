@@ -208,6 +208,18 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
               },
               value: config.showExtraOptions,
             ),
+            ConfigElement(
+              text: "Enable anonymous online services",
+              description:
+                  "Query data such as node list, prices and other static data from xmruw.nettaki  server",
+              onClick: () {
+                config.enableStaticOnlineServices =
+                    !config.enableStaticOnlineServices;
+                config.save();
+                setState(() {});
+              },
+              value: config.enableStaticOnlineServices,
+            ),
           ],
         ),
       ),
