@@ -749,6 +749,15 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
         walletMutex.release();
         return;
       }
+
+      await _addProgress("Storing wallet");
+      monero.Wallet_store(walletPtr!);
+      status = monero.Wallet_status(walletPtr!);
+      if (status != 0) {
+        _failProgress(monero.Wallet_errorString(walletPtr!));
+        walletMutex.release();
+        return;
+      }
     }
 
     // await _addProgress("Closing wallet");
