@@ -1,6 +1,3 @@
-import 'package:offline_market_data/offline_market_data.dart';
-import 'package:xmruw/pages/config/base.dart';
-
 String formatMonero(num? amt) {
   if (amt == null) {
     return "#.######## XMR";
@@ -11,17 +8,18 @@ String formatMonero(num? amt) {
 String formatMoneroFiat(num? amt, DateTime? date) {
   date ??= DateTime.now();
   if (amt == null) {
-    return "#.##";
+    return "#.## ???";
   }
+  return "#.## ???";
 
-  var price = CurrencyDataXMRxUSD().getPrice(date) ?? -1;
+  // var price = CurrencyDataXMRxUSD().getPrice(date) ?? -1;
 
-  if (config.fiatCurrency != "USD") {
-    final p = usdPairs[config.fiatCurrency]?.getPrice(date);
-    if (p != null) {
-      price *= p;
-    }
-  }
+  // if (config.fiatCurrency != "USD") {
+  //   final p = usdPairs[config.fiatCurrency]?.getPrice(date);
+  //   if (p != null) {
+  //     price *= p;
+  //   }
+  // }
 
-  return "${((((amt / 1e12)) * price)).toStringAsFixed(2)} ${config.fiatCurrency}";
+  // return "${((((amt / 1e12)) * price)).toStringAsFixed(2)} ${config.fiatCurrency}";
 }

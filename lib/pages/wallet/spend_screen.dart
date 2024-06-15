@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart' as monero;
-import 'package:offline_market_data/offline_market_data.dart';
 import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/scanner/base_scan.dart';
 import 'package:xmruw/pages/wallet/spend_confirm.dart';
@@ -107,18 +106,18 @@ class _SpendScreenState extends State<SpendScreen> {
   void _amtFiatEdited() {
     final amt = double.tryParse(amountFiatCtrl.text);
     if (amt != null) {
-      var price = CurrencyDataXMRxUSD().getPrice(null) ?? -1;
+      // var price = CurrencyDataXMRxUSD().getPrice(null) ?? -1;
 
-      if (config.fiatCurrency != "USD") {
-        final p = usdPairs[config.fiatCurrency]?.getPrice(null);
-        if (p != null) {
-          price *= p;
-        }
-      }
+      // if (config.fiatCurrency != "USD") {
+      //   final p = usdPairs[config.fiatCurrency]?.getPrice(null);
+      //   if (p != null) {
+      //     price *= p;
+      //   }
+      // }
 
-      setState(() {
-        amountCtrl.text = (amt / price).toStringAsFixed(12);
-      });
+      // setState(() {
+      //   amountCtrl.text = (amt / price).toStringAsFixed(12);
+      // });
     }
     if (sweepAllVar) {
       setState(() {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:offline_market_data/offline_market_data.dart';
 import 'package:xmruw/pages/config/pos.dart';
 import 'package:xmruw/widgets/labeled_text_input.dart';
 import 'package:xmruw/widgets/long_outlined_button.dart';
@@ -69,7 +68,6 @@ class _ItemPageState extends State<ItemPage> {
 
   bool inputValid() {
     final cur = currenctyCtrl.text.toUpperCase();
-    return (num.tryParse(priceCtrl.text) != null) &&
-        (usdPairs[cur] != null || cur == "USD" || cur == "XMR");
+    return (num.tryParse(priceCtrl.text) != null);
   }
 }

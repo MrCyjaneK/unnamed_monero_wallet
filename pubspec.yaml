@@ -24,30 +24,29 @@ dependencies:
   file_picker: 6.1.1
   mobile_scanner: 4.0.0
   anonero_backup:
-    hosted: https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
-    version: 0.0.14
+    git:
+      url: https://github.com/MrCyjaneK/anonero_backup
+      ref: 0bcca6597c5887a4ed7f402a3d1d2cc92eed50f5
   flutter_svg: 2.0.9
   archive: 3.4.10
   tor_binary:
-    hosted: https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
-    version: 4.7.14
+    git:
+      url: https://github.com/MrCyjaneK/flutter-tor_binary
+      ref: da00d4f4c3918e78734bbe0e9496559fc342d8b5
   disable_battery_optimization: ^1.1.1
   flutter_background_service: 5.0.5
   flutter_background_service_android: 6.2.2
   flutter_local_notifications: 16.3.2
-  permission_handler: ^11.1.0
+  permission_handler: 11.1.0
   libstealth_calculator:
-    hosted: https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
-    version: 0.0.4
+    git:
+      url: https://github.com/MrCyjaneK/libstealth_calculator
+      ref: fafdb3d215dbc09f1901062cb1c43bfcac374844
   path: any
-  offline_market_data:
-    hosted: https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/
-    version: ^2024.06.05+381
-    # path: ../offline_market_data
   flex_color_picker: 3.3.1
   polyseed: 0.0.4
   introduction_screen: 3.1.14
-  http: ^1.2.1
+  http: 1.2.1
 
 
 dev_dependencies:

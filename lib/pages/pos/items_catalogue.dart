@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:offline_market_data/offline_market_data.dart';
 import 'package:xmruw/pages/config/pos.dart';
 import 'package:xmruw/pages/pos/item_page.dart';
 import 'package:xmruw/tools/format_monero.dart';
@@ -48,20 +47,20 @@ class ItemsCataloguePage extends StatelessWidget {
 }
 
 double? getPriceIn(String target, double amount, String source) {
-  target = target.toUpperCase();
-  source = source.toUpperCase();
-  if (target == source) return amount;
-  if (source == "USD" && target == "XMR") {
-    return amount / CurrencyDataXMRxUSD().getPrice(null)!;
-  }
-  if (source == "XMR" && target == "USD") {
-    return amount * CurrencyDataXMRxUSD().getPrice(null)!;
-  }
-  for (var k in usdPairs.keys) {
-    if (k == source) {
-      final usdAmt = amount / usdPairs[k]!.getPrice(null)!;
-      return usdAmt / CurrencyDataXMRxUSD().getPrice(null)!;
-    }
-  }
+  // target = target.toUpperCase();
+  // source = source.toUpperCase();
+  // if (target == source) return amount;
+  // if (source == "USD" && target == "XMR") {
+  //   return amount / CurrencyDataXMRxUSD().getPrice(null)!;
+  // }
+  // if (source == "XMR" && target == "USD") {
+  //   return amount * CurrencyDataXMRxUSD().getPrice(null)!;
+  // }
+  // for (var k in usdPairs.keys) {
+  //   if (k == source) {
+  //     final usdAmt = amount / usdPairs[k]!.getPrice(null)!;
+  //     return usdAmt / CurrencyDataXMRxUSD().getPrice(null)!;
+  //   }
+  // }
   return null;
 }

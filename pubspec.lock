@@ -4,11 +4,12 @@ packages:
   anonero_backup:
     dependency: "direct main"
     description:
-      name: anonero_backup
-      sha256: "73e8a89fe8fe2ffb72d0f4565e887f72988a8d58c6cdcaa5d324844078f744a8"
-      url: "https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/"
-    source: hosted
-    version: "0.0.14"
+      path: "."
+      ref: "0bcca6597c5887a4ed7f402a3d1d2cc92eed50f5"
+      resolved-ref: "0bcca6597c5887a4ed7f402a3d1d2cc92eed50f5"
+      url: "https://github.com/MrCyjaneK/anonero_backup"
+    source: git
+    version: "0.0.0"
   archive:
     dependency: "direct main"
     description:
@@ -443,11 +444,12 @@ packages:
   libstealth_calculator:
     dependency: "direct main"
     description:
-      name: libstealth_calculator
-      sha256: "16fb567bdea7576572b6d1e8af25f527549b2f8b76b2b0d485ef9190029df4cd"
-      url: "https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/"
-    source: hosted
-    version: "0.0.4"
+      path: "."
+      ref: fafdb3d215dbc09f1901062cb1c43bfcac374844
+      resolved-ref: fafdb3d215dbc09f1901062cb1c43bfcac374844
+      url: "https://github.com/MrCyjaneK/libstealth_calculator"
+    source: git
+    version: "0.0.1"
   lints:
     dependency: transitive
     description:
@@ -513,14 +515,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.0"
-  offline_market_data:
-    dependency: "direct main"
-    description:
-      name: offline_market_data
-      sha256: a7ae25e728d9f93f35745fae761b2b288a9e93bdd613db6c2d6c0fb22931c7c9
-      url: "https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/"
-    source: hosted
-    version: "2024.06.05+381"
   path:
     dependency: "direct main"
     description:
@@ -589,10 +583,10 @@ packages:
     dependency: "direct main"
     description:
       name: permission_handler
-      sha256: "74e962b7fad7ff75959161bb2c0ad8fe7f2568ee82621c9c2660b751146bfe44"
+      sha256: "860c6b871c94c78e202dc69546d4d8fd84bd59faeb36f8fb9888668a53ff4f78"
       url: "https://pub.dev"
     source: hosted
-    version: "11.3.0"
+    version: "11.1.0"
   permission_handler_android:
     dependency: transitive
     description:
@@ -753,10 +747,11 @@ packages:
   tor_binary:
     dependency: "direct main"
     description:
-      name: tor_binary
-      sha256: ed78c6fdb03217a053ae5fbe16d55a5f9847ce14bd67337f4bcf72b96f421086
-      url: "https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/"
-    source: hosted
+      path: "."
+      ref: da00d4f4c3918e78734bbe0e9496559fc342d8b5
+      resolved-ref: da00d4f4c3918e78734bbe0e9496559fc342d8b5
+      url: "https://github.com/MrCyjaneK/flutter-tor_binary"
+    source: git
     version: "4.7.14"
   typed_data:
     dependency: transitive

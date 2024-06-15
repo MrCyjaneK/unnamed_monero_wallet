@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:offline_market_data/offline_market_data.dart';
 import 'package:xmruw/pages/config/base.dart';
 
 class CurrencySettingsPage extends StatefulWidget {
@@ -35,7 +34,7 @@ class _CurrencySettingsPageState extends State<CurrencySettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final keys = usdPairs.keys.toList();
+    final keys = []; //usdPairs.keys.toList();
     return Scaffold(
       appBar: AppBar(
         title: const Text("Change currency"),
@@ -49,13 +48,14 @@ class _CurrencySettingsPageState extends State<CurrencySettingsPage> {
       body: ListView.builder(
         itemCount: keys.length,
         itemBuilder: (context, index) {
-          final key = keys[index];
-          final xmrPrice = CurrencyDataXMRxUSD().getPrice(currentDate)!;
-          var price = usdPairs[key]?.getPrice(currentDate);
-          if (price != null) {
-            price *= xmrPrice;
-          }
-          return _getTile(price, key);
+          // final key = keys[index];
+          // final xmrPrice = CurrencyDataXMRxUSD().getPrice(currentDate)!;
+          // var price = usdPairs[key]?.getPrice(currentDate);
+          // if (price != null) {
+          //   price *= xmrPrice;
+          // }
+          // return _getTile(price, key);\
+          return const Text("Work In Progress");
         },
       ),
     );
