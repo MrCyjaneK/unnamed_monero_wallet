@@ -22,7 +22,7 @@ dependencies:
       ref: 7b301d37215c79059ccf3b7aefddc3842d4ef9d4
   cr_file_saver: 0.0.2
   file_picker: 6.2.1
-  mobile_scanner: 4.0.1
+  mobile_scanner: 5.1.1
   anonero_backup:
     git:
       url: https://github.com/MrCyjaneK/anonero_backup
