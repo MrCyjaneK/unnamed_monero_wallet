@@ -64,6 +64,9 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
   int? height;
   final passphraseEncryptionCtrl = TextEditingController();
 
+  final primaryAddressCtrl = TextEditingController();
+  final privateViewKeyCtrl = TextEditingController();
+
   PinInput pin = PinInput();
   late final tCtrl = TextEditingController(text: pin.value);
 
@@ -306,20 +309,22 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
             decoration: pageDecoration,
           ),
         if ((type == SetupWalletType.normal ||
-                type == SetupWalletType.offline) &&
+                type == SetupWalletType.offline ||
+                type == SetupWalletType.viewOnly) &&
             restore == null)
           PageViewModel(
             title: "What to do?",
             bodyWidget: Column(
               children: [
-                LongElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      restore = false;
-                    });
-                  },
-                  text: "Create New Wallet",
-                ),
+                if (type != SetupWalletType.viewOnly)
+                  LongElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        restore = false;
+                      });
+                    },
+                    text: "Create New Wallet",
+                  ),
                 const SizedBox(height: 16),
                 LongElevatedButton(
                   onPressed: () {
@@ -338,17 +343,46 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
             title: "Seed information",
             bodyWidget: Column(
               children: [
-                LabeledTextInput(
-                  label: "",
-                  ctrl: seedCtrl,
-                  minLines: 8,
-                  maxLines: 8,
-                  onEdit: () {
-                    setState(() {
-                      seed = seedCtrl.text.trim().split(" ");
-                    });
-                  },
-                ),
+                if (type != SetupWalletType.viewOnly)
+                  LabeledTextInput(
+                    label: "",
+                    ctrl: seedCtrl,
+                    minLines: 8,
+                    maxLines: 8,
+                    onEdit: () {
+                      setState(() {
+                        seed = seedCtrl.text.trim().split(" ");
+                      });
+                    },
+                  ),
+                if (type == SetupWalletType.viewOnly)
+                  LabeledTextInput(
+                    label: "Primary Address",
+                    ctrl: primaryAddressCtrl,
+                    onEdit: () {
+                      setState(() {});
+                    },
+                  ),
+                if (type == SetupWalletType.viewOnly)
+                  LabeledTextInput(
+                    label: "Secret View Key",
+                    ctrl: privateViewKeyCtrl,
+                    onEdit: () {
+                      setState(() {
+                        seed = seedCtrl.text.trim().split(" ");
+                      });
+                    },
+                  ),
+                if (type == SetupWalletType.viewOnly)
+                  LabeledTextInput(
+                    label: "Restore Height",
+                    ctrl: heightCtrl,
+                    onEdit: () {
+                      setState(() {
+                        height = int.tryParse(heightCtrl.text.trim());
+                      });
+                    },
+                  ),
                 if (seed.length > 16 + 1)
                   LabeledTextInput(
                     label: "RESTORE HEIGHT",
@@ -359,7 +393,7 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
                       });
                     },
                   ),
-                if (!showAdvancedRestore)
+                if (!showAdvancedRestore && type != SetupWalletType.viewOnly)
                   Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -389,7 +423,8 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
           ),
         if ((seed.length == 25 && height != null) ||
             (seed.length == 16) ||
-            (restore == false))
+            (restore == false) ||
+            (type == SetupWalletType.viewOnly && height != null))
           PageViewModel(
             title: "Wallet Password",
             bodyWidget: Column(
@@ -429,7 +464,7 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
           ),
         if (didWalletOperationStart)
           PageViewModel(
-            title: "Restoring",
+            title: (restore == true) ? "Restoring" : "Creating",
             bodyWidget: Column(
               children: List.generate(
                   progressDisplay.length + (progressFailed ? 1 : 0), (index) {
@@ -677,9 +712,8 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
           kdfRounds: 1,
         ).address,
       );
-    } else {
+    } else if (seed.length == 25) {
       final wmPtrAddress = wmPtr.address;
-      _addProgress("height: $height");
       final returnAddress = monero.WalletManager_recoveryWallet(
         ffi.Pointer.fromAddress(wmPtrAddress),
         path: walletPath,
@@ -689,6 +723,15 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
         seedOffset: offset,
       ).address;
       walletPtr = ffi.Pointer.fromAddress(returnAddress);
+    } else {
+      walletPtr = monero.WalletManager_createWalletFromKeys(wmPtr,
+          path: await getMainWalletPath(),
+          password: pin.value,
+          restoreHeight: height ?? 0,
+          addressString: primaryAddressCtrl.text,
+          viewKeyString: privateViewKeyCtrl.text,
+          spendKeyString: "",
+          nettype: 0);
     }
     if (await _shouldFailWalletError()) return;
     await _addProgress("Initializing wallet (offline)");
@@ -728,7 +771,6 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
 
       await _addProgress("Closing wallet");
       monero.WalletManager_closeWallet(wmPtr, walletPtr!, true);
-      if (await _shouldFailWalletError()) return;
 
       await _addProgress("Opening wallet");
       walletPtr = monero.WalletManager_openWallet(
