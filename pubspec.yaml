@@ -28,7 +28,7 @@ dependencies:
       url: https://github.com/MrCyjaneK/anonero_backup
       ref: 0bcca6597c5887a4ed7f402a3d1d2cc92eed50f5
   flutter_svg: 2.0.10+1
-  archive: 3.4.10
+  archive: 3.6.1
   tor_binary:
     git:
       url: https://github.com/MrCyjaneK/flutter-tor_binary
