@@ -387,7 +387,9 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
             ),
             decoration: pageDecoration,
           ),
-        if ((seed.length == 25 && height != null) || (seed.length == 16))
+        if ((seed.length == 25 && height != null) ||
+            (seed.length == 16) ||
+            (restore == false))
           PageViewModel(
             title: "Wallet Password",
             bodyWidget: Column(
@@ -412,7 +414,11 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
                   },
                   showConfirm: _showConfirm,
                   nextPage: () async {
-                    _beginRestore();
+                    if (restore == true) {
+                      _beginRestore();
+                    } else {
+                      _beginCreate();
+                    }
                     await Future.delayed(const Duration(milliseconds: 133));
                     _introKey.currentState?.next();
                   },
@@ -421,7 +427,7 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
             ),
             decoration: pageDecoration,
           ),
-        if (didRestoreStart)
+        if (didWalletOperationStart)
           PageViewModel(
             title: "Restoring",
             bodyWidget: Column(
@@ -512,7 +518,7 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
   }
 
   final walletMutex = Mutex();
-  bool didRestoreStart = false;
+  bool didWalletOperationStart = false;
   List<String> progressDisplay = [];
   bool progressFailed = false;
   bool progressCompleted = false;
@@ -540,13 +546,108 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
     });
   }
 
-  Future<void> _beginRestore() async {
+  Future<void> _beginCreate() async {
     _resetProgress();
-    if (didRestoreStart) {
+    if (didWalletOperationStart) {
       await _addProgress("Waiting for wallet file lock");
     }
     setState(() {
-      didRestoreStart = true;
+      didWalletOperationStart = true;
+    });
+    await walletMutex.acquire();
+    final walletPath = await getMainWalletPath();
+    if (await File(walletPath).exists()) {
+      await _addProgress("Deleting old wallet cache");
+      await File(walletPath).delete();
+    }
+    if (await File("$walletPath.keys").exists()) {
+      await _addProgress("Deleting old wallet keys");
+      await File("$walletPath.keys").delete();
+    }
+    await _addProgress("Generating polyseed");
+    final polyseed = monero.Wallet_createPolyseed();
+
+    await _addProgress("Creating wallet from polyseed");
+
+    walletPtr = monero.WalletManager_createWalletFromPolyseed(
+      wmPtr,
+      path: await getMainWalletPath(),
+      password: pin.value,
+      mnemonic: polyseed,
+      seedOffset: passphraseEncryptionCtrl.text,
+      newWallet: true,
+      restoreHeight: 0,
+      kdfRounds: 1,
+    );
+    if (await _shouldFailWalletError()) return;
+    await _addProgress("Initializing wallet");
+    final wPtrAddr = walletPtr!.address;
+    final n = await node.NodeStore.getCurrentNode();
+    final ProxyStore proxy = (await ProxyStore.getProxy());
+
+    final proxyAddress =
+        ((n == null || config.disableProxy) ? "" : proxy.getAddress(n.network));
+    print("proxyAddress: $proxyAddress");
+    monero.Wallet_init(
+      walletPtr!,
+      daemonAddress: n?.address ?? "",
+      daemonUsername: n?.username ?? "",
+      daemonPassword: n?.password ?? "",
+      proxyAddress: proxyAddress,
+    );
+
+    if (await _shouldFailWalletError()) return;
+
+    await _addProgress("Triggering rescan");
+
+    monero.Wallet_rescanBlockchainAsync(walletPtr!);
+    if (await _shouldFailWalletError()) return;
+
+    monero.Wallet_refreshAsync(walletPtr!);
+    if (await _shouldFailWalletError()) return;
+
+    monero.Wallet_rescanBlockchainAsync(walletPtr!);
+    if (await _shouldFailWalletError()) return;
+
+    monero.Wallet_refreshAsync(walletPtr!);
+    if (await _shouldFailWalletError()) return;
+
+    monero.Wallet_startRefresh(walletPtr!);
+    if (await _shouldFailWalletError()) return;
+
+    monero.Wallet_refreshAsync(walletPtr!);
+    if (await _shouldFailWalletError()) return;
+
+    await _addProgress("Storing wallet");
+    monero.Wallet_store(walletPtr!);
+    if (await _shouldFailWalletError()) return;
+
+    setState(() {
+      progressCompleted = true;
+    });
+    walletMutex.release();
+    Future.delayed(const Duration(milliseconds: 722)).then((value) {
+      WalletHome.push(context);
+    });
+  }
+
+  Future<bool> _shouldFailWalletError() async {
+    int status = monero.Wallet_status(walletPtr!);
+    if (status != 0) {
+      _failProgress(monero.Wallet_errorString(walletPtr!));
+      walletMutex.release();
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> _beginRestore() async {
+    _resetProgress();
+    if (didWalletOperationStart) {
+      await _addProgress("Waiting for wallet file lock");
+    }
+    setState(() {
+      didWalletOperationStart = true;
     });
     await walletMutex.acquire();
     final walletPath = await getMainWalletPath();
@@ -589,12 +690,7 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
       ).address;
       walletPtr = ffi.Pointer.fromAddress(returnAddress);
     }
-    int status = monero.Wallet_status(walletPtr!);
-    if (status != 0) {
-      _failProgress(monero.Wallet_errorString(walletPtr!));
-      walletMutex.release();
-      return;
-    }
+    if (await _shouldFailWalletError()) return;
     await _addProgress("Initializing wallet (offline)");
     final wPtrAddr = walletPtr!.address;
     final n = await node.NodeStore.getCurrentNode();
@@ -602,20 +698,11 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
       ffi.Pointer.fromAddress(wPtrAddr),
       daemonAddress: "",
     );
-    status = monero.Wallet_status(walletPtr!);
-    if (status != 0) {
-      _failProgress(monero.Wallet_errorString(walletPtr!));
-      walletMutex.release();
-      return;
-    }
+    if (await _shouldFailWalletError()) return;
+
     await _addProgress("Storing wallet");
     monero.Wallet_store(walletPtr!);
-    status = monero.Wallet_status(walletPtr!);
-    if (status != 0) {
-      _failProgress(monero.Wallet_errorString(walletPtr!));
-      walletMutex.release();
-      return;
-    }
+    if (await _shouldFailWalletError()) return;
 
     if (height != null) {
       await _addProgress("Setting refresh height");
@@ -623,51 +710,25 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
         walletPtr!,
         refresh_from_block_height: height!,
       );
-      if (status != 0) {
-        _failProgress(monero.Wallet_errorString(walletPtr!));
-        walletMutex.release();
-        return;
-      }
+      if (await _shouldFailWalletError()) return;
+
       await _addProgress("Triggering rescan");
 
       monero.Wallet_rescanBlockchainAsync(walletPtr!);
-      status = monero.Wallet_status(walletPtr!);
-      if (status != 0) {
-        _failProgress(monero.Wallet_errorString(walletPtr!));
-        walletMutex.release();
-        return;
-      }
+      if (await _shouldFailWalletError()) return;
 
       monero.Wallet_refreshAsync(walletPtr!);
-      status = monero.Wallet_status(walletPtr!);
-      if (status != 0) {
-        _failProgress(monero.Wallet_errorString(walletPtr!));
-        walletMutex.release();
-        return;
-      }
+      if (await _shouldFailWalletError()) return;
 
       monero.Wallet_rescanBlockchainAsync(walletPtr!);
-      if (status != 0) {
-        _failProgress(monero.Wallet_errorString(walletPtr!));
-        walletMutex.release();
-        return;
-      }
+      if (await _shouldFailWalletError()) return;
 
       monero.Wallet_refreshAsync(walletPtr!);
-      status = monero.Wallet_status(walletPtr!);
-      if (status != 0) {
-        _failProgress(monero.Wallet_errorString(walletPtr!));
-        walletMutex.release();
-        return;
-      }
+      if (await _shouldFailWalletError()) return;
 
       await _addProgress("Closing wallet");
       monero.WalletManager_closeWallet(wmPtr, walletPtr!, true);
-      if (status != 0) {
-        _failProgress(monero.Wallet_errorString(walletPtr!));
-        walletMutex.release();
-        return;
-      }
+      if (await _shouldFailWalletError()) return;
 
       await _addProgress("Opening wallet");
       walletPtr = monero.WalletManager_openWallet(
@@ -675,6 +736,7 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
         path: walletPath,
         password: pinVal,
       );
+      if (await _shouldFailWalletError()) return;
 
       await _addProgress("Initializing wallet");
       final wPtrAddr = walletPtr!.address;
@@ -697,86 +759,38 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
         walletPtr!,
         refresh_from_block_height: height!,
       );
-      if (status != 0) {
-        _failProgress(monero.Wallet_errorString(walletPtr!));
-        walletMutex.release();
-        return;
-      }
+      if (await _shouldFailWalletError()) return;
+
       await _addProgress("Triggering rescan");
 
       monero.Wallet_rescanBlockchainAsync(walletPtr!);
-      status = monero.Wallet_status(walletPtr!);
-      if (status != 0) {
-        _failProgress(monero.Wallet_errorString(walletPtr!));
-        walletMutex.release();
-        return;
-      }
+      if (await _shouldFailWalletError()) return;
 
       monero.Wallet_refreshAsync(walletPtr!);
-      status = monero.Wallet_status(walletPtr!);
-      if (status != 0) {
-        _failProgress(monero.Wallet_errorString(walletPtr!));
-        walletMutex.release();
-        return;
-      }
+      if (await _shouldFailWalletError()) return;
 
       monero.Wallet_rescanBlockchainAsync(walletPtr!);
-      if (status != 0) {
-        _failProgress(monero.Wallet_errorString(walletPtr!));
-        walletMutex.release();
-        return;
-      }
+      if (await _shouldFailWalletError()) return;
 
       monero.Wallet_refreshAsync(walletPtr!);
-      status = monero.Wallet_status(walletPtr!);
-      if (status != 0) {
-        _failProgress(monero.Wallet_errorString(walletPtr!));
-        walletMutex.release();
-        return;
-      }
+      if (await _shouldFailWalletError()) return;
+
       monero.Wallet_startRefresh(walletPtr!);
-      status = monero.Wallet_status(walletPtr!);
-      if (status != 0) {
-        _failProgress(monero.Wallet_errorString(walletPtr!));
-        walletMutex.release();
-        return;
-      }
+      if (await _shouldFailWalletError()) return;
 
       monero.Wallet_refreshAsync(walletPtr!);
-      status = monero.Wallet_status(walletPtr!);
-      if (status != 0) {
-        _failProgress(monero.Wallet_errorString(walletPtr!));
-        walletMutex.release();
-        return;
-      }
+      if (await _shouldFailWalletError()) return;
 
       await _addProgress("Storing wallet");
       monero.Wallet_store(walletPtr!);
-      status = monero.Wallet_status(walletPtr!);
-      if (status != 0) {
-        _failProgress(monero.Wallet_errorString(walletPtr!));
-        walletMutex.release();
-        return;
-      }
+      if (await _shouldFailWalletError()) return;
     }
 
-    // await _addProgress("Closing wallet");
-    // monero.WalletManager_closeWallet(wmPtr, walletPtr!, true);
-    // if (status != 0) {
-    //   _failProgress(monero.Wallet_errorString(walletPtr!));
-    //   walletMutex.release();
-    //   return;
-    // }
     setState(() {
       progressCompleted = true;
     });
     walletMutex.release();
     Future.delayed(const Duration(milliseconds: 722)).then((value) {
-      // PinScreen.pushReplace(
-      //   context,
-      //   PinScreenFlag.openMainWallet,
-      //   passphrase: '',
-      // );
       WalletHome.push(context);
     });
   }
