@@ -1,0 +1,2 @@
+-dontwarn net.freehaven.tor.control.RawEventListener
+-dontwarn net.freehaven.tor.control.TorControlConnection
