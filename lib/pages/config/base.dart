@@ -58,6 +58,8 @@ class Config {
     this.autoSave = true,
     this.showExtraOptions = false,
     this.enableStaticOnlineServices = true,
+    this.staticOnlineServicesOverTor = false,
+    this.enableDevicePreview = false,
   });
 
   final String confPath;
@@ -96,6 +98,8 @@ class Config {
   bool autoSave;
   bool showExtraOptions;
   bool enableStaticOnlineServices;
+  bool staticOnlineServicesOverTor;
+  bool enableDevicePreview;
 
   void save() {
     file.writeAsString(json.encode(toJson()));
@@ -199,6 +203,12 @@ class Config {
     if (json['enableStaticOnlineServices'] is bool) {
       c.enableStaticOnlineServices = json['enableStaticOnlineServices'];
     }
+    if (json['staticOnlineServicesOverTor'] is bool) {
+      c.staticOnlineServicesOverTor = json['staticOnlineServicesOverTor'];
+    }
+    if (json['enableDevicePreview'] is bool) {
+      c.enableDevicePreview = json['enableDevicePreview'];
+    }
     return c;
   }
 
@@ -235,6 +245,8 @@ class Config {
       "autoSave": autoSave,
       "showExtraOptions": showExtraOptions,
       "enableStaticOnlineServices": enableStaticOnlineServices,
+      "staticOnlineServicesOverTor": staticOnlineServicesOverTor,
+      "enableDevicePreview": enableDevicePreview,
     };
   }
 }

@@ -113,7 +113,7 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
                 ConfigElement(
                   text: "Enable anonymous online services",
                   description:
-                      "Query data such as node list, prices and other static data from xmruw.nettaki  server",
+                      "Query data such as node list, prices and other static data from xmruw.net",
                   onClick: () {
                     config.enableStaticOnlineServices =
                         !config.enableStaticOnlineServices;
@@ -121,6 +121,18 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
                     setState(() {});
                   },
                   value: config.enableStaticOnlineServices,
+                ),
+                ConfigElement(
+                  text: "Online services over tor",
+                  description:
+                      "When downloading static data from xmruw.net use Tor proxy.",
+                  onClick: () {
+                    config.staticOnlineServicesOverTor =
+                        !config.staticOnlineServicesOverTor;
+                    config.save();
+                    setState(() {});
+                  },
+                  value: config.staticOnlineServicesOverTor,
                 ),
                 if (!privacyStepShowOtherOptions)
                   Row(
@@ -250,33 +262,50 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
           PageViewModel(
             title: "Select Node",
             bodyWidget: (!showNodes)
-                ? LongElevatedButton(
-                    onPressed: () async {
-                      await reloadNodes();
-                      if (ns!.nodes.isEmpty) {
-                        final nListStr =
-                            (await rootBundle.loadString(R.ASSETS_NODES_TXT))
+                ? Column(
+                    children: [
+                      LongElevatedButton(
+                        onPressed: () async {
+                          await reloadNodes();
+                          if (ns!.nodes.isEmpty) {
+                            final nListStr = (await rootBundle
+                                    .loadString(R.ASSETS_NODES_TXT))
                                 .trim();
-                        final nList = nListStr.split("\n");
-                        nList.shuffle();
-                        for (var n in nList) {
-                          await node.NodeStore.saveNode(
-                              node.Node(
-                                address: n,
-                                username: '',
-                                password: '',
-                                id: node.NodeStore.getUniqueId(),
-                              ),
-                              current: true);
-                        }
-                      }
-                      await reloadNodes();
-                      setState(() {
-                        showNodes = !showNodes;
-                      });
-                    },
-                    text: "Show Nodes",
-                    backgroundColor: Colors.white,
+                            final nList = nListStr.split("\n");
+                            nList.shuffle();
+                            for (var n in nList) {
+                              await node.NodeStore.saveNode(
+                                  node.Node(
+                                    address: n,
+                                    username: '',
+                                    password: '',
+                                    id: node.NodeStore.getUniqueId(),
+                                  ),
+                                  current: true);
+                            }
+                          }
+                          await reloadNodes();
+                          setState(() {
+                            showNodes = !showNodes;
+                          });
+                        },
+                        text: "Load Default Nodes",
+                        backgroundColor: Colors.white,
+                      ),
+                      LongElevatedButton(
+                        onPressed: () async {
+                          await AddNodeScreen.push(context);
+                          reloadNodes();
+                          Future.delayed(const Duration(milliseconds: 222))
+                              .then((value) => reloadNodes());
+                          setState(() {
+                            showNodes = !showNodes;
+                          });
+                        },
+                        text: "Add Custom Node",
+                        backgroundColor: Colors.white,
+                      ),
+                    ],
                   )
                 : Column(
                     children: [

@@ -211,7 +211,7 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
             ConfigElement(
               text: "Enable anonymous online services",
               description:
-                  "Query data such as node list, prices and other static data from xmruw.nettaki  server",
+                  "Query data such as node list, prices and other static data from xmruw.net",
               onClick: () {
                 config.enableStaticOnlineServices =
                     !config.enableStaticOnlineServices;
@@ -219,6 +219,28 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
                 setState(() {});
               },
               value: config.enableStaticOnlineServices,
+            ),
+            ConfigElement(
+              text: "Online services over tor",
+              description:
+                  "When downloading static data from xmruw.net use Tor proxy.",
+              onClick: () {
+                config.staticOnlineServicesOverTor =
+                    !config.staticOnlineServicesOverTor;
+                config.save();
+                setState(() {});
+              },
+              value: config.staticOnlineServicesOverTor,
+            ),
+            ConfigElement(
+              text: "Enable Device Preview",
+              description: "Useful for UI preview",
+              onClick: () {
+                config.enableDevicePreview = !config.enableDevicePreview;
+                config.save();
+                setState(() {});
+              },
+              value: config.enableDevicePreview,
             ),
           ],
         ),

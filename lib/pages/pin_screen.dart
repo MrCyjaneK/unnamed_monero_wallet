@@ -424,7 +424,6 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
     });
     if (Platform.isAndroid) await Permission.notification.request();
     unawaited(isOfflineRefresh());
-    unawaited(showServiceNotification());
     if (config.autoSave) {
       _doAutoSaveStuff();
     }

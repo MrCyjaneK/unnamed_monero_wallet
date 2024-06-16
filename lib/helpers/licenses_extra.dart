@@ -88,7 +88,6 @@ String getLicenseName(String pkg) => switch (pkg) {
       "win32" ||
       "xdg_directories" =>
         "BSD-3-Clause",
-      "bytewords" || "offline_market_data" => "Proprietary",
       "clock" || "fake_async" || "material_color_utilities" => "Apache-2.0",
       "dbus" => "MPL-2.0",
       "monero" ||
@@ -155,7 +154,6 @@ final importantLicenses = [
   "permission_handler",
   "libstealth_calculator",
   "path",
-  "offline_market_data",
   "flex_color_picker",
   "unnamed_monero_wallet",
   "monero_c"

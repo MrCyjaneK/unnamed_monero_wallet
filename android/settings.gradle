@@ -23,7 +23,7 @@ pluginManagement {
 
 plugins {
     id "dev.flutter.flutter-plugin-loader" version "1.0.0"
-    id "com.android.application" version "7.4.2" apply false
+    id "com.android.application" version "8.5.0" apply false
     // If anybody **EVER** tries to bump this I'll find you
     // no but seriously, this requires also bumping minSdkVersion
     // for reasons unknown to me. I'm staying on 1.8.22 for now.

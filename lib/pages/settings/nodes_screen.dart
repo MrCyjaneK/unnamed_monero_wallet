@@ -1,12 +1,17 @@
-import 'dart:convert';
+import 'dart:ffi';
+import 'dart:isolate';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:monero/monero.dart' as monero;
+import 'package:mutex/mutex.dart';
+import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/pin_screen.dart';
 import 'package:xmruw/pages/settings/add_node_screen.dart';
 import 'package:xmruw/pages/wallet/settings_page.dart';
 import 'package:xmruw/tools/node.dart';
+import 'package:xmruw/tools/proxy.dart';
 import 'package:xmruw/tools/show_alert.dart';
+import 'package:xmruw/tools/wallet_manager.dart';
 
 class NodesScreen extends StatefulWidget {
   const NodesScreen({super.key});
@@ -206,6 +211,8 @@ class NodeStatusCard extends StatefulWidget {
   State<NodeStatusCard> createState() => _NodeStatusCardState();
 }
 
+final walletManagerNodeMutex = Mutex();
+
 class _NodeStatusCardState extends State<NodeStatusCard> {
   int? height;
   int status = 0;
@@ -217,26 +224,30 @@ class _NodeStatusCardState extends State<NodeStatusCard> {
       height = null;
       error = "";
     });
-    final headers = {
-      'Content-Type': 'application/json',
-    };
+    await walletManagerNodeMutex.acquire();
+    final ProxyStore proxy = (await ProxyStore.getProxy());
+    final proxyAddress =
+        ((config.disableProxy) ? "" : proxy.getAddress(widget.node.network));
+    monero.WalletManager_setProxy(wmPtr, proxyAddress);
+    monero.WalletManager_setDaemonAddress(wmPtr, widget.node.address);
 
-    const data = '{"jsonrpc":"2.0","id":"0","method":"get_block_count"}';
-
-    final url = Uri.parse('${widget.node.address}/json_rpc');
-    try {
-      final res = await http.post(url, headers: headers, body: data);
-      final jsonData = json.decode(res.body);
-      if (!mounted) return;
-      setState(() {
-        status = res.statusCode;
-        height = jsonData["result"]["count"];
-      });
-    } catch (e) {
-      if (!mounted) return;
+    final wmPtrAddr = wmPtr.address;
+    final remoteHeight = await Isolate.run(() {
+      return monero.WalletManager_blockchainHeight(
+          Pointer.fromAddress(wmPtrAddr));
+    });
+    final err = monero.WalletManager_errorString(wmPtr);
+    if (!mounted) return;
+    if (err != "") {
       setState(() {
         status = 500;
-        error = e.toString();
+        error = err;
+      });
+    } else {
+      setState(() {
+        height = remoteHeight;
+        error = "";
+        status = 200;
       });
     }
   }
