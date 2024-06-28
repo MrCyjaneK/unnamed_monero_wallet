@@ -10,13 +10,20 @@ If you want to test the wallet you can join any of these rooms, messages are bri
 
 Found a bug? Please use Gitea or Github issue tracker to report them.
 
-### Android
+### Building
 
-Android has first-class support, it should work out of the box in all situations.
+Easiest way to build is to use a devcontainer, you can do it by pressing `,` if you are on github, or by using Dev Containers plugin for the IDE of your choice.
 
-### Linux support
+Otherwise you need
 
-Linux support is experimental and undocumented.
+- flutter (version can be found in `.fvmrc`)
+
+Then just build the app:
+
+- android: `make libs_android_download android`
+- x86_64 linux: `make linux FLUTTER_ARCH=x64`
+
+For other platforms just run `flutter build`
 
 ### Donations
 
