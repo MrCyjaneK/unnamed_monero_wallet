@@ -15,4 +15,4 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
 RUN curl -fsSL https://fvm.app/install.sh | bash \
     && echo -n '#!/bin/bash\nfvm flutter $@' > /bin/flutter \
     && echo -n '#!/bin/bash\nfvm dart $@' > /bin/dart \
-    && chmod +x /bin/{flutter,dart}
+    && chmod +x /bin/flutter /bin/dart
