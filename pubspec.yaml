@@ -24,7 +24,7 @@ dependencies:
     git:
       url: https://github.com/crit-iq/cr_file_saver
       ref: 1db62fd53adf9b34d4b769788d6c4be4fa416817
-  file_picker: 6.2.1
+  file_picker: 8.0.5
   mobile_scanner: 5.1.1
   anonero_backup:
     git:

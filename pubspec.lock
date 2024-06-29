@@ -99,6 +99,14 @@ packages:
       url: "https://github.com/crit-iq/cr_file_saver"
     source: git
     version: "0.0.2+1"
+  cross_file:
+    dependency: transitive
+    description:
+      name: cross_file
+      sha256: "55d7b444feb71301ef6b8838dbc1ae02e63dd48c8773f3810ff53bb1e2945b32"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.4+1"
   crypto:
     dependency: transitive
     description:
@@ -183,10 +191,10 @@ packages:
     dependency: "direct main"
     description:
       name: file_picker
-      sha256: "1bbf65dd997458a08b531042ec3794112a6c39c07c37ff22113d2e7e4f81d4e4"
+      sha256: "2ca051989f69d1b2ca012b2cf3ccf78c70d40144f0861ff2c063493f7c8c3d45"
       url: "https://pub.dev"
     source: hosted
-    version: "6.2.1"
+    version: "8.0.5"
   flex_color_picker:
     dependency: "direct main"
     description:
