@@ -88,3 +88,4 @@ linux/CMakeLists.txt
 windows/CMakeLists.txt
 debian/debian.yaml.txt
 elinux/sailfishos.spec
+pubspec.yaml

@@ -1,8 +1,6 @@
 include .env
 
 MONERO_C_TAG=v0.18.3.3-RC47
-LIBCPP_SHARED_SO_TAG=latest-RC1
-LIBCPP_SHARED_SO_NDKVERSION=r17c
 
 .PHONY: android
 android:

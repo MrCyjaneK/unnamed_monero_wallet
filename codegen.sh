@@ -3,9 +3,12 @@
 # please keep list of all defines below:
 # LIBSTEALTH_CALCULATOR - build stealthmode calculator
 # COIN_MONERO - build monero version
-# COIN_WOWNERO - build wownero version 
+# COIN_WOWNERO - build wownero version
 #note: only one COIN_* can be set at a time
-
+set - -DXMRUW_VERSION_PLAIN=$(git describe --tags | sed -E 's/^v([0-9]+\.[0-9]+\.[0-9]+).*/\1/') "$@"
+set - -DXMRUW_VERSION_BUILDID=$(git rev-list --count HEAD) "$@"
+set - -DXMRUW_VERSION_COMBINED_PLUS=$(git describe --tags | sed -E 's/^v([0-9]+\.[0-9]+\.[0-9]+).*/\1/')+$(git rev-list --count HEAD) "$@"
+set - -DXMRUW_VERSION_PRETTY=$(git describe --tags --dirty) "$@"
 set -e
 
 FILES=$(( git status --short| grep '^?' | cut -d\  -f2- && git ls-files ) | sort -u | grep -E '\.pproc |\.pproc$')

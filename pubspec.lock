@@ -119,10 +119,10 @@ packages:
     dependency: "direct main"
     description:
       name: cupertino_icons
-      sha256: d57953e10f9f8327ce64a508a355f0b1ec902193f66288e8cb5070e7c47eeb2d
+      sha256: caac504f942f41dfadcf45229ce8c47065b93919a12739f20d6173a883c5ec73
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.6"
+    version: "1.0.2"
   dart_pubspec_licenses:
     dependency: transitive
     description:
@@ -289,10 +289,10 @@ packages:
     dependency: "direct dev"
     description:
       name: flutter_oss_licenses
-      sha256: "1219e0e03faac80e68a554b79447d4936c79081d698abca912cc123fb77094aa"
+      sha256: ab12d6a0df3796e05006f6a58e3e072a3c61c4682f6acb9410304c446d5199f8
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.2"
+    version: "3.0.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:

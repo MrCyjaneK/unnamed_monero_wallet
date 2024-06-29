@@ -1,5 +1,15 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "prConcurrentLimit": 100,
-    "prHourlyLimit": 20
+    "prHourlyLimit": 20,
+    "customManagers": [
+        {
+            "customType": "regex",
+            "description": "Update _VERSION variables in pub_versions",
+            "fileMatch": ["(^|/|\\.)pub_versions.pproch$", "(^|/)pub_versions.pproch\\.[^/]*$"],
+            "matchStrings": [
+              "# renovate: datasource=(?<datasource>[a-z-]+?)(?: depName=(?<depName>.+?))? packageName=(?<packageName>.+?)(?: versioning=(?<versioning>[a-z-]+?))?\\s(?:ENV|ARG) .+?_VERSION (?<currentValue>.+?)\\s"
+            ]
+        }
+    ]
 }
