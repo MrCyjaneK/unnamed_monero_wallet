@@ -1,19 +1,5 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "prConcurrentLimit": 100,
-    "prHourlyLimit": 20,
-    "packageRules": [
-        {
-            "matchPackageNames": [
-                "monero",
-                "monero_libs",
-                "bytewords",
-                "anonero_backup",
-                "tor_binary"
-            ],
-            "registryUrls": [
-                "https://git.mrcyjanek.net/api/packages/mrcyjanek/pub/"
-            ]
-        }
-    ]
+    "prHourlyLimit": 20
 }
