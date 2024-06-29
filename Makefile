@@ -49,7 +49,7 @@ version:
 
 .PHONY: lib/helpers/licenses.g.dart
 lib/helpers/licenses.g.dart:
-	dart pub run flutter_oss_licenses:generate.dart -o lib/helpers/licenses.g.dart
+	dart run flutter_oss_licenses:generate -o lib/helpers/licenses.g.dart
 
 libs_android_download:
 	./build_moneroc.sh --prebuild --coin monero --tag ${MONERO_C_TAG} --triplet x86_64-linux-android  --location android/app/src/main/jniLibs/x86_64

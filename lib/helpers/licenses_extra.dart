@@ -113,7 +113,7 @@ final extraLicenses = <Package>[
     license: "GPL-3.0",
     isMarkdown: false,
     isSdk: false,
-    isDirectDependency: true,
+    dependencies: [],
   ),
   const Package(
     name: 'monero_c',
@@ -125,11 +125,11 @@ final extraLicenses = <Package>[
     license: "GPL-3.0",
     isMarkdown: false,
     isSdk: false,
-    isDirectDependency: true,
+    dependencies: [],
   ),
 ];
 
-final allLicenses = <Package>[...ossLicenses, ...extraLicenses];
+final allLicenses = <Package>[...allDependencies, ...extraLicenses];
 
 final importantLicenses = [
   "flutter",
