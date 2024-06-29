@@ -1,8 +1,8 @@
 import 'dart:ffi';
-import 'dart:isolate';
 
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart' as monero;
+import 'package:monero/src/generated_bindings_monero.g.dart' as monero_gen;
 import 'package:mutex/mutex.dart';
 import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/pin_screen.dart';
@@ -232,10 +232,13 @@ class _NodeStatusCardState extends State<NodeStatusCard> {
     monero.WalletManager_setDaemonAddress(wmPtr, widget.node.address);
 
     final wmPtrAddr = wmPtr.address;
-    final remoteHeight = await Isolate.run(() {
-      return monero.WalletManager_blockchainHeight(
+    final remoteHeight = /*await Isolate.run(*/() {
+      final lib = monero_gen.MoneroC(DynamicLibrary.open(monero.libPath));
+      final ret = lib.MONERO_WalletManager_blockchainHeight(
           Pointer.fromAddress(wmPtrAddr));
-    });
+      return ret.toInt();
+    }();
+    // });
     final err = monero.WalletManager_errorString(wmPtr);
     if (!mounted) return;
     if (err != "") {

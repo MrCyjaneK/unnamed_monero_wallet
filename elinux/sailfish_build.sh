@@ -13,7 +13,7 @@ fi
 flutter-elinux pub get
 flutter-elinux build elinux --release
 
-./build_moneroc.sh --prebuild --coin monero --tag ${MONERO_C_TAG} --triplet $(uname -m)-linux-gnu --location $PWD/build/elinux/${FLUTTER_ARCH}/release/bundle/lib/
+./build_moneroc.sh --prebuild --coin monero --tag ${MONERO_C_TAG} --triplet $(uname -m)-meego-linux-gnu --location $PWD/build/elinux/${FLUTTER_ARCH}/release/bundle/lib/
 
 cp $HOME/SailfishOS/flutter-elinux/$(uname -m)/flutter-client build/elinux/${FLUTTER_ARCH}/release/bundle/flutter-client
 

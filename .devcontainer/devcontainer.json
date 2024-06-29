@@ -5,7 +5,13 @@
 	},
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
+	"features": {
+		"ghcr.io/devcontainers/features/desktop-lite": {
+            "password": "vscode",
+            "webPort": "6080",
+            "vncPort": "5901"
+        }
+	},
 
 	// Configure tool-specific properties.
 	"customizations": {
@@ -24,8 +30,15 @@
 	},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
-
+	"forwardPorts": [6080, 5901],
+    "portsAttributes": {
+        "5901": {
+            "label": "VNC"
+        },
+        "6080": {
+            "label": "Web VNC"
+        }
+    },
 
     "postCreateCommand": "yes | fvm flutter doctor"
 

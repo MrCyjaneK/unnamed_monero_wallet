@@ -19,10 +19,7 @@ linux:
 
 .PHONY: linux_debug_lib
 linux_debug_lib:
-	wget https://static.mrcyjanek.net/monero_c/${MONERO_C_TAG}/monero/${shell gcc -dumpmachine}_libwallet2_api_c.so.xz \
-		-O build/linux/${FLUTTER_ARCH}/debug/bundle/lib/libmonero_libwallet2_api_c.so.xz
-	-rm build/linux/${FLUTTER_ARCH}/debug/bundle/lib/libmonero_libwallet2_api_c.so
-	unxz -f build/linux/${FLUTTER_ARCH}/debug/bundle/lib/libmonero_libwallet2_api_c.so.xz
+	./build_moneroc.sh --prebuild --coin monero --tag ${MONERO_C_TAG} --triplet x86_64-linux-gnu  --location build/linux/*/debug/bundle/lib
 
 .PHONY: dev
 dev: libs
