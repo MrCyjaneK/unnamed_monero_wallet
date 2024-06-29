@@ -1,5 +1,9 @@
 FROM ghcr.io/cirruslabs/android-sdk:34
 
+# Fix the image
+
+RUN rm /root/.gitconfig
+
 # Install dependencies
 
 RUN apt update \
