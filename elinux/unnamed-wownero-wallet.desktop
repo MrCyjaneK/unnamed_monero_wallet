@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0.0+62
+Name=wowuw
+GenericName=wowuw
+Comment=wowuw wallet for SailfishOS
+Exec=/opt/unnamed-wownero-wallet/unnamed_wownero_wallet %U
+Terminal=false
+Type=Application
+Categories=Utility
+Keywords=Finance;
+Icon=unnamed_wownero_wallet
+
+[X-Sailjail]
+Sandboxing=Disabled

@@ -15,12 +15,10 @@ migrate_working_dir/
 *.ipr
 *.iws
 .idea/
-
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
 # is commented out by default.
 #.vscode/
-
 # Flutter/Dart/Pub related
 **/doc/api/
 **/ios/Flutter/.last_build_id
@@ -30,23 +28,63 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
-
 # Symbolication related
 app.*.symbols
-
 # Obfuscation related
 app.*.map.json
-
 # Android Studio will place build artifacts here
 /android/app/debug
 /android/app/profile
 /android/app/release
-
 assets/changelog.jsonp
-
 debian/debian.yaml
-
 # FVM Version Cache
 .fvm/
 ios/Flutter/Generated.xcconfig
 ios/Flutter/flutter_export_environment.sh
+# codegen.sh
+lib/legacy.dart
+lib/main_clean.dart
+lib/main.dart
+lib/pages/debug.dart
+lib/pages/pin_screen.dart
+lib/pages/settings/view_seed_page.dart
+lib/pages/setup/backup_restore.dart
+lib/pages/setup/polyseed_mnemonic.dart
+lib/pages/wallet/outputs_page.dart
+lib/pages/wallet/receive_screen.dart
+lib/pages/wallet/settings_page.dart
+lib/pages/wallet/spend_confirm.dart
+lib/pages/wallet/spend_screen.dart
+lib/pages/wallet/spend_success.dart
+lib/pages/wallet/subaddress_details.dart
+lib/pages/wallet/subaddress_page.dart
+lib/pages/wallet/transaction_details.dart
+lib/pages/wallet/transaction_list.dart
+lib/pages/wallet/wallet_home.dart
+lib/tools/is_view_only.dart
+lib/tools/monero/subaddress_label.dart
+lib/tools/proxy.dart
+lib/tools/wallet_lock.dart
+lib/tools/wallet_manager.dart
+lib/tools/wallet_ptr.dart
+lib/widgets/transaction_list/popup_menu.dart
+lib/widgets/transaction_list/transaction_item.dart
+lib/pages/anon/firstrun.dart
+lib/pages/settings/nodes_screen.dart
+lib/pages/scanner/base_scan.dart
+lib/pages/scanner/process_ur.dart
+lib/pages/debug/monero_dart_advanced.dart
+lib/pages/debug/monero_dart_core.dart
+lib/pages/debug/monero_dart_state.dart
+lib/pages/debug/multisig.dart
+lib/pages/debug/performance.dart
+lib/pages/debug/polyseed_dart_compat.dart
+lib/pages/debug/polyseed_test.dart
+lib/pages/crypto/crypto.dart
+elinux/CMakeLists.txt
+.env
+linux/CMakeLists.txt
+windows/CMakeLists.txt
+debian/debian.yaml.txt
+elinux/sailfishos.spec

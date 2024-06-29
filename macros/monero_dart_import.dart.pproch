@@ -1,0 +1,7 @@
+#if defined(COIN_MONERO)
+import 'package:monero/monero.dart' as coin;
+#elif defined(COIN_WOWNERO)
+import 'package:monero/wownero.dart' as coin;
+#else
+#error COIN_MONERO or COIN_WOWNERO
+#endif

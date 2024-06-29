@@ -1,0 +1,84 @@
+#include <macros/names.pproch>
+#if defined(COIN_MONERO)
+Name:       unnamed-monero-wallet
+#elif defined(COIN_WOWNERO)
+Name:       unnamed-wownero-wallet
+#endif
+Version:    1.0.0+100
+Release:    100
+Summary:    Unnamed CURRENCY_CAPITALIZED Wallet for SailfishOS
+License:    GPLv3
+BuildRequires: ffmpeg-tools
+Requires: maliit-framework-wayland-glib
+
+%description
+Unnamed CURRENCY_CAPITALIZED Wallet (xmruw.net) port for SailfishOS.
+
+%prep
+#pragma we have no source, so nothing here
+
+%build
+rm -rf files %{_datadir} || true
+mkdir files
+cp -r %{_bundledir}/* files
+# // */ so the compiler wont complain 
+#if defined(COIN_MONERO)
+# // */ so the compiler wont complain 
+cp %{_sourcedir}/elinux/unnamed-monero-wallet.desktop unnamed-monero-wallet.desktop
+#elif defined(COIN_WOWNERO)
+cp %{_sourcedir}/elinux/unnamed-wownero-wallet.desktop unnamed-wownero-wallet.desktop
+#endif
+cp %{_sourcedir}/assets/logo.png logo.png
+
+%install
+mkdir -p %{buildroot}%{_libdir}
+#if defined(COIN_MONERO)
+mv files/lib/monero_libwallet2_api_c.so %{buildroot}%{_libdir}
+mkdir -p %{buildroot}/opt/unnamed-monero-wallet
+cp -r files/* %{buildroot}/opt/unnamed-monero-wallet
+# // */ so the compiler wont complain 
+#elif defined(COIN_WOWNERO)
+mv files/lib/wownero_libwallet2_api_c.so %{buildroot}%{_libdir}
+mkdir -p %{buildroot}/opt/unnamed-wownero-wallet
+cp -r files/* %{buildroot}/opt/unnamed-wownero-wallet
+# // */ so the compiler wont complain 
+#endif
+
+mkdir -p %{buildroot}%{_datadir}/icons/hicolor/108x108/apps
+mkdir -p %{buildroot}%{_datadir}/icons/hicolor/128x128/apps
+mkdir -p %{buildroot}%{_datadir}/icons/hicolor/172x172/apps
+mkdir -p %{buildroot}%{_datadir}/icons/hicolor/86x86/apps
+#if defined(COIN_MONERO)
+ffmpeg -i logo.png -vf scale=108:108 %{buildroot}%{_datadir}/icons/hicolor/108x108/apps/unnamed_monero_wallet.png
+ffmpeg -i logo.png -vf scale=128:128 %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/unnamed_monero_wallet.png
+ffmpeg -i logo.png -vf scale=172:172 %{buildroot}%{_datadir}/icons/hicolor/172x172/apps/unnamed_monero_wallet.png
+ffmpeg -i logo.png -vf scale=86:86   %{buildroot}%{_datadir}/icons/hicolor/86x86/apps/unnamed_monero_wallet.png
+#elif defiend(COIN_WOWNERO)
+ffmpeg -i logo.png -vf scale=108:108 %{buildroot}%{_datadir}/icons/hicolor/108x108/apps/unnamed_wownero_wallet.png
+ffmpeg -i logo.png -vf scale=128:128 %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/unnamed_wownero_wallet.png
+ffmpeg -i logo.png -vf scale=172:172 %{buildroot}%{_datadir}/icons/hicolor/172x172/apps/unnamed_wownero_wallet.png
+ffmpeg -i logo.png -vf scale=86:86   %{buildroot}%{_datadir}/icons/hicolor/86x86/apps/unnamed_wownero_wallet.png
+#endif
+mkdir -p %{buildroot}%{_datadir}/applications
+#ifdef COIN_MONERO
+cp unnamed-monero-wallet.desktop %{buildroot}%{_datadir}/applications/unnamed-monero-wallet.desktop
+#elif COIN_WOWNERO
+cp unnamed-wownero-wallet.desktop %{buildroot}%{_datadir}/applications/unnamed-wownero-wallet.desktop
+#endif
+
+%files
+#if defined(COIN_MONERO)
+/opt/unnamed-monero-wallet/
+%{_datadir}/icons/hicolor/*/apps/unnamed_monero_wallet.png
+%{_datadir}/applications/unnamed-monero-wallet.desktop
+%{_libdir}/monero_libwallet2_api_c.so
+# // */ so the compiler wont complain 
+#elif defined(COIN_WOWNERO)
+/opt/unnamed-wownero-wallet/
+%{_datadir}/icons/hicolor/*/apps/unnamed_wownero_wallet.png
+# // */ so the compiler wont complain 
+%{_datadir}/applications/unnamed-wownero-wallet.desktop
+%{_libdir}/wownero_libwallet2_api_c.so
+#endif
+
+%changelog

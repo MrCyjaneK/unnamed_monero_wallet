@@ -1,0 +1,3 @@
+#include <macros/monero_dart_import.dart.pproch>
+
+final wmPtr = coin.WalletManagerFactory_getWalletManager();

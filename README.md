@@ -12,6 +12,8 @@ Found a bug? Please use Gitea or Github issue tracker to report them.
 
 ### Building
 
+`$ mkdir ~/.cache/devcontainers_xmruw_{ccache,gradle,cache,fvm} # required for devcontainers`
+
 Easiest way to build is to use a devcontainer, you can do it by pressing `,` if you are on github, or by using Dev Containers plugin for the IDE of your choice.
 
 Otherwise you need
@@ -19,6 +21,13 @@ Otherwise you need
 - flutter (version can be found in `.fvmrc`)
 
 Then just build the app:
+
+Codegen (pick one)
+
+- `./codegen.sh -DCOIN_MONERO`
+- `./codegen.sh -DCOIN_MONERO -DLIBSTEALTH_CALCULATOR`
+- `./codegen.sh -DCOIN_WOWNERO`
+- `./codegen.sh -DCOIN_WOWNERO -DLIBSTEALTH_CALCULATOR`
 
 - android: `make libs_android_download android`
 - x86_64 linux: `make linux FLUTTER_ARCH=x64`

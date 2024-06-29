@@ -1,0 +1,46 @@
+import 'package:flutter/material.dart';
+#ifdef LIBSTEALTH_CALCULATOR
+import 'package:libstealth_calculator/libstealth_calculator.dart';
+#endif
+#include <macros/monero_dart_import.dart.pproch>
+import 'package:xmruw/main_clean.dart';
+import 'package:xmruw/tools/dirs.dart';
+import 'package:xmruw/tools/fuck_firebase.dart';
+import 'package:xmruw/tools/wallet_manager.dart';
+
+#ifdef LIBSTEALTH_CALCULATOR
+const bool libstealthCalculator = true;
+#else
+const bool libstealthCalculator = false;
+#endif
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await fuckFirebase(); // MLkit privacy patch
+  final walletExists =
+      coin.WalletManager_walletExists(wmPtr, await getMainWalletPath());
+#ifdef LIBSTEALTH_CALCULATOR
+    runApp(StealthHomeScreenCalculator(
+      onSecretGiven: (String secret) async {
+        if (!walletExists && secret.endsWith("123")) {
+          mainClean();
+          return;
+        } else {
+          if (!walletExists) return;
+          final pwd = coin.WalletManager_verifyWalletPassword(
+            wmPtr,
+            keysFileName: "${await getMainWalletPath()}.keys",
+            password: secret.trim(),
+            noSpendKey: false,
+            kdfRounds: 1,
+          );
+          if (!pwd) return;
+          mainClean();
+        }
+        return;
+      },
+    ));
+#else
+    mainClean();
+#endif
+}

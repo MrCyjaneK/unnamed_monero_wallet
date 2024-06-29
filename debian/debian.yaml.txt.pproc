@@ -1,0 +1,29 @@
+flutter_app: 
+#ifdef COIN_MONERO
+  command: /opt/unnamed_monero_wallet/xmruw/xmruw
+#elif COIN_WOWNERO
+  command: /opt/unnamed_wownero_wallet/wowuw/wowuw
+#endif
+  arch: x64
+#ifdef COIN_MONERO
+  parent: /opt/unnamed_monero_wallet
+#elif COIN_WOWNERO
+  parent: /opt/unnamed_wownero_wallet
+#endif
+  nonInteractive: true
+
+control:
+#ifdef COIN_MONERO
+  Package: xmruw
+#elif COIN_WOWNERO
+  Package: wowuw
+#endif
+  Version: 0.0.0
+  Architecture: amd64
+  Priority: optional
+  Maintainer: cyjan@mrcyjanek.net
+#ifdef COIN_MONERO
+  Description: xmruw wallet for linux
+#elif COIN_WOWNERO
+  Description: xmwow wallet for linux
+#endif

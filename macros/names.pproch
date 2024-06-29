@@ -1,0 +1,11 @@
+#if defined(COIN_MONERO)
+#define XMRUW_NAME xmruw
+#define CURRENCY_CAPITALIZED Monero
+#define CURRENCY_LOWERCASE monero
+#elif defined(COIN_WOWNERO)
+#define XMRUW_NAME wowuw
+#define CURRENCY_CAPITALIZED Wownero
+#define CURRENCY_LOWERCASE wownero
+#else
+#error COIN_MONERO or COIN_WOWNERO
+#endif

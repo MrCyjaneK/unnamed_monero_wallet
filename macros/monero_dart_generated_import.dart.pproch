@@ -1,0 +1,7 @@
+#if defined(COIN_MONERO)
+import 'package:monero/src/generated_bindings_monero.g.dart' as coin_gen;
+#elif defined(COIN_WOWNERO)
+import 'package:monero/src/generated_bindings_wownero.g.dart' as coin_gen;
+#else
+#error COIN_MONERO or COIN_WOWNERO
+#endif

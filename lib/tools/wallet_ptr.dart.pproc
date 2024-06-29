@@ -1,0 +1,3 @@
+#include <macros/monero_dart_import.dart.pproch>
+
+coin.wallet? walletPtr;
