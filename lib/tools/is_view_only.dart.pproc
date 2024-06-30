@@ -1,5 +1,5 @@
 #include <macros/monero_dart_import.dart.pproch>
 import 'package:xmruw/tools/wallet_ptr.dart';
 
-bool get isViewOnly => int.parse(coin.Wallet_secretSpendKey(walletPtr!)) == 0;
+bool get isViewOnly => int.tryParse(coin.Wallet_secretSpendKey(walletPtr!)) == 0;
 
