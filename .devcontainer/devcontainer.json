@@ -40,7 +40,7 @@
         }
     },
 
-    "postCreateCommand": "./codegen.sh -DCOIN_MONERO && yes | fvm use $(cat .fvmrc | jq .flutter | xargs)",
+    "postCreateCommand": "git config --global --add safe.directory '*' && ./codegen.sh -DCOIN_MONERO && yes | fvm use $(cat .fvmrc | jq .flutter | xargs)",
 
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
