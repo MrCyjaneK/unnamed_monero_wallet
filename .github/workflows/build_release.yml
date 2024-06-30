@@ -35,6 +35,11 @@ jobs:
         with:
           files: build/app/outputs/flutter-apk/*.apk
           token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+      - name: Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.coin }} ${{ matrix.stealth }}
+          path: build/app/outputs/flutter-apk/*.apk
   linux:
     runs-on: ubuntu-latest
     steps:
@@ -65,8 +70,13 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: build/linux/x64/release/xmruw-linux-x64.tar.xz
+          files: build/linux/*/release/*.tar.xz
           token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+      - name: Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.coin }} ${{ matrix.stealth }}
+          path: build/linux/*/release/*.tar.xz
   sailfishos:
     runs-on: ubuntu-latest
     steps:
@@ -86,3 +96,8 @@ jobs:
         with:
           files: build/elinux/*/release/unnamed-monero-wallet.*.rpm
           token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+      - name: Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.coin }} ${{ matrix.stealth }}
+          path: build/elinux/*/release/unnamed-*-wallet.*.rpm
