@@ -45,7 +45,7 @@ jobs:
       - name: Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.coin }} ${{ matrix.stealth }}
+          name: android ${{ matrix.coin }} ${{ matrix.stealth }}
           path: build/app/outputs/flutter-apk/*.apk
   linux:
     strategy:
@@ -89,7 +89,7 @@ jobs:
       - name: Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.coin }} ${{ matrix.stealth }}
+          name: linux ${{ matrix.coin }} ${{ matrix.stealth }}
           path: build/linux/*/release/*.tar.xz
   sailfishos:
     strategy:
@@ -120,5 +120,5 @@ jobs:
       - name: Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.coin }} ${{ matrix.stealth }}
+          name: sfos ${{ matrix.coin }} ${{ matrix.stealth }}
           path: build/elinux/*/release/unnamed-*-wallet.*.rpm
