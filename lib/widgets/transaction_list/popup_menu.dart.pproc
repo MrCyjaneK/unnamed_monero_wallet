@@ -18,6 +18,7 @@ import 'package:xmruw/tools/wallet_ptr.dart';
 import 'package:xmruw/widgets/urqr.dart';
 
 Future<void> exportOutputs(BuildContext c) async {
+#ifdef COIN_MONERO
   final ur = coin.Wallet_exportOutputsUR(walletPtr!, all: true);
   final status = coin.Wallet_status(walletPtr!);
   if (status != 0) {
@@ -34,9 +35,13 @@ Future<void> exportOutputs(BuildContext c) async {
     content: ur,
     flag: UrBroadcastPageFlag.xmrOutputs,
   );
+#else
+  throw UnimplementedError("UR features are supported only with -DCOIN_MONERO");
+#endif
 }
 
 void exportKeyImages(BuildContext c) async {
+#ifdef COIN_MONERO
   final ur = coin.Wallet_exportKeyImagesUR(walletPtr!, all: true);
   final status = coin.Wallet_status(walletPtr!);
   if (status != 0) {
@@ -51,6 +56,9 @@ void exportKeyImages(BuildContext c) async {
     content: ur,
     flag: UrBroadcastPageFlag.xmrKeyImage,
   );
+#else
+  throw UnimplementedError("UR features are supported only with -DCOIN_MONERO");
+#endif
 }
 
 class TxListPopupMenu extends StatelessWidget {
@@ -116,7 +124,11 @@ class TxListPopupMenu extends StatelessWidget {
             .show(c);
         return;
       }
+#ifdef COIN_MONERO
       final res = coin.UnsignedTransaction_signUR(utx, 130);
+#else
+      final res = "";
+#endif
       final status2 = coin.Wallet_status(walletPtr!);
       if (status2 != 0 || res == false) {
         // ignore: use_build_context_synchronously

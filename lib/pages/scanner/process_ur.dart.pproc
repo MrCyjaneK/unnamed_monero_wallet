@@ -13,6 +13,7 @@ Future<void> processUr(
   switch (tag) {
     case "debug":
       Alert(title: urCodes.join("\n"), cancelable: true).show(context);
+#ifdef COIN_MONERO
     case "xmr-output":
       final ok = coin.Wallet_importOutputsUR(walletPtr!, urCodes.join("\n"));
       if (!ok) {
@@ -86,7 +87,7 @@ Future<void> processUr(
       }
       // ignore: use_build_context_synchronously
       SpendSuccess.push(context);
-
+#endif
     case _:
       Alert(
         singleBody: SelectableText(

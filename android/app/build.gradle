@@ -37,7 +37,7 @@ android {
     flavorDimensions "default"
 
     productFlavors {
-        clean {
+        clean_monero {
             dimension "default"
             resValue "string", "app_name", "xmruw"
             applicationId "net.mrcyjanek.xmruw"
@@ -45,7 +45,23 @@ android {
                 appIcon: "@mipmap/ic_launcher"
             ]
         }
-        calc {
+        clean_wownero {
+            dimension "default"
+            resValue "string", "app_name", "wowuw"
+            applicationId "net.mrcyjanek.wowuw"
+            manifestPlaceholders = [
+                appIcon: "@mipmap/ic_launcher"
+            ]
+        }
+        calc_monero {
+            dimension "default"
+            resValue "string", "app_name", "Calculator"
+            applicationId "net.mrcyjanek.calculator"
+            manifestPlaceholders = [
+                appIcon: "@mipmap/ic_launcher_calc"
+            ]
+        }
+        calc_wownero {
             dimension "default"
             resValue "string", "app_name", "Calculator"
             applicationId "net.mrcyjanek.calculator"

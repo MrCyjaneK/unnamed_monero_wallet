@@ -115,12 +115,10 @@ ThemeData getTheme(AppThemeEnum theme) => switch (theme) {
             primary: config.customThemePrimary,
             secondary: config.customThemeSecondary,
             surface: config.customThemeSurface,
-            background: config.customThemeBackground,
             error: config.customThemeError,
             onPrimary: config.customThemeOnPrimary,
             onSecondary: config.customThemeOnSecondary,
             onSurface: config.customThemeOnSurface,
-            onBackground: config.customThemeOnBackground,
             onError: config.customThemeOnError,
             brightness: config.customThemeBrightness
                 ? Brightness.light

@@ -212,7 +212,11 @@ class _SpendConfirmState extends State<SpendConfirm> {
     if (isOffline) {
       Navigator.of(context).pop();
       Navigator.of(context).pop();
+#ifdef COIN_MONERO
       final content = coin.UnsignedTransaction_signUR(widget.tx.txPtr!, 120);
+#else
+      final content = "";
+#endif
       UrBroadcastPage.push(
         context,
         content: content.trim(),

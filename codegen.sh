@@ -21,6 +21,7 @@ git add .gitignore
 
 for i in $FILES
 do
+    [[ -f $i ]] || continue
     # cpp -nostdinc -fno-show-column -trigraphs -CC -E $@ $i | sed '/^# [0-9]\+/d'
     # Run cpp with the provided options and save the output to a temporary file
     cpp -I. -nostdinc -fno-show-column -trigraphs -CC -E "$@" "$i" |\

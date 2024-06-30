@@ -31,6 +31,7 @@ class MultisigDebug extends StatefulWidget {
 }
 
 class _MultisigDebugState extends State<MultisigDebug> {
+#ifdef COIN_MONERO
   @override
   void initState() {
     super.initState();
@@ -352,4 +353,24 @@ class _MultisigDebugState extends State<MultisigDebug> {
       ).show(context);
     }
   }
+#else
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("multisig"),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            children: [
+              Text("App wasn't compiled with -DCOIN_MONERO"),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+#endif
 }

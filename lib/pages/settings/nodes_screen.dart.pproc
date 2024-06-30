@@ -233,8 +233,13 @@ class _NodeStatusCardState extends State<NodeStatusCard> {
 
     final wmPtrAddr = wmPtr.address;
     final remoteHeight = /*await Isolate.run(*/() {
+#ifdef COIN_MONERO
       final lib = coin_gen.MoneroC(DynamicLibrary.open(coin.libPath));
       final ret = lib.MONERO_WalletManager_blockchainHeight(
+#else
+      final lib = coin_gen.WowneroC(DynamicLibrary.open(coin.libPath));
+      final ret = lib.WOWNERO_WalletManager_blockchainHeight(
+#endif
           Pointer.fromAddress(wmPtrAddr));
       return ret.toInt();
     }();

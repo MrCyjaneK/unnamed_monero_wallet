@@ -53,7 +53,7 @@ ffmpeg -i logo.png -vf scale=108:108 %{buildroot}%{_datadir}/icons/hicolor/108x1
 ffmpeg -i logo.png -vf scale=128:128 %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/unnamed_monero_wallet.png
 ffmpeg -i logo.png -vf scale=172:172 %{buildroot}%{_datadir}/icons/hicolor/172x172/apps/unnamed_monero_wallet.png
 ffmpeg -i logo.png -vf scale=86:86   %{buildroot}%{_datadir}/icons/hicolor/86x86/apps/unnamed_monero_wallet.png
-#elif defiend(COIN_WOWNERO)
+#elif defined(COIN_WOWNERO)
 ffmpeg -i logo.png -vf scale=108:108 %{buildroot}%{_datadir}/icons/hicolor/108x108/apps/unnamed_wownero_wallet.png
 ffmpeg -i logo.png -vf scale=128:128 %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/unnamed_wownero_wallet.png
 ffmpeg -i logo.png -vf scale=172:172 %{buildroot}%{_datadir}/icons/hicolor/172x172/apps/unnamed_wownero_wallet.png

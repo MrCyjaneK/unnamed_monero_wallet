@@ -40,7 +40,7 @@
         }
     },
 
-    "postCreateCommand": "yes | fvm flutter doctor",
+    "postCreateCommand": "./codegen.sh -DCOIN_MONERO && yes | fvm use $(cat .fvmrc | jq .flutter | xargs)",
 
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
