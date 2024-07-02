@@ -60,11 +60,11 @@ libs_android_build:
 	./build_moneroc.sh --coin ${COIN} --tag ${MONERO_C_TAG} --triplet aarch64-linux-android --location android/app/src/main/jniLibs/arm64-v8a
 	./build_moneroc.sh --coin ${COIN} --tag ${MONERO_C_TAG} --triplet arm-linux-androideabi --location android/app/src/main/jniLibs/armeabi-v7a
 
-.PHONY: macos
-macos:
-	# cd macos && ./use_prebuild.sh
-	# flutter build macos -v
-	test -f build/${BINARY_NAME}.dmg && rm -rf build/${BINARY_NAME}.dmg || true
+.PHONY: macos_arm64
+macos_arm64:
+	flutter build macos -v
+	./build_moneroc.sh --prebuild --coin ${COIN} --tag ${MONERO_C_TAG} --triplet aarch64-apple-darwin11 --location macos
+	test -f build/${BINARY_NAME}_darwin_arm64.dmg && rm -rf build/${BINARY_NAME}_darwin_arm64.dmg || true
 	create-dmg \
 		--volname "${BINARY_NAME}" \
 		--background "assets/macos_installer_background.png" \
@@ -75,5 +75,5 @@ macos:
 		--hide-extension unnamed_${COIN}_wallet.app \
 		--app-drop-link 460 205 \
 		--eula LICENSE \
-		build/${BINARY_NAME}.dmg \
+		build/${BINARY_NAME}_darwin_arm64.dmg \
 		build/macos/Build/Products/Release
