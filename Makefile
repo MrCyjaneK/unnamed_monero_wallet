@@ -66,6 +66,12 @@ macos:
 	# cd macos && ./use_prebuild.sh
 	# flutter build macos -v
 	test -f build/xmruw.dmg && rm -rf build/xmruw.dmg || true
+
+.PHONY: macos_arm64
+macos_arm64:
+	flutter build macos -v
+	./build_moneroc.sh --prebuild --coin ${COIN} --tag ${MONERO_C_TAG} --triplet aarch64-apple-darwin11 --location macos
+	test -f build/${BINARY_NAME}_darwin_arm64.dmg && rm -rf build/${BINARY_NAME}_darwin_arm64.dmg || true
 	create-dmg \
 		--volname "xmruw" \
 		--background "assets/macos_installer_background.png" \

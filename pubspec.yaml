@@ -26,7 +26,10 @@ dependencies:
       ref: 1db62fd53adf9b34d4b769788d6c4be4fa416817
   file_picker: 8.0.5
   win32: 5.5.1 # Remove this after file_picker update
-  mobile_scanner: 5.1.1
+  fast_scanner:
+    git:
+      url: https://github.com/mrcyjanek/fast_scanner
+      ref: 195b0560203c22b9ac219b5e78059888f5671064
   anonero_backup:
     git:
       url: https://github.com/MrCyjaneK/anonero_backup

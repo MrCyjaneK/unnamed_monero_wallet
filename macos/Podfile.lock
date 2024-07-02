@@ -1,40 +1,35 @@
 PODS:
-  - bytewords (0.0.1):
-    - FlutterMacOS
-  - flutter_local_notifications (0.0.1):
+  - fast_scanner (5.1.1):
     - FlutterMacOS
   - FlutterMacOS (1.0.0)
-  - mobile_scanner (3.5.6):
-    - FlutterMacOS
   - path_provider_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
 
 DEPENDENCIES:
-  - bytewords (from `Flutter/ephemeral/.symlinks/plugins/bytewords/macos`)
-  - flutter_local_notifications (from `Flutter/ephemeral/.symlinks/plugins/flutter_local_notifications/macos`)
+  - fast_scanner (from `Flutter/ephemeral/.symlinks/plugins/fast_scanner/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
-  - mobile_scanner (from `Flutter/ephemeral/.symlinks/plugins/mobile_scanner/macos`)
   - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
+  - shared_preferences_foundation (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin`)
 
 EXTERNAL SOURCES:
-  bytewords:
-    :path: Flutter/ephemeral/.symlinks/plugins/bytewords/macos
-  flutter_local_notifications:
-    :path: Flutter/ephemeral/.symlinks/plugins/flutter_local_notifications/macos
+  fast_scanner:
+    :path: Flutter/ephemeral/.symlinks/plugins/fast_scanner/macos
   FlutterMacOS:
     :path: Flutter/ephemeral
-  mobile_scanner:
-    :path: Flutter/ephemeral/.symlinks/plugins/mobile_scanner/macos
   path_provider_foundation:
     :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin
+  shared_preferences_foundation:
+    :path: Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin
 
 SPEC CHECKSUMS:
-  bytewords: 01ba7123e8426e367d3ee227145ed3afe3021364
-  flutter_local_notifications: 3805ca215b2fb7f397d78b66db91f6a747af52e4
+  fast_scanner: d31bae07e2653403a69dac99fb710c1722b16a97
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
-  mobile_scanner: 54ceceae0c8da2457e26a362a6be5c61154b1829
   path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
+  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
 
 PODFILE CHECKSUM: 236401fc2c932af29a9fcf0e97baeeb2d750d367
 
