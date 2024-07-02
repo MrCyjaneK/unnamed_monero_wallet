@@ -6,6 +6,10 @@ version: 1.0.0
 environment:
   sdk: '>=3.2.3 <4.0.0'
 
+# When adding a dependency from git, if it is from trusted source, use
+# branch as ref, if it is questionable source - as in somebody else than
+# me, then pin via hash
+
 dependencies:
   flutter:
     sdk: flutter
@@ -19,30 +23,33 @@ dependencies:
   monero:
     git: 
       url: https://github.com/mrcyjanek/monero.dart
-      ref: 7b301d37215c79059ccf3b7aefddc3842d4ef9d4
+      ref: 728da21098d4200b60a21f53226f7c5897314a7a
   cr_file_saver:
     git:
       url: https://github.com/crit-iq/cr_file_saver
       ref: 1db62fd53adf9b34d4b769788d6c4be4fa416817
   file_picker: 8.0.6
   win32: 5.5.1 # Remove this after file_picker update
-  mobile_scanner: 5.1.1
+  fast_scanner:
+    git:
+      url: https://github.com/mrcyjanek/fast_scanner
+      ref: cdfc2d78186e3eb8a9b4e6344513dcbf1b470df4
   anonero_backup:
     git:
       url: https://github.com/MrCyjaneK/anonero_backup
-      ref: 0bcca6597c5887a4ed7f402a3d1d2cc92eed50f5
+      ref: 90c1586e2a43cb8d26627244cf53f2281b520f0d
   flutter_svg: 2.0.10+1
   archive: 3.6.1
   tor_binary:
     git:
       url: https://github.com/MrCyjaneK/flutter-tor_binary
-      ref: da00d4f4c3918e78734bbe0e9496559fc342d8b5
-  disable_battery_optimization: ^1.1.1
+      ref: adfd6e0bcfa794d8716f799b150b49067e9eb94f
+  disable_battery_optimization: 1.1.1
   permission_handler: 11.3.1
   libstealth_calculator:
     git:
       url: https://github.com/MrCyjaneK/libstealth_calculator
-      ref: fafdb3d215dbc09f1901062cb1c43bfcac374844
+      ref: 2cb96d476e99a795ce5960787444a96c44d4ccc8
   path: any
   flex_color_picker: 3.5.1
   polyseed: 0.0.5
