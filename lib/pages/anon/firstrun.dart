@@ -645,7 +645,6 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
     );
     if (await _shouldFailWalletError()) return;
     await _addProgress("Initializing wallet");
-    final wPtrAddr = walletPtr!.address;
     final n = await node.NodeStore.getCurrentNode();
     final ProxyStore proxy = (await ProxyStore.getProxy());
 
@@ -810,7 +809,6 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
       if (await _shouldFailWalletError()) return;
 
       await _addProgress("Initializing wallet");
-      final wPtrAddr = walletPtr!.address;
       final n = await node.NodeStore.getCurrentNode();
       final ProxyStore proxy = (await ProxyStore.getProxy());
 

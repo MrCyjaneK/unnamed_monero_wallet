@@ -15,6 +15,7 @@ void main() async {
   final walletExists =
       monero.WalletManager_walletExists(wmPtr, await getMainWalletPath());
   if (libstealthCalculator) {
+      monero.WalletManager_walletExists(wmPtr, await getMainWalletPath());
     runApp(StealthHomeScreenCalculator(
       onSecretGiven: (String secret) async {
         if (!walletExists && secret.endsWith("123")) {
