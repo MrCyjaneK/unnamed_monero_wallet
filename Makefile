@@ -46,6 +46,17 @@ version:
 	sed -i "s/^Version:    .*/Version:    1.0.0/" "elinux/sailfishos.spec"
 	sed -i "s/^const ${BINARY_NAME}Version = .*/const ${BINARY_NAME}Version = '$(shell git describe --tags)';/" "lib/helpers/licenses_extra.dart"
 
+.PHONY: version_nongnu
+version_nongnu:
+	sed -i '' "s/^version: .*/version: 1.0.0+$(shell git rev-list --count HEAD)/" "pubspec.yaml"
+	sed -i '' "s/^  Version: .*/  Version: 1.0.0+$(shell git rev-list --count HEAD)/" "debian/debian.yaml.txt"
+	sed -i '' "s/^Version=.*/Version=1.0.0+$(shell git rev-list --count HEAD)/" "debian/gui/${BINARY_NAME}.desktop"
+	sed -i '' "s/^Version=.*/Version=1.0.0+$(shell git rev-list --count HEAD)/" "elinux/unnamed-${COIN}-wallet.desktop"
+	sed -i '' "s/^Version:    .*/Version:    1.0.0/" "elinux/sailfishos.spec"
+	sed -i '' "s/^Release:    .*/Release:    $(shell git rev-list --count HEAD)/" "elinux/sailfishos.spec"
+	sed -i '' "s/^Version:    .*/Version:    1.0.0/" "elinux/sailfishos.spec"
+	sed -i '' "s/^const ${BINARY_NAME}Version = .*/const ${BINARY_NAME}Version = '$(shell git describe --tags)';/" "lib/helpers/licenses_extra.dart"
+
 .PHONY: lib/helpers/licenses.g.dart
 lib/helpers/licenses.g.dart:
 	dart run flutter_oss_licenses:generate -o lib/helpers/licenses.g.dart
@@ -62,8 +73,8 @@ libs_android_build:
 
 .PHONY: macos_arm64
 macos_arm64:
-	flutter build macos -v
 	./build_moneroc.sh --prebuild --coin ${COIN} --tag ${MONERO_C_TAG} --triplet aarch64-apple-darwin11 --location macos
+	flutter build macos -v
 	test -f build/${BINARY_NAME}_darwin_arm64.dmg && rm -rf build/${BINARY_NAME}_darwin_arm64.dmg || true
 	create-dmg \
 		--volname "${BINARY_NAME}" \

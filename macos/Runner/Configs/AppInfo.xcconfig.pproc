@@ -5,10 +5,13 @@
 // 'flutter create' template.
 
 // The application's name. By default this is also the title of the Flutter window.
+#ifdef COIN_MONERO
 PRODUCT_NAME = unnamed_monero_wallet
-
-// The application's bundle identifier
 PRODUCT_BUNDLE_IDENTIFIER = net.mrcyjanek.unnamedMoneroWallet
+#elif COIN_WOWNERO
+PRODUCT_NAME = unnamed_wownero_wallet
+PRODUCT_BUNDLE_IDENTIFIER = net.mrcyjanek.unnamedWowneroWallet
+#endif
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2024 net.mrcyjanek. All rights reserved.

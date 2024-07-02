@@ -29,6 +29,8 @@ jobs:
       - name: Flutter pub get
         run: |
           flutter pub get
+      - name: Build changelog
+        run: ./build_changelog.sh
       - name: make version
         run: |
           make version
@@ -74,6 +76,8 @@ jobs:
       - name: Flutter pub get
         run: |
           flutter pub get
+      - name: Build changelog
+        run: ./build_changelog.sh
       - name: make version
         run: |
           make version
@@ -117,9 +121,11 @@ jobs:
       - name: Flutter pub get
         run: |
           flutter pub get
+      - name: Build changelog
+        run: ./build_changelog.sh
       - name: make version
         run: |
-          make version
+          make version_nongnu
       - name: Build .tar.gz
         run: |
           make macos_arm64

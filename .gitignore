@@ -89,3 +89,4 @@ windows/CMakeLists.txt
 debian/debian.yaml.txt
 elinux/sailfishos.spec
 pubspec.yaml
+macos/Runner/Configs/AppInfo.xcconfig
