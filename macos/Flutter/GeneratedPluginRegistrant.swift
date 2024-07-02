@@ -5,7 +5,7 @@
 import FlutterMacOS
 import Foundation
 
-import mobile_scanner
+import fast_scanner
 import path_provider_foundation
 import shared_preferences_foundation
 

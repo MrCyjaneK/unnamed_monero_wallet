@@ -80,6 +80,7 @@ flutter_launcher_icons:
     image_path: "assets/logo.png"
 
 flutter:
+  uses-material-design: true
   assets:
     - assets/logo.png
     - assets/logo_calc.png
