@@ -37,6 +37,8 @@ do
         # Extract the line number from the preprocessor directive
         target_line=${BASH_REMATCH[1]}
 
+        [[ "x$(echo $line | grep $i)" == "x" ]] && continue
+
         # Calculate the number of lines to insert
         newlines_to_insert=$((target_line - current_line))
         

@@ -90,3 +90,4 @@ debian/debian.yaml.txt
 elinux/sailfishos.spec
 pubspec.yaml
 macos/Runner/Configs/AppInfo.xcconfig
+macos/Runner.xcodeproj/project.pbxproj
