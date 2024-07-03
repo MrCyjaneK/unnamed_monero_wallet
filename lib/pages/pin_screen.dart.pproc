@@ -396,6 +396,7 @@ viewKeyString: ${widget.restoreData!.privateViewKey!},
       daemonPassword: node?.password ?? "",
       proxyAddress: proxyAddress,
     );
+    coin.Wallet_setTrustedDaemon(walletPtr!, arg: true);
     File(await getWalletPointerAddrPath()).writeAsString(
       walletPtr!.address.toString(),
     );

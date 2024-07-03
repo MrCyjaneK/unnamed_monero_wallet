@@ -18,7 +18,7 @@ linux:
 
 .PHONY: linux_debug_lib
 linux_debug_lib:
-	./build_moneroc.sh --prebuild --coin ${COIN} --tag ${MONERO_C_TAG} --triplet $(shell gcc -dumpmachine)  --location build/linux/*/debug/bundle/lib
+	./build_moneroc.sh --prebuild --coin ${COIN} --tag ${MONERO_C_TAG} --triplet $(shell gcc -dumpmachine)  --location /usr/lib
 
 .PHONY: dev
 dev: libs
