@@ -71,6 +71,9 @@ libs_android_build:
 	./build_moneroc.sh --coin ${COIN} --tag ${MONERO_C_TAG} --triplet aarch64-linux-android --location android/app/src/main/jniLibs/arm64-v8a
 	./build_moneroc.sh --coin ${COIN} --tag ${MONERO_C_TAG} --triplet arm-linux-androideabi --location android/app/src/main/jniLibs/armeabi-v7a
 
+windows_libs_download:
+	./build_moneroc.sh --prebuild --coin ${COIN} --tag ${MONERO_C_TAG} --triplet x86_64-w64-mingw32 --location build/windows/x64/runner/Release
+
 .PHONY: macos_arm64
 macos_arm64:
 	./build_moneroc.sh --prebuild --coin ${COIN} --tag ${MONERO_C_TAG} --triplet aarch64-apple-darwin11 --location macos
