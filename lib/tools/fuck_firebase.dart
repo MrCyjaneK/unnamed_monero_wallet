@@ -13,8 +13,8 @@ Future<void> fuckFirebase() async {
   if (Platform.isAndroid) {
     final dir = await getApplicationDocumentsDirectory();
     final path = dir.parent.path;
-    final file =
-        File('$path/databases/com.google.android.datatransport.events');
+    final file = File('$path/databases/com.google.android.datatransport.events')
+      ..createSync(recursive: true);
     await file.writeAsString('Fake');
   }
 }
