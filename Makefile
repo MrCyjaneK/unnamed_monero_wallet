@@ -78,6 +78,9 @@ macos:
 	# flutter build macos -v
 	test -f build/xmruw.dmg && rm -rf build/xmruw.dmg || true
 
+windows_libs_download:
+	./build_moneroc.sh --prebuild --coin ${COIN} --tag ${MONERO_C_TAG} --triplet x86_64-w64-mingw32 --location build/windows/x64/runner/Release
+
 .PHONY: macos_arm64
 macos_arm64:
 	./build_moneroc.sh --prebuild --coin ${COIN} --tag ${MONERO_C_TAG} --triplet aarch64-apple-darwin11 --location macos
