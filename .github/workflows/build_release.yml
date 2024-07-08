@@ -150,3 +150,67 @@ jobs:
         with:
           name: sfos ${{ matrix.coin }} ${{ matrix.stealth }}
           path: build/elinux/*/release/unnamed-*-wallet.*.rpm
+  windows:
+    strategy:
+      matrix:
+        coin: [COIN_MONERO, COIN_WOWNERO]
+        stealth: [LIBSTEALTH_DISABLED]
+    name: windows build
+    runs-on: windows-latest
+    steps:
+      - name: Checkout unnamed_monero_wallet repo
+        uses: actions/checkout@v4
+        with:
+          repository: MrCyjaneK/unnamed_monero_wallet
+          fetch-depth: 0
+          submodules: recursive
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          install: git make xz autotools mingw-w64-x86_64-gcc mingw-w64-x86_64-jq
+      - name: Codegen
+        run: ./codegen.sh -D${{ matrix.coin }} -D${{ matrix.stealth }}
+        shell: msys2 {0}
+      - name: ./build_changelog.sh
+        run: ./build_changelog.sh
+        shell: msys2 {0}
+        continue-on-error: true
+      - uses: kuhnroyal/flutter-fvm-config-action@v2
+        id: fvm-config-action
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.fvm-config-action.outputs.FLUTTER_VERSION }}
+          channel: ${{ steps.fvm-config-action.outputs.FLUTTER_CHANNEL }}
+          cache: true
+      - name: Flutter pub get
+        run: |
+          flutter pub get
+      - name: licenses [dummy]
+        run: dart run flutter_oss_licenses:generate -o lib/helpers/licenses.g.dart
+      - name: make version
+        run: make version
+        shell: msys2 {0}
+      - name: build
+        run: flutter build windows
+        continue-on-error: true
+      - name: make windows_libs_download
+        run: make windows_libs_download
+        shell: msys2 {0}
+      - name: Archive Release
+        uses: thedoctor0/zip-release@master
+        with:
+          type: 'zip'
+          filename: xmruw-windows-x86_64.zip
+          directory: build/windows/x64/runner/Release
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: build/windows/x64/runner/Release/xmruw-windows-x86_64.zip
+          token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+      - name: Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows ${{ matrix.coin }} ${{ matrix.stealth }}
+          path: build/windows/x64/runner/Release/xmruw-windows-x86_64.zip
+
