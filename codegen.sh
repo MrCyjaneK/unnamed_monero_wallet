@@ -16,7 +16,7 @@ FILES=$(( git status --short| grep '^?' | cut -d\  -f2- && git ls-files ) | sort
 # update gitignore
 
 (cat .gitignore; echo "# codegen.sh"; echo $FILES | tr ' ' '\n' | sed 's/\.[^\.]*$//') | awk '!seen[$0]++' > .gitignore_
-mv .gitignore_ .gitignore
+mv -f .gitignore_ .gitignore
 git add .gitignore
 
 for i in $FILES
