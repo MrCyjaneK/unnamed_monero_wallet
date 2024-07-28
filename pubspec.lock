@@ -484,10 +484,10 @@ packages:
   monero:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "728da21098d4200b60a21f53226f7c5897314a7a"
-      resolved-ref: "728da21098d4200b60a21f53226f7c5897314a7a"
-      url: "https://github.com/mrcyjanek/monero.dart"
+      path: "impls/monero.dart"
+      ref: "64e02614f5a509dc6ea310282caa04d77fe5a3cb"
+      resolved-ref: "64e02614f5a509dc6ea310282caa04d77fe5a3cb"
+      url: "https://github.com/mrcyjanek/monero_c"
     source: git
     version: "0.0.0"
   mutex:

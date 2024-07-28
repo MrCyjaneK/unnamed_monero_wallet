@@ -21,9 +21,10 @@ dependencies:
   path_provider: 2.1.3
   mutex: 3.1.0
   monero:
-    git: 
-      url: https://github.com/mrcyjanek/monero.dart
-      ref: 728da21098d4200b60a21f53226f7c5897314a7a
+    git:
+      url: https://github.com/mrcyjanek/monero_c
+      ref: 64e02614f5a509dc6ea310282caa04d77fe5a3cb # monero_c hash
+      path: impls/monero.dart
   cr_file_saver:
     git:
       url: https://github.com/crit-iq/cr_file_saver

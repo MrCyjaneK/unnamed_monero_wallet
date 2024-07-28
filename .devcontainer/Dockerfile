@@ -8,6 +8,8 @@ RUN apt update \
 USER ubuntu
 WORKDIR /home/ubuntu
 
+RUN sudo chown -R $(whoami) /sdks /opt
+
 # Fix the image
 
 RUN sudo rm /root/.gitconfig
