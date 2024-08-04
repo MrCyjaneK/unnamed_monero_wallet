@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/helpers/licenses_extra.dart';
 import 'package:xmruw/pages/settings/license_list_page.dart';
 import 'package:xmruw/widgets/long_outlined_button.dart';
@@ -16,6 +17,12 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cppcpp = monero.MONERO_checksum_wallet2_api_c_cpp();
+    final cpph = monero.MONERO_checksum_wallet2_api_c_h();
+    final cppexp = monero.MONERO_checksum_wallet2_api_c_exp();
+    final dartcpp = monero.wallet2_api_c_cpp_sha256;
+    final darth = monero.wallet2_api_c_h_sha256;
+    final dartexp = monero.wallet2_api_c_exp_sha256;
     return Scaffold(
       appBar: AppBar(
         title: const Text("About"),
@@ -46,6 +53,9 @@ If you enjoy the wallet, please consider donating
 83F5SjMRjE9UuaCUwso8zhix3DJEThnhcF8vTsCJ7zG3KiuKiqbyUshezKjmBwhqiAJP2KvzWNVRYVyBKaqpBwbp1cMD1FU
           """,
               ),
+              if (dartcpp != cppcpp) Text("cpp mismatch"),
+              if (darth != cpph) Text("cpp mismatch"),
+              if (dartexp != cppexp) Text("exp mismatch"),
               LongOutlinedButton(
                 text: "Licenses",
                 onPressed: () => LicenseListPage.push(context),
