@@ -1,6 +1,6 @@
 include .env
 
-MONERO_C_TAG=v0.18.3.3-RC47
+MONERO_C_TAG=v0.18.3.3-RC51
 
 .PHONY: android
 android:
