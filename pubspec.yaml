@@ -30,7 +30,7 @@ dependencies:
       url: https://github.com/crit-iq/cr_file_saver
       ref: 1db62fd53adf9b34d4b769788d6c4be4fa416817
   file_picker: 8.0.6
-  win32: 5.5.3 # Remove this after file_picker update
+  win32: 5.5.4 # Remove this after file_picker update
   fast_scanner:
     git:
       url: https://github.com/mrcyjanek/fast_scanner
