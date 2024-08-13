@@ -30,7 +30,7 @@ dependencies:
   fast_scanner:
     git:
       url: https://github.com/mrcyjanek/fast_scanner
-      ref: 195b0560203c22b9ac219b5e78059888f5671064
+      ref: f315ad7500afdfeb95c732bc7ab54d30cb2a2b14
   anonero_backup:
     git:
       url: https://github.com/MrCyjaneK/anonero_backup

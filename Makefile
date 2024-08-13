@@ -19,6 +19,10 @@ linux:
 linux_debug_lib:
 	./build_moneroc.sh --prebuild --coin monero --tag ${MONERO_C_TAG} --triplet x86_64-linux-gnu  --location build/linux/*/debug/bundle/lib
 
+.PHONY: ios_debug_lib
+ios_debug_lib:
+	./build_moneroc.sh --prebuild --coin ${COIN} --tag ${MONERO_C_TAG} --triplet host-apple-ios --location ios
+
 .PHONY: dev
 dev: libs
 

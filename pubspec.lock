@@ -175,8 +175,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "195b0560203c22b9ac219b5e78059888f5671064"
-      resolved-ref: "195b0560203c22b9ac219b5e78059888f5671064"
+      ref: f315ad7500afdfeb95c732bc7ab54d30cb2a2b14
+      resolved-ref: f315ad7500afdfeb95c732bc7ab54d30cb2a2b14
       url: "https://github.com/mrcyjanek/fast_scanner"
     source: git
     version: "5.1.1"
