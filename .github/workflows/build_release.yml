@@ -40,7 +40,7 @@ jobs:
       - name: Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: android ${{ matrix.coin }} ${{ matrix.stealth }}
+          name: android monero ${{ matrix.stealth }}
           path: build/app/outputs/flutter-apk/*.apk
   linux:
     runs-on: ubuntu-latest
@@ -79,7 +79,7 @@ jobs:
       - name: Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: linux ${{ matrix.coin }} ${{ matrix.stealth }}
+          name: linux monero ${{ matrix.stealth }}
           path: build/linux/*/release/*.tar.xz
   macos:
     strategy:
@@ -103,7 +103,7 @@ jobs:
         run: |
           brew install create-dmg
       - name: Codegen
-        run: ./codegen.sh -D${{ matrix.coin }} -D${{ matrix.stealth }}
+        run: ./codegen.sh -Dmonero -D${{ matrix.stealth }}
       - name: Flutter pub get
         run: |
           flutter pub get
@@ -124,7 +124,7 @@ jobs:
       - name: Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: darwin ${{ matrix.coin }} ${{ matrix.stealth }}
+          name: darwin monero ${{ matrix.stealth }}
           path: build/*darwin_*.dmg
   sailfishos:
     runs-on: ubuntu-latest
@@ -148,7 +148,7 @@ jobs:
       - name: Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: sfos ${{ matrix.coin }} ${{ matrix.stealth }}
+          name: sfos monero ${{ matrix.stealth }}
           path: build/elinux/*/release/unnamed-*-wallet.*.rpm
   windows:
     strategy:
@@ -169,7 +169,7 @@ jobs:
           msystem: MINGW64
           install: git make xz autotools mingw-w64-x86_64-gcc mingw-w64-x86_64-jq
       - name: Codegen
-        run: ./codegen.sh -D${{ matrix.coin }} -D${{ matrix.stealth }}
+        run: ./codegen.sh -Dmonero -D${{ matrix.stealth }}
         shell: msys2 {0}
       - name: ./build_changelog.sh
         run: ./build_changelog.sh
@@ -211,6 +211,6 @@ jobs:
       - name: Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: windows ${{ matrix.coin }} ${{ matrix.stealth }}
+          name: windows monero ${{ matrix.stealth }}
           path: build/windows/x64/runner/Release/xmruw-windows-x86_64.zip
 
