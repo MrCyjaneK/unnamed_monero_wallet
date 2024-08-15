@@ -41,5 +41,5 @@
     },
 
     "remoteUser": "ubuntu",
-    "postCreateCommand": "git config --global --add safe.directory '*' && ./codegen.sh -DCOIN_MONERO",
+    "postCreateCommand": "git config --global --add safe.directory '*' && ./codegen.sh -DCOIN_MONERO && ./build_changelog.sh",
 }

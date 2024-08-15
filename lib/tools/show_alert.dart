@@ -34,6 +34,8 @@ class Alert {
   Widget _builder(BuildContext context) {
     return AlertDialog.adaptive(
       content: _getContent(),
+      backgroundColor: Colors.black,
+      surfaceTintColor: Colors.transparent,
       actions: overrideActions.isEmpty
           ? [
               if (cancelable)
