@@ -53,7 +53,7 @@ dependencies:
       ref: 2cb96d476e99a795ce5960787444a96c44d4ccc8
   path: any
   flex_color_picker: 3.5.1
-  polyseed: 0.0.5
+  polyseed: 0.0.6
   introduction_screen: 3.1.14
   http: 1.2.2
   device_preview: 1.2.0
