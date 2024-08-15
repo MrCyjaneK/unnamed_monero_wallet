@@ -86,7 +86,7 @@ fi
 if [[ ! "x$ARG_PREBUILD" == "x" ]];
 then
     # download prebuild
-    GH_JSON="$(curl -o- 'https://api.github.com/repos/MrCyjaneK/monero_c/releases/tags/'"${ARG_TAG}" | tr -d '\r')"
+    GH_JSON="$(curl -L -o- 'https://api.github.com/repos/MrCyjaneK/monero_c/releases/tags/'"${ARG_TAG}" | tr -d '\r')"
     for release_url in $(echo "$GH_JSON" | jq -r '.assets[].browser_download_url' | tr -d '\r' | xargs)
     do
         asset_basename=$(urldecode $(basename $release_url) | tr -d '\r' | xargs)
