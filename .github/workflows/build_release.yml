@@ -30,6 +30,14 @@ jobs:
       - name: Build apk
         run: |
           make libs_android_download
+          wget https://github.com/upx/upx/releases/download/v4.2.4/upx-4.2.4-amd64_linux.tar.xz -O /tmp/upx.tar.xz
+          unxz /tmp/upx.tar.xz
+          (cd /tmp && tar xvf /tmp/upx.tar)
+          for i in android/app/src/main/jniLibs/*/*.so;
+          do
+            /tmp/upx-4.2.4-amd64_linux/upx --android-shlib --all-methods --all-filters "$i" &
+          done
+          wait
           make android
       - name: Release
         uses: softprops/action-gh-release@v2

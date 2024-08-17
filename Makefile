@@ -1,5 +1,5 @@
 MONERO_C_TAG=v0.18.3.3-RC51
-
+COIN=monero
 .PHONY: android
 android:
 	./build_changelog.sh
@@ -65,20 +65,14 @@ lib/helpers/licenses.g.dart:
 	dart run flutter_oss_licenses:generate -o lib/helpers/licenses.g.dart
 
 libs_android_download:
-	./build_moneroc.sh --prebuild --coin monero --tag ${MONERO_C_TAG} --triplet x86_64-linux-android  --location android/app/src/main/jniLibs/x86_64
-	./build_moneroc.sh --prebuild --coin monero --tag ${MONERO_C_TAG} --triplet aarch64-linux-android --location android/app/src/main/jniLibs/arm64-v8a
-	./build_moneroc.sh --prebuild --coin monero --tag ${MONERO_C_TAG} --triplet arm-linux-androideabi --location android/app/src/main/jniLibs/armeabi-v7a
+	./build_moneroc.sh --prebuild --coin ${COIN} --tag ${MONERO_C_TAG} --triplet x86_64-linux-android  --location android/app/src/main/jniLibs/x86_64
+	./build_moneroc.sh --prebuild --coin ${COIN} --tag ${MONERO_C_TAG} --triplet aarch64-linux-android --location android/app/src/main/jniLibs/arm64-v8a
+	./build_moneroc.sh --prebuild --coin ${COIN} --tag ${MONERO_C_TAG} --triplet armv7a-linux-androideabi --location android/app/src/main/jniLibs/armeabi-v7a
 
 libs_android_build:
-	./build_moneroc.sh --coin monero --tag ${MONERO_C_TAG} --triplet x86_64-linux-android  --location android/app/src/main/jniLibs/x86_64
-	./build_moneroc.sh --coin monero --tag ${MONERO_C_TAG} --triplet aarch64-linux-android --location android/app/src/main/jniLibs/arm64-v8a
-	./build_moneroc.sh --coin monero --tag ${MONERO_C_TAG} --triplet arm-linux-androideabi --location android/app/src/main/jniLibs/armeabi-v7a
-
-.PHONY: macos
-macos:
-	# cd macos && ./use_prebuild.sh
-	# flutter build macos -v
-	test -f build/xmruw.dmg && rm -rf build/xmruw.dmg || true
+	./build_moneroc.sh --coin ${COIN} --tag ${MONERO_C_TAG} --triplet x86_64-linux-android  --location android/app/src/main/jniLibs/x86_64
+	./build_moneroc.sh --coin ${COIN} --tag ${MONERO_C_TAG} --triplet aarch64-linux-android --location android/app/src/main/jniLibs/arm64-v8a
+	./build_moneroc.sh --coin ${COIN} --tag ${MONERO_C_TAG} --triplet armv7a-linux-androideabi --location android/app/src/main/jniLibs/armeabi-v7a
 
 windows_libs_download:
 	./build_moneroc.sh --prebuild --coin ${COIN} --tag ${MONERO_C_TAG} --triplet x86_64-w64-mingw32 --location build/windows/x64/runner/Release
