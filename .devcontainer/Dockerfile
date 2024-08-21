@@ -1,4 +1,4 @@
-FROM ghcr.io/cirruslabs/flutter:3.24.0
+FROM ghcr.io/cirruslabs/flutter:3.24.1
 
 # Install dependencies
 
