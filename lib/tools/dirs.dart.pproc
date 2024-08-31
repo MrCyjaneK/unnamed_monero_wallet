@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:xmruw/pages/config/base.dart';
 
-
+#ifdef COIN_MONERO
 const dir_prefix="monero";
-
-
-
-
+#endif
+#ifdef COIN_WOWNERO
+const dir_prefix="wownero";
+#endif
 
 Future<Directory> getWd() async {
   if (config.useOldDir) {
@@ -86,4 +86,3 @@ Future<String> getWalletPointerAddrPath() async {
 Future<String> getConfigFile() async {
   return "${(await getWd()).path}/config.json";
 }
-

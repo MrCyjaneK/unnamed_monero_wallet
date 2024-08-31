@@ -21,7 +21,7 @@ void mainClean() async {
   if (!wd.existsSync()) wd.createSync();
   await loadConfig();
 
-  coin.printStarts = config.printStarts;
+  coin.printStarts = true;
   _walletExists =
       coin.WalletManager_walletExists(wmPtr, await getMainWalletPath());
   runApp(

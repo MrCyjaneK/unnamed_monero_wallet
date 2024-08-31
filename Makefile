@@ -1,6 +1,6 @@
 include .env
 
-MONERO_C_TAG=v0.18.3.3-RC51
+MONERO_C_TAG=v0.18.3.4-RC1
 
 .PHONY: android
 android:
@@ -20,9 +20,19 @@ linux:
 linux_debug_lib:
 	./build_moneroc.sh --prebuild --coin ${COIN} --tag ${MONERO_C_TAG} --triplet $(shell gcc -dumpmachine)  --location /usr/lib
 
-.PHONY: ios_debug_lib
-ios_debug_lib:
+.PHONY: ios_lib_download
+ios_lib_download:
 	./build_moneroc.sh --prebuild --coin ${COIN} --tag ${MONERO_C_TAG} --triplet host-apple-ios --location ios
+	cd ios && ./gen_framework.sh
+
+.PHONY: ios_lib_build
+ios_lib_build:
+	./build_moneroc.sh --prebuild --coin ${COIN} --tag ${MONERO_C_TAG} --triplet host-apple-ios --location ios
+	cd ios && ./gen_framework.sh
+
+.PHONY: ios
+ios:
+	flutter build ipa
 
 .PHONY: dev
 dev: libs

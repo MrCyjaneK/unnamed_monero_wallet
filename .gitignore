@@ -92,3 +92,4 @@ pubspec.yaml
 macos/Runner/Configs/AppInfo.xcconfig
 macos/Runner.xcodeproj/project.pbxproj
 lib/pages/settings/about.dart
+lib/tools/dirs.dart
