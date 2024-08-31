@@ -1,12 +1,21 @@
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
+import 'package:xmruw/pages/config/base.dart';
+
+const dir_prefix="monero";
 
 Future<Directory> getWd() async {
-  if (Platform.isLinux) {
-    return Directory("${Platform.environment['HOME']}/.config/xmruw");
+  if (config.useOldDir) {
+    if (Platform.isLinux) {
+      return Directory("${Platform.environment['HOME']}/.config/xmruw");
+    }
+    return await getApplicationDocumentsDirectory();
   }
-  return await getApplicationDocumentsDirectory();
+  if (Platform.isLinux) {
+    return Directory("${Platform.environment['HOME']}/.config/xmruw/${dir_prefix}");
+  }
+  return Directory((await getApplicationDocumentsDirectory()).path+"/.data/xmruw/${dir_prefix}");
 }
 
 Future<String> getMainWalletPath() async {

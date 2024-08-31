@@ -35,3 +35,6 @@ Runner/GeneratedPluginRegistrant.*
 
 monero_libwallet2_api_c.dylib
 wownero_libwallet2_api_c.dylib
+
+altstore
+MoneroWallet.framework/MoneroWallet

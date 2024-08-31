@@ -60,6 +60,7 @@ class Config {
     this.enableStaticOnlineServices = true,
     this.staticOnlineServicesOverTor = false,
     this.enableDevicePreview = false,
+    this.useOldDir = false,
   });
 
   final String confPath;
@@ -100,6 +101,7 @@ class Config {
   bool enableStaticOnlineServices;
   bool staticOnlineServicesOverTor;
   bool enableDevicePreview;
+  bool useOldDir;
 
   void save() {
     file.writeAsString(json.encode(toJson()));
@@ -209,6 +211,9 @@ class Config {
     if (json['enableDevicePreview'] is bool) {
       c.enableDevicePreview = json['enableDevicePreview'];
     }
+    if (json['useOldDir'] is bool) {
+      c.useOldDir = json['useOldDir'];
+    }
     return c;
   }
 
@@ -247,6 +252,7 @@ class Config {
       "enableStaticOnlineServices": enableStaticOnlineServices,
       "staticOnlineServicesOverTor": staticOnlineServicesOverTor,
       "enableDevicePreview": enableDevicePreview,
+      "useOldDir": useOldDir,
     };
   }
 }

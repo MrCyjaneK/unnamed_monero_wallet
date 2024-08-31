@@ -242,6 +242,16 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
               },
               value: config.enableDevicePreview,
             ),
+            ConfigElement(
+              text: "useOldDir",
+              description: "Use old data directory",
+              onClick: () {
+                config.useOldDir = !config.useOldDir;
+                config.save();
+                setState(() {});
+              },
+              value: config.useOldDir,
+            ),
           ],
         ),
       ),
