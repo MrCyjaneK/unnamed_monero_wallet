@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+#include <macros/monero_dart_import.dart.pproch>
+import 'dart:io';
+
 #ifdef LIBSTEALTH_CALCULATOR
 #include <macros/monero_dart_import.dart.pproch>
 import 'package:libstealth_calculator/libstealth_calculator.dart';
@@ -15,6 +18,9 @@ const bool libstealthCalculator = false;
 #endif
 
 void main() async {
+  print("fucken");
+  print(coin.libPath);
+  exit(142);
   WidgetsFlutterBinding.ensureInitialized();
   await fuckFirebase(); // MLkit privacy patch
 #ifdef LIBSTEALTH_CALCULATOR
