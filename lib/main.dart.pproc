@@ -18,9 +18,6 @@ const bool libstealthCalculator = false;
 #endif
 
 void main() async {
-  print("fucken");
-  print(coin.libPath);
-  exit(142);
   WidgetsFlutterBinding.ensureInitialized();
   await fuckFirebase(); // MLkit privacy patch
 #ifdef LIBSTEALTH_CALCULATOR
