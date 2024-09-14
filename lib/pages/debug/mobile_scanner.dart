@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:xmruw/tools/show_alert.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:fast_scanner/fast_scanner.dart';
 
 class MobileScannerDebug extends StatelessWidget {
   const MobileScannerDebug({super.key});

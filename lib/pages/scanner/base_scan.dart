@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:fast_scanner/fast_scanner.dart';
 import 'package:monero/monero.dart' as monero;
 import 'package:xmruw/helpers/resource.g.dart';
 import 'package:xmruw/legacy.dart';

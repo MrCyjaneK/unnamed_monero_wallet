@@ -8,14 +8,26 @@ const dir_prefix="monero";
 Future<Directory> getWd() async {
   if (config.useOldDir) {
     if (Platform.isLinux) {
-      return Directory("${Platform.environment['HOME']}/.config/xmruw");
+      final dir = Directory("${Platform.environment['HOME']}/.config/xmruw");
+      if (!dir.existsSync()) {
+        dir.createSync(recursive: true);
+      }
+      return dir;
     }
     return await getApplicationDocumentsDirectory();
   }
   if (Platform.isLinux) {
-    return Directory("${Platform.environment['HOME']}/.config/xmruw/${dir_prefix}");
+    final dir = Directory("${Platform.environment['HOME']}/.config/xmruw/${dir_prefix}");
+    if (!dir.existsSync()) {
+      dir.createSync(recursive: true);
+    }
+    return dir;
   }
-  return Directory((await getApplicationDocumentsDirectory()).path+"/.data/xmruw/${dir_prefix}");
+  final dir = Directory((await getApplicationDocumentsDirectory()).path+"/.data/xmruw/${dir_prefix}");
+  if (!dir.existsSync()) {
+    dir.createSync(recursive: true);
+  }
+  return dir;
 }
 
 Future<String> getMainWalletPath() async {

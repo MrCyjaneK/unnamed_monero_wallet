@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:xmruw/tools/show_alert.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:fast_scanner/fast_scanner.dart';
 
 Map<String, dynamic> viewOnlyKeysLastScanned = {};
 
