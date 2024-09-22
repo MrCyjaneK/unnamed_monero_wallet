@@ -5,17 +5,20 @@ import 'package:xmruw/main_clean.dart';
 import 'package:xmruw/tools/dirs.dart';
 import 'package:xmruw/tools/fuck_firebase.dart';
 import 'package:xmruw/tools/wallet_manager.dart';
+
 const bool libstealthCalculator = bool.hasEnvironment("libstealth_calculator")
     ? bool.fromEnvironment("libstealth_calculator")
     : false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await loadConfig();
+
   await fuckFirebase(); // MLkit privacy patch
   final walletExists =
       monero.WalletManager_walletExists(wmPtr, await getMainWalletPath());
   if (libstealthCalculator) {
-      monero.WalletManager_walletExists(wmPtr, await getMainWalletPath());
+    monero.WalletManager_walletExists(wmPtr, await getMainWalletPath());
     runApp(StealthHomeScreenCalculator(
       onSecretGiven: (String secret) async {
         if (!walletExists && secret.endsWith("123")) {

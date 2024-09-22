@@ -486,6 +486,7 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
                     await Future.delayed(const Duration(milliseconds: 133));
                     _introKey.currentState?.next();
                   },
+                  showComma: false,
                 ),
               ],
             ),

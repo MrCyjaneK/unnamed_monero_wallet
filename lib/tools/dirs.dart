@@ -1,29 +1,27 @@
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
-import 'package:xmruw/pages/config/base.dart';
 
-const dir_prefix="monero";
+const dir_prefix = "monero";
 
 Future<Directory> getWd() async {
-  if (config.useOldDir) {
-    if (Platform.isLinux) {
-      final dir = Directory("${Platform.environment['HOME']}/.config/xmruw");
-      if (!dir.existsSync()) {
-        dir.createSync(recursive: true);
-      }
-      return dir;
-    }
-    return await getApplicationDocumentsDirectory();
-  }
   if (Platform.isLinux) {
-    final dir = Directory("${Platform.environment['HOME']}/.config/xmruw/${dir_prefix}");
+    final dir = Directory("${Platform.environment['HOME']}/.config/xmruw");
     if (!dir.existsSync()) {
       dir.createSync(recursive: true);
     }
     return dir;
   }
-  final dir = Directory((await getApplicationDocumentsDirectory()).path+"/.data/xmruw/${dir_prefix}");
+  if (Platform.isLinux) {
+    final dir =
+        Directory("${Platform.environment['HOME']}/.config/xmruw/$dir_prefix");
+    if (!dir.existsSync()) {
+      dir.createSync(recursive: true);
+    }
+    return dir;
+  }
+  final dir = Directory(
+      "${(await getApplicationDocumentsDirectory()).path}/.data/xmruw/$dir_prefix");
   if (!dir.existsSync()) {
     dir.createSync(recursive: true);
   }

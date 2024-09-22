@@ -19,7 +19,6 @@ void mainClean() async {
   WidgetsFlutterBinding.ensureInitialized();
   final wd = await getWd();
   if (!wd.existsSync()) wd.createSync();
-  await loadConfig();
 
   monero.printStarts = config.printStarts;
   _walletExists =

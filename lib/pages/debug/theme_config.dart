@@ -440,12 +440,12 @@ At the bottom of the screen you can see ready-made full theme definition. Once t
     config.customThemePrimary = Theme.of(context).colorScheme.primary;
     config.customThemeSecondary = Theme.of(context).colorScheme.secondary;
     config.customThemeSurface = Theme.of(context).colorScheme.surface;
-    config.customThemeBackground = Theme.of(context).colorScheme.background;
+    config.customThemeBackground = Theme.of(context).colorScheme.surface;
     config.customThemeError = Theme.of(context).colorScheme.error;
     config.customThemeOnPrimary = Theme.of(context).colorScheme.onPrimary;
     config.customThemeOnSecondary = Theme.of(context).colorScheme.onSecondary;
     config.customThemeOnSurface = Theme.of(context).colorScheme.onSurface;
-    config.customThemeOnBackground = Theme.of(context).colorScheme.onBackground;
+    config.customThemeOnBackground = Theme.of(context).colorScheme.onSurface;
     config.customThemeOnError = Theme.of(context).colorScheme.onError;
     config.customThemeBrightness =
         Theme.of(context).colorScheme.brightness == Brightness.dark;

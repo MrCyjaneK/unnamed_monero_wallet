@@ -76,7 +76,8 @@ enum Keys {
   backspace,
   next,
   shift,
-  spacebar
+  spacebar,
+  dot
 }
 
 String getKeysChar(Keys key) {
@@ -157,6 +158,7 @@ String getKeysChar(Keys key) {
     Keys.backspace => '',
     Keys.next => '',
     Keys.shift => '',
+    Keys.dot => '.',
   };
 }
 
@@ -172,7 +174,8 @@ Widget getKeyWidgetPinPad(Keys key) {
     Keys.a7 ||
     Keys.a8 ||
     Keys.a9 ||
-    Keys.a0 =>
+    Keys.a0 ||
+    Keys.dot =>
       Text(getKeysChar(key),
           style: const TextStyle(
             fontSize: 32,

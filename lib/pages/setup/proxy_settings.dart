@@ -1,4 +1,3 @@
-
 import 'package:xmruw/legacy.dart';
 import 'package:xmruw/pages/config/base.dart';
 import 'package:xmruw/pages/sync_static_progress.dart';

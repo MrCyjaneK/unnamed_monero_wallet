@@ -36,14 +36,14 @@ class _MoneroLogDebugState extends State<MoneroLogDebug> {
   Widget build(BuildContext context) {
     if (logFile == null) return Container();
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("monero logs"),
-        actions: [
-          IconButton(onPressed: () {
-            Clipboard.setData(ClipboardData(text: logFile?.readAsStringSync() ?? "404"));
-          }, icon: const Icon(Icons.copy)),
-        ]
-      ),
+      appBar: AppBar(title: const Text("monero logs"), actions: [
+        IconButton(
+            onPressed: () {
+              Clipboard.setData(
+                  ClipboardData(text: logFile?.readAsStringSync() ?? "404"));
+            },
+            icon: const Icon(Icons.copy)),
+      ]),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8),

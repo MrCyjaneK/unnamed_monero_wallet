@@ -20,9 +20,9 @@ class AboutPage extends StatelessWidget {
     final cppcpp = monero.MONERO_checksum_wallet2_api_c_cpp();
     final cpph = monero.MONERO_checksum_wallet2_api_c_h();
     final cppexp = monero.MONERO_checksum_wallet2_api_c_exp();
-    final dartcpp = monero.wallet2_api_c_cpp_sha256;
-    final darth = monero.wallet2_api_c_h_sha256;
-    final dartexp = monero.wallet2_api_c_exp_sha256;
+    const dartcpp = monero.wallet2_api_c_cpp_sha256;
+    const darth = monero.wallet2_api_c_h_sha256;
+    const dartexp = monero.wallet2_api_c_exp_sha256;
     return Scaffold(
       appBar: AppBar(
         title: const Text("About"),
@@ -53,9 +53,9 @@ If you enjoy the wallet, please consider donating
 83F5SjMRjE9UuaCUwso8zhix3DJEThnhcF8vTsCJ7zG3KiuKiqbyUshezKjmBwhqiAJP2KvzWNVRYVyBKaqpBwbp1cMD1FU
           """,
               ),
-              if (dartcpp != cppcpp) Text("cpp mismatch"),
-              if (darth != cpph) Text("cpp mismatch"),
-              if (dartexp != cppexp) Text("exp mismatch"),
+              if (dartcpp != cppcpp) const Text("cpp mismatch"),
+              if (darth != cpph) const Text("cpp mismatch"),
+              if (dartexp != cppexp) const Text("exp mismatch"),
               LongOutlinedButton(
                 text: "Licenses",
                 onPressed: () => LicenseListPage.push(context),

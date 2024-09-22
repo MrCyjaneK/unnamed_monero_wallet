@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart';
 import 'package:xmruw/tools/show_alert.dart';
@@ -64,12 +63,17 @@ class _ScannerTextOnlyState extends State<ScannerTextOnly> {
     }
     final tag = splTxt[1].split("/")[0];
     switch (tag) {
-      case "xmr-output": Wallet_importOutputsUR(walletPtr!, codeCtrl.text);
+      case "xmr-output":
+        Wallet_importOutputsUR(walletPtr!, codeCtrl.text);
     }
     final status = Wallet_status(walletPtr!);
     if (status != 0) {
       final errorString = Wallet_errorString(walletPtr!);
-      await Alert(title: "Error", singleBody: SelectableText(errorString), cancelable: true).show(context);
+      await Alert(
+              title: "Error",
+              singleBody: SelectableText(errorString),
+              cancelable: true)
+          .show(context);
     }
 
     setState(() {

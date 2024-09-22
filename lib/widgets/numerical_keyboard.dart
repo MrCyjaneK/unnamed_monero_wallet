@@ -9,11 +9,13 @@ class NumericalKeyboard extends StatelessWidget {
       required this.pin,
       required this.rebuild,
       required this.showConfirm,
-      required this.nextPage});
+      required this.nextPage,
+      required this.showComma});
   final PinInput pin;
   final VoidCallback rebuild;
   final bool Function() showConfirm;
   final VoidCallback? nextPage;
+  final bool showComma;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -43,8 +45,12 @@ class NumericalKeyboard extends StatelessWidget {
           const Spacer(),
           SingleKey(Keys.backspace, pin, rebuild),
           SingleKey(Keys.a0, pin, rebuild),
-          if (showConfirm()) SingleKey(Keys.next, pin, nextPage),
-          Spacer(flex: showConfirm() ? 1 : 3),
+          if (showConfirm() &&
+              (!showComma || pin.value.contains(getKeysChar(Keys.dot))))
+            SingleKey(Keys.next, pin, nextPage),
+          if (showComma && !pin.value.contains(getKeysChar(Keys.dot)))
+            SingleKey(Keys.dot, pin, rebuild),
+          Spacer(flex: showConfirm() || showComma ? 1 : 3),
         ]),
       ],
     );

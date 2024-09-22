@@ -16,8 +16,7 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
-		CE3497342C837477000A0E36 /* MoneroWallet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE3497332C837477000A0E36 /* MoneroWallet.framework */; };
-		CE3497352C837477000A0E36 /* MoneroWallet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CE3497332C837477000A0E36 /* MoneroWallet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		CE2FCBE22C987BDB00F12082 /* MoneroWallet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CE2FCBE12C987BDB00F12082 /* MoneroWallet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,7 +36,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				CE3497352C837477000A0E36 /* MoneroWallet.framework in Embed Frameworks */,
+				CE2FCBE22C987BDB00F12082 /* MoneroWallet.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -66,8 +65,7 @@
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9D5E78B9343D9B53FD053865 /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
 		9ECE85DFE1A81196C02FFC6E /* Pods-RunnerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug.xcconfig"; sourceTree = "<group>"; };
-		CE3497332C837477000A0E36 /* MoneroWallet.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MoneroWallet.framework; sourceTree = "<group>"; };
-		CE8D85A82BED7AD300E99407 /* monero_libwallet2_api_c.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = monero_libwallet2_api_c.dylib; sourceTree = "<group>"; };
+		CE2FCBE12C987BDB00F12082 /* MoneroWallet.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MoneroWallet.framework; sourceTree = "<group>"; };
 		E9E328C3D9BDE2150DE9CC46 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		F8147374FAD5E34A21C36D6A /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -86,7 +84,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3E265DAEC233F27DE43ABC45 /* Pods_Runner.framework in Frameworks */,
-				CE3497342C837477000A0E36 /* MoneroWallet.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,7 +93,6 @@
 		31736F7E184619355D3F5CE6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				CE3497332C837477000A0E36 /* MoneroWallet.framework */,
 				F8147374FAD5E34A21C36D6A /* Pods_Runner.framework */,
 				93C2DE7E0D804C00857DEDEB /* Pods_RunnerTests.framework */,
 			);
@@ -125,7 +121,7 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
-				CE8D85A82BED7AD300E99407 /* monero_libwallet2_api_c.dylib */,
+				CE2FCBE12C987BDB00F12082 /* MoneroWallet.framework */,
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
 				97C146EF1CF9000F007C117D /* Products */,
@@ -200,10 +196,10 @@
 			buildPhases = (
 				365FBD61D338BFB1B5B6D21B /* [CP] Check Pods Manifest.lock */,
 				9740EEB61CF901F6004384FC /* Run Script */,
+				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				97C146EC1CF9000F007C117D /* Resources */,
-				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				B9EE55742B0CBB3B9E25AF0C /* [CP] Embed Pods Frameworks */,
 				0BC5DD2BFC461E201BB9452B /* [CP] Copy Pods Resources */,

@@ -2,11 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:monero/monero.dart' as monero;
-import 'package:mutex/mutex.dart';
 import 'package:path/path.dart' as p;
 import 'package:tor_binary/tor_binary_platform_interface.dart';
 import 'package:xmruw/pages/config/base.dart';

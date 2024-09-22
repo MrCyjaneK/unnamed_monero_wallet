@@ -232,7 +232,7 @@ class _NodeStatusCardState extends State<NodeStatusCard> {
     monero.WalletManager_setDaemonAddress(wmPtr, widget.node.address);
 
     final wmPtrAddr = wmPtr.address;
-    final remoteHeight = /*await Isolate.run(*/() {
+    final remoteHeight = /*await Isolate.run(*/ () {
       final lib = monero_gen.MoneroC(DynamicLibrary.open(monero.libPath));
       final ret = lib.MONERO_WalletManager_blockchainHeight(
           Pointer.fromAddress(wmPtrAddr));
