@@ -6,6 +6,7 @@ If you want to test the wallet you can join any of these rooms, messages are bri
 
 - [Telegram @xmruw](https://t.me/xmruw)
 - [Discord](https://discord.gg/YdM5yTVqed)
+- #xmruw:matrix.org
 - Other? If you want to moderate another platform I'll be happy to bridge them with rooms above.
 
 Found a bug? Please use Gitea or Github issue tracker to report them.
