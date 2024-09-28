@@ -92,7 +92,6 @@ jobs:
   macos:
     strategy:
       matrix:
-        coin: [COIN_MONERO, COIN_WOWNERO]
         stealth: [LIBSTEALTH_DISABLED]
       fail-fast: false
     runs-on: macos-14
@@ -110,8 +109,6 @@ jobs:
       - name: install dependencies
         run: |
           brew install create-dmg
-      - name: Codegen
-        run: ./codegen.sh -Dmonero -D${{ matrix.stealth }}
       - name: Flutter pub get
         run: |
           flutter pub get
@@ -161,7 +158,6 @@ jobs:
   windows:
     strategy:
       matrix:
-        coin: [COIN_MONERO, COIN_WOWNERO]
         stealth: [LIBSTEALTH_DISABLED]
     name: windows build
     runs-on: windows-latest
@@ -176,9 +172,6 @@ jobs:
         with:
           msystem: MINGW64
           install: git make xz autotools mingw-w64-x86_64-gcc mingw-w64-x86_64-jq
-      - name: Codegen
-        run: ./codegen.sh -Dmonero -D${{ matrix.stealth }}
-        shell: msys2 {0}
       - name: ./build_changelog.sh
         run: ./build_changelog.sh
         shell: msys2 {0}
