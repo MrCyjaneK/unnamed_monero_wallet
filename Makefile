@@ -89,7 +89,7 @@ windows_libs_download:
 
 .PHONY: macos_arm64
 macos_arm64:
-	./build_moneroc.sh --coin ${COIN} --tag ${MONERO_C_TAG} --triplet aarch64-apple-darwin11 --location macos
+	./build_moneroc.sh --coin ${COIN} --tag ${MONERO_C_TAG} --triplet host-apple-darwin --location macos
 	flutter build macos
 	test -f build/xmruw_darwin_arm64.dmg && rm -rf build/xmruw_darwin_arm64.dmg || true
 	create-dmg \
