@@ -48,7 +48,7 @@ dependencies:
       url: https://github.com/MrCyjaneK/libstealth_calculator
       ref: fafdb3d215dbc09f1901062cb1c43bfcac374844
   path: any
-  flex_color_picker: 3.5.1
+  flex_color_picker: 3.6.0
   polyseed: 0.0.5
   introduction_screen: 3.1.14
   http: 1.2.1
