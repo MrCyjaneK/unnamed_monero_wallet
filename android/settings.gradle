@@ -28,7 +28,7 @@ plugins {
     // no but seriously, this requires also bumping minSdkVersion
     // for reasons unknown to me. I'm staying on 1.8.22 for now.
     // p.s. if you bump the version app size will go to insane numbers
-    id "org.jetbrains.kotlin.android" version "2.0.0" apply false
+    id "org.jetbrains.kotlin.android" version "2.0.21" apply false
 }
 
 include ":app"
