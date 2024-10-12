@@ -238,23 +238,25 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
         if ([SetupWalletType.normal, SetupWalletType.viewOnly].contains(type))
           PageViewModel(
             title: "Connection settings",
-            bodyWidget: Column(
-              children: [
-                LongElevatedButton(
-                  onPressed: () {
-                    ProxySettings.push(context);
-                  },
-                  text: "Proxy Settings",
-                ),
-                const SizedBox(height: 16),
-                LongElevatedButton(
-                  onPressed: () {
-                    _introKey.currentState?.next();
-                  },
-                  text: "Continue",
-                  backgroundColor: Colors.white,
-                ),
-              ],
+            bodyWidget: SingleChildScrollView(
+              child: Column(
+                children: [
+                  LongElevatedButton(
+                    onPressed: () {
+                      ProxySettings.push(context);
+                    },
+                    text: "Proxy Settings",
+                  ),
+                  const SizedBox(height: 16),
+                  LongElevatedButton(
+                    onPressed: () {
+                      _introKey.currentState?.next();
+                    },
+                    text: "Continue",
+                    backgroundColor: Colors.white,
+                  ),
+                ],
+              ),
             ),
             decoration: pageDecoration,
           ),
@@ -307,33 +309,35 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
                       ),
                     ],
                   )
-                : Column(
-                    children: [
-                      (currentNode == null)
-                          ? const Text("No node")
-                          : (node.Node n) {
-                              return NodeStatusCard(node: n);
-                            }(currentNode!),
-                      if (ns != null)
-                        ...List.generate(
-                          ns!.nodes.length,
-                          (index) => SingleNodeWidget(
-                            node: ns!.nodes[index],
-                            disabled: ns!.nodes[index].id == ns!.currentNode,
-                            rebuildParent: () {
-                              reloadNodes();
-                            },
+                : SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        (currentNode == null)
+                            ? const Text("No node")
+                            : (node.Node n) {
+                                return NodeStatusCard(node: n);
+                              }(currentNode!),
+                        if (ns != null)
+                          ...List.generate(
+                            ns!.nodes.length,
+                            (index) => SingleNodeWidget(
+                              node: ns!.nodes[index],
+                              disabled: ns!.nodes[index].id == ns!.currentNode,
+                              rebuildParent: () {
+                                reloadNodes();
+                              },
+                            ),
                           ),
-                        ),
-                      LongOutlinedButton(
-                          onPressed: () async {
-                            await AddNodeScreen.push(context);
-                            reloadNodes();
-                            Future.delayed(const Duration(milliseconds: 222))
-                                .then((value) => reloadNodes());
-                          },
-                          text: "Add Custom Node")
-                    ],
+                        LongOutlinedButton(
+                            onPressed: () async {
+                              await AddNodeScreen.push(context);
+                              reloadNodes();
+                              Future.delayed(const Duration(milliseconds: 222))
+                                  .then((value) => reloadNodes());
+                            },
+                            text: "Add Custom Node")
+                      ],
+                    ),
                   ),
             decoration: pageDecoration,
           ),
@@ -343,110 +347,114 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
             restore == null)
           PageViewModel(
             title: "What to do?",
-            bodyWidget: Column(
-              children: [
-                if (type != SetupWalletType.viewOnly)
+            bodyWidget: SingleChildScrollView(
+              child: Column(
+                children: [
+                  if (type != SetupWalletType.viewOnly)
+                    LongElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          restore = false;
+                        });
+                      },
+                      text: "Create New Wallet",
+                    ),
+                  const SizedBox(height: 16),
                   LongElevatedButton(
                     onPressed: () {
                       setState(() {
-                        restore = false;
+                        restore = true;
                       });
                     },
-                    text: "Create New Wallet",
+                    text: "Restore Wallet",
                   ),
-                const SizedBox(height: 16),
-                LongElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      restore = true;
-                    });
-                  },
-                  text: "Restore Wallet",
-                ),
-              ],
+                ],
+              ),
             ),
             decoration: pageDecoration,
           ),
         if (restore == true)
           PageViewModel(
             title: "Seed information",
-            bodyWidget: Column(
-              children: [
-                if (type != SetupWalletType.viewOnly)
-                  LabeledTextInput(
-                    label: "",
-                    ctrl: seedCtrl,
-                    minLines: 8,
-                    maxLines: 8,
-                    onEdit: () {
-                      setState(() {
-                        seed = seedCtrl.text.trim().split(" ");
-                      });
-                    },
-                  ),
-                if (type == SetupWalletType.viewOnly)
-                  LabeledTextInput(
-                    label: "Primary Address",
-                    ctrl: primaryAddressCtrl,
-                    onEdit: () {
-                      setState(() {});
-                    },
-                  ),
-                if (type == SetupWalletType.viewOnly)
-                  LabeledTextInput(
-                    label: "Secret View Key",
-                    ctrl: privateViewKeyCtrl,
-                    onEdit: () {
-                      setState(() {
-                        seed = seedCtrl.text.trim().split(" ");
-                      });
-                    },
-                  ),
-                if (type == SetupWalletType.viewOnly)
-                  LabeledTextInput(
-                    label: "Restore Height",
-                    ctrl: heightCtrl,
-                    onEdit: () {
-                      setState(() {
-                        height = int.tryParse(heightCtrl.text.trim());
-                      });
-                    },
-                  ),
-                if (seed.length > 16 + 1)
-                  LabeledTextInput(
-                    label: "RESTORE HEIGHT",
-                    ctrl: heightCtrl,
-                    onEdit: () {
-                      setState(() {
-                        height = int.tryParse(heightCtrl.text.trim());
-                      });
-                    },
-                  ),
-                if (!showAdvancedRestore && type != SetupWalletType.viewOnly)
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          setState(() {
-                            showAdvancedRestore = !showAdvancedRestore;
-                          });
-                          Alert(
-                            title:
-                                "WARNING\n\nWhile enabling passphrase encryption you need to remember your seed and your passphrase, otherwise you won't be able to restore your wallet.",
-                            cancelable: true,
-                          ).show(context);
-                        },
-                        child: const Text("Passphrase encryption"),
-                      ),
-                    ],
-                  ),
-                if (showAdvancedRestore)
-                  LabeledTextInput(
-                      label: "PASSPHRASE ENCRYPTION",
-                      ctrl: passphraseEncryptionCtrl),
-              ],
+            bodyWidget: SingleChildScrollView(
+              child: Column(
+                children: [
+                  if (type != SetupWalletType.viewOnly)
+                    LabeledTextInput(
+                      label: "",
+                      ctrl: seedCtrl,
+                      minLines: 8,
+                      maxLines: 8,
+                      onEdit: () {
+                        setState(() {
+                          seed = seedCtrl.text.trim().split(" ");
+                        });
+                      },
+                    ),
+                  if (type == SetupWalletType.viewOnly)
+                    LabeledTextInput(
+                      label: "Primary Address",
+                      ctrl: primaryAddressCtrl,
+                      onEdit: () {
+                        setState(() {});
+                      },
+                    ),
+                  if (type == SetupWalletType.viewOnly)
+                    LabeledTextInput(
+                      label: "Secret View Key",
+                      ctrl: privateViewKeyCtrl,
+                      onEdit: () {
+                        setState(() {
+                          seed = seedCtrl.text.trim().split(" ");
+                        });
+                      },
+                    ),
+                  if (type == SetupWalletType.viewOnly)
+                    LabeledTextInput(
+                      label: "Restore Height",
+                      ctrl: heightCtrl,
+                      onEdit: () {
+                        setState(() {
+                          height = int.tryParse(heightCtrl.text.trim());
+                        });
+                      },
+                    ),
+                  if (seed.length > 16 + 1)
+                    LabeledTextInput(
+                      label: "RESTORE HEIGHT",
+                      ctrl: heightCtrl,
+                      onEdit: () {
+                        setState(() {
+                          height = int.tryParse(heightCtrl.text.trim());
+                        });
+                      },
+                    ),
+                  if (!showAdvancedRestore && type != SetupWalletType.viewOnly)
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              showAdvancedRestore = !showAdvancedRestore;
+                            });
+                            Alert(
+                              title:
+                                  "WARNING\n\nWhile enabling passphrase encryption you need to remember your seed and your passphrase, otherwise you won't be able to restore your wallet.",
+                              cancelable: true,
+                            ).show(context);
+                          },
+                          child: const Text("Passphrase encryption"),
+                        ),
+                      ],
+                    ),
+                  if (showAdvancedRestore)
+                    LabeledTextInput(
+                        label: "PASSPHRASE ENCRYPTION",
+                        ctrl: passphraseEncryptionCtrl),
+                ],
+              ),
             ),
             decoration: pageDecoration,
           ),
@@ -456,90 +464,94 @@ class _AnonFirstRunState extends State<AnonFirstRun> {
             (type == SetupWalletType.viewOnly && height != null))
           PageViewModel(
             title: "Wallet Password",
-            bodyWidget: Column(
-              children: [
-                TextField(
-                  obscureText: true,
-                  style: const TextStyle(fontSize: 48),
-                  controller: tCtrl,
-                  decoration: null,
-                  textAlign: TextAlign.center,
-                  onChanged: (value) {
-                    setState(() {
-                      pin.value = value;
-                    });
-                  },
-                ),
-                NumericalKeyboard(
-                  pin: pin,
-                  rebuild: () {
-                    setState(() {});
-                    tCtrl.text = pin.value;
-                  },
-                  showConfirm: _showConfirm,
-                  nextPage: () async {
-                    if (restore == true) {
-                      _beginRestore();
-                    } else {
-                      _beginCreate();
-                    }
-                    await Future.delayed(const Duration(milliseconds: 133));
-                    _introKey.currentState?.next();
-                  },
-                  showComma: false,
-                ),
-              ],
+            bodyWidget: SingleChildScrollView(
+              child: Column(
+                children: [
+                  TextField(
+                    obscureText: true,
+                    style: const TextStyle(fontSize: 48),
+                    controller: tCtrl,
+                    decoration: null,
+                    textAlign: TextAlign.center,
+                    onChanged: (value) {
+                      setState(() {
+                        pin.value = value;
+                      });
+                    },
+                  ),
+                  NumericalKeyboard(
+                    pin: pin,
+                    rebuild: () {
+                      setState(() {});
+                      tCtrl.text = pin.value;
+                    },
+                    showConfirm: _showConfirm,
+                    nextPage: () async {
+                      if (restore == true) {
+                        _beginRestore();
+                      } else {
+                        _beginCreate();
+                      }
+                      await Future.delayed(const Duration(milliseconds: 133));
+                      _introKey.currentState?.next();
+                    },
+                    showComma: false,
+                  ),
+                ],
+              ),
             ),
             decoration: pageDecoration,
           ),
         if (didWalletOperationStart)
           PageViewModel(
             title: (restore == true) ? "Restoring" : "Creating",
-            bodyWidget: Column(
-              children: List.generate(
-                  progressDisplay.length + (progressFailed ? 1 : 0), (index) {
-                if (progressFailed && index == progressDisplay.length) {
+            bodyWidget: SingleChildScrollView(
+              child: Column(
+                children: List.generate(
+                    progressDisplay.length + (progressFailed ? 1 : 0), (index) {
+                  if (progressFailed && index == progressDisplay.length) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 16.0),
+                      child: Card(
+                        child: ListTile(
+                          title: const Text("Error"),
+                          subtitle: Text(progressFailedReason),
+                        ),
+                      ),
+                    );
+                  }
                   return Padding(
                     padding: const EdgeInsets.only(top: 16.0),
-                    child: Card(
-                      child: ListTile(
-                        title: const Text("Error"),
-                        subtitle: Text(progressFailedReason),
-                      ),
+                    child: Row(
+                      children: [
+                        Text(progressDisplay[index]),
+                        const Spacer(),
+                        (index + 1 == progressDisplay.length)
+                            ? (!progressFailed)
+                                ? (progressCompleted)
+                                    ? const Icon(
+                                        Icons.check_circle,
+                                        color: Colors.green,
+                                      )
+                                    : const SizedBox.square(
+                                        dimension: 24,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: .75,
+                                        ),
+                                      )
+                                : Icon(
+                                    Icons.error_rounded,
+                                    color: Theme.of(context).colorScheme.error,
+                                  )
+                            : const Icon(
+                                Icons.check_circle,
+                                color: Colors.green,
+                              )
+                      ],
                     ),
                   );
-                }
-                return Padding(
-                  padding: const EdgeInsets.only(top: 16.0),
-                  child: Row(
-                    children: [
-                      Text(progressDisplay[index]),
-                      const Spacer(),
-                      (index + 1 == progressDisplay.length)
-                          ? (!progressFailed)
-                              ? (progressCompleted)
-                                  ? const Icon(
-                                      Icons.check_circle,
-                                      color: Colors.green,
-                                    )
-                                  : const SizedBox.square(
-                                      dimension: 24,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: .75,
-                                      ),
-                                    )
-                              : Icon(
-                                  Icons.error_rounded,
-                                  color: Theme.of(context).colorScheme.error,
-                                )
-                          : const Icon(
-                              Icons.check_circle,
-                              color: Colors.green,
-                            )
-                    ],
-                  ),
-                );
-              }),
+                }),
+              ),
             ),
             decoration: pageDecoration,
           ),
