@@ -9,7 +9,7 @@ jobs:
         with:
           fetch-depth: 0
           submodules: recursive
-      - uses: kuhnroyal/flutter-fvm-config-action@v2
+      - uses: kuhnroyal/flutter-fvm-config-action@v3
         id: fvm-config-action
       - uses: subosito/flutter-action@v2
         with:
@@ -57,7 +57,7 @@ jobs:
         with:
           fetch-depth: 0
           submodules: recursive
-      - uses: kuhnroyal/flutter-fvm-config-action@v2
+      - uses: kuhnroyal/flutter-fvm-config-action@v3
         id: fvm-config-action
       - uses: subosito/flutter-action@v2
         with:
@@ -110,7 +110,7 @@ jobs:
       - name: install dependencies
         run: |
           brew install ccache unbound boost@1.76 zmq autoconf automake libtool && brew link boost@1.76
-      - uses: kuhnroyal/flutter-fvm-config-action@v2
+      - uses: kuhnroyal/flutter-fvm-config-action@v3
         id: fvm-config-action
       - uses: subosito/flutter-action@v2
         with:
@@ -186,7 +186,7 @@ jobs:
         run: ./build_changelog.sh
         shell: msys2 {0}
         continue-on-error: true
-      - uses: kuhnroyal/flutter-fvm-config-action@v2
+      - uses: kuhnroyal/flutter-fvm-config-action@v3
         id: fvm-config-action
       - uses: subosito/flutter-action@v2
         with:
