@@ -1,4 +1,4 @@
-MONERO_C_TAG=v0.18.3.4-RC3
+MONERO_C_TAG=v0.18.3.4-RC8-zano
 COIN=monero
 .PHONY: android
 android:
