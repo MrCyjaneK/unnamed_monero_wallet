@@ -21,12 +21,12 @@ linux_debug_lib:
 
 .PHONY: ios_lib_download
 ios_lib_download:
-	./build_moneroc.sh --prebuild --coin ${COIN} --tag ${MONERO_C_TAG} --triplet host-apple-ios --location ios
+	./build_moneroc.sh --prebuild --coin ${COIN} --tag ${MONERO_C_TAG} --triplet aarch64-apple-ios --location ios
 	cd ios && ./gen_framework.sh
 
 .PHONY: ios_lib_build
 ios_lib_build:
-	./build_moneroc.sh --prebuild --coin ${COIN} --tag ${MONERO_C_TAG} --triplet host-apple-ios --location ios
+	./build_moneroc.sh --prebuild --coin ${COIN} --tag ${MONERO_C_TAG} --triplet aarch64-apple-ios --location ios
 	cd ios && ./gen_framework.sh
 
 .PHONY: ios
@@ -89,7 +89,7 @@ windows_libs_download:
 
 .PHONY: macos_arm64
 macos_arm64:
-	./build_moneroc.sh --coin ${COIN} --tag ${MONERO_C_TAG} --triplet host-apple-darwin --location macos
+	./build_moneroc.sh --coin ${COIN} --tag ${MONERO_C_TAG} --triplet aarch64-apple-darwin --location macos
 	flutter build macos
 	test -f build/xmruw_darwin_arm64.dmg && rm -rf build/xmruw_darwin_arm64.dmg || true
 	create-dmg \
