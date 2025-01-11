@@ -109,7 +109,7 @@ jobs:
           key: macos-ccache
       - name: install dependencies
         run: |
-          brew install ccache unbound boost@1.76 zmq autoconf automake libtool && brew link boost@1.76
+          brew install ccache unbound zmq autoconf automake libtool
       - uses: kuhnroyal/flutter-fvm-config-action@v3
         id: fvm-config-action
       - uses: subosito/flutter-action@v2
