@@ -42,7 +42,7 @@ dependencies:
       url: https://github.com/MrCyjaneK/flutter-tor_binary
       ref: da00d4f4c3918e78734bbe0e9496559fc342d8b5
   disable_battery_optimization: ^1.1.1
-  permission_handler: 11.3.1
+  permission_handler: 12.0.1
   libstealth_calculator:
     git:
       url: https://github.com/MrCyjaneK/libstealth_calculator
