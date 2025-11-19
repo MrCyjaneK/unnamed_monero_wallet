@@ -1,4 +1,4 @@
-FROM ghcr.io/cirruslabs/android-sdk:34
+FROM ghcr.io/cirruslabs/android-sdk:36
 
 # Fix the image
 
