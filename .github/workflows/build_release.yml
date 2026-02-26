@@ -46,7 +46,7 @@ jobs:
           files: build/app/outputs/flutter-apk/*.apk
           token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
       - name: Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: android monero ${{ matrix.stealth }}
           path: build/app/outputs/flutter-apk/*.apk
@@ -85,7 +85,7 @@ jobs:
           files: build/linux/*/release/*.tar.xz
           token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
       - name: Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: linux monero ${{ matrix.stealth }}
           path: build/linux/*/release/*.tar.xz
@@ -137,7 +137,7 @@ jobs:
           files: build/linux/*/release/*.tar.xz
           token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
       - name: Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: darwin monero ${{ matrix.stealth }}
           path: build/*darwin_*.dmg
@@ -161,7 +161,7 @@ jobs:
           files: build/elinux/*/release/unnamed-*-wallet.*.rpm
           token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
       - name: Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sfos monero
           path: build/elinux/*/release/unnamed-*-wallet.*.rpm
@@ -220,7 +220,7 @@ jobs:
           files: build/windows/x64/runner/Release/xmruw-windows-x86_64.zip
           token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
       - name: Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: windows monero ${{ matrix.stealth }}
           path: build/windows/x64/runner/Release/xmruw-windows-x86_64.zip
